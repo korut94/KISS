@@ -2,6 +2,9 @@
 
 #include "KC_CircleRenderSystem.h"
 
+#include "imgui.h"
+#include "imgui-SFML.h"
+
 #include <SFML/Graphics.hpp>
 
 KC_RenderThread::KC_RenderThread(sf::RenderWindow& aRenderWindow)
@@ -11,7 +14,7 @@ KC_RenderThread::KC_RenderThread(sf::RenderWindow& aRenderWindow)
     myThread = std::move(std::thread(&KC_RenderThread::Run, this));
 }
 
-void KC_RenderThread::UpdateFrame(const KC_MainComponentManager& aMainComponentManager)
+void KC_RenderThread::UpdateFrame(const KC_MainComponentManager& aMainComponentManager, sf::Time elapsedTime)
 {
     std::unique_lock lock { myStateMutex };
     
@@ -19,6 +22,10 @@ void KC_RenderThread::UpdateFrame(const KC_MainComponentManager& aMainComponentM
     myStateConditionVariable.wait(lock, [this]{ return myState == State::Wait; });
 
     aMainComponentManager.AssignComponents(myRenderSystemProvider.GetComponentManager());
+    
+    ImGui::SFML::Update(myRenderWindow, elapsedTime);
+    ImGui::ShowDemoWindow();
+    
     myState = State::ReadyToStart;
 
     lock.unlock();
@@ -80,5 +87,6 @@ void KC_RenderThread::Render() const
 {
     myRenderWindow.clear(sf::Color::Black);
     myRenderSystemProvider.Run<KC_CircleRenderSystem>(myRenderWindow);
+    ImGui::SFML::Render(myRenderWindow);
     myRenderWindow.display();
 }

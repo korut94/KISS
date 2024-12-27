@@ -10,6 +10,23 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
+FetchContent_Declare(imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui
+    GIT_TAG v1.91.6
+)
+FetchContent_MakeAvailable(imgui)
+
+FetchContent_Declare(imgui-sfml
+  GIT_REPOSITORY https://github.com/SFML/imgui-sfml.git
+  GIT_TAG 2.6.x
+)
+
+set(IMGUI_DIR ${imgui_SOURCE_DIR})
+option(IMGUI_SFML_FIND_SFML "Use find_package to find SFML" OFF)
+option(IMGUI_SFML_IMGUI_DEMO "Build imgui_demo.cpp" ON)
+
+FetchContent_MakeAvailable(imgui-sfml)
+
 add_library(kiss STATIC)
 target_include_directories(kiss PUBLIC ${PROJECT_SOURCE_DIR})
 target_sources(kiss
@@ -38,5 +55,5 @@ target_sources(kiss
         KC_GameManager.cpp
         KC_CircleRenderSystem.cpp
         KC_RenderThread.cpp)
-target_link_libraries(kiss PUBLIC sfml-graphics)
+target_link_libraries(kiss PUBLIC sfml-graphics ImGui-SFML::ImGui-SFML)
 target_compile_definitions(kiss PRIVATE $<$<CONFIG:Debug>:IS_DEBUG_BUILD>)

@@ -2,6 +2,8 @@
 
 #include "KC_RenderSystemProvider.h"
 
+#include <SFML/System/Time.hpp>
+
 #include <condition_variable>
 #include <mutex>
 #include <thread>
@@ -15,7 +17,7 @@ class KC_RenderThread final
 public:
     KC_RenderThread(sf::RenderWindow& aRenderWindow);
 
-    void UpdateFrame(const KC_MainComponentManager& aMainComponentManager);
+    void UpdateFrame(const KC_MainComponentManager& aMainComponentManager, sf::Time elapsedTime);
     void StopAndWait();
 
 private:
