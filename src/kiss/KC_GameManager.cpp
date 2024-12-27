@@ -31,10 +31,11 @@ KC_World &KC_GameManager::GetWorld()
 void KC_GameManager::Run()
 {
     sf::RenderWindow window = sf::RenderWindow({1280u, 720u}, "KISS");
-    KC_ASSERT(ImGui::SFML::Init(window));
-    
     window.setActive(false);
-
+    
+    KC_ASSERT(ImGui::SFML::Init(window));
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    
     KC_World world;
     myWorld = &world;
 
