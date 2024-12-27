@@ -1,0 +1,8 @@
+build
+out
+.github
+.cache
+.idea
+.vs
+.vscode
+Testing
