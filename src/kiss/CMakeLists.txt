@@ -1,3 +1,4 @@
+project(KissEngine LANGUAGES CXX)
 cmake_minimum_required(VERSION 3.28)
 
 include(FetchContent)
@@ -10,7 +11,7 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 add_library(kiss STATIC)
-target_include_directories(kiss PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(kiss PUBLIC ${PROJECT_SOURCE_DIR})
 target_sources(kiss
     PUBLIC
         KC_Assert.h
