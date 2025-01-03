@@ -6,8 +6,10 @@
 #include "KC_RenderSystemProvider.h"
 #include "KC_World.h"
 
+#if IS_IMGUI
 #include "imgui.h"
 #include "imgui-SFML.h"
+#endif // IS_IMGUI
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
@@ -16,7 +18,7 @@
 template <typename TGame>
 class KC_GameManager final
 {
-public:
+public: 
     KC_GameManager();
 
     const KC_World& GetWorld() const;
@@ -73,8 +75,10 @@ void KC_GameManager<TGame>::Run()
         {
             std::unique_lock lock = std::move(renderSystemProvider.UpdateFrame());
             renderSystemProvider.SetComponents(world.GetComponentManager());
+#if IS_IMGUI
             renderSystemProvider.ImGuiUpdate(elapsedTime);
             game.ImGui();
+#endif // IS_IMGUI
             renderSystemProvider.Ready(lock);
         }
 
@@ -87,7 +91,9 @@ bool KC_GameManager<TGame>::ProcessEvent(sf::RenderWindow& aRenderWindow)
 {
     for (sf::Event event; aRenderWindow.pollEvent(event);)
     {
+#if IS_IMGUI
         ImGui::SFML::ProcessEvent(aRenderWindow, event);
+#endif // IS_IMGUI
 
         if (event.type == sf::Event::Closed)
         {

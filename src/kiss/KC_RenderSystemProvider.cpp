@@ -3,8 +3,10 @@
 #include "KC_Assert.h"
 #include "KC_CircleRenderSystem.h"
 
+#if IS_IMGUI
 #include "imgui.h"
 #include "imgui-SFML.h"
+#endif // IS_IMGUI
 
 #include <SFML/Graphics.hpp>
 
@@ -12,14 +14,18 @@ KC_RenderSystemProvider::KC_RenderSystemProvider(sf::RenderWindow& aRenderWindow
     : myRenderWindow(aRenderWindow)
     , myRenderThreadState(RenderThreadState::Run)
 {
+#if IS_IMGUI
     ImGuiInit();
+#endif // IS_IMGUI
     myRenderThread = std::move(std::thread(&KC_RenderSystemProvider::RenderThread, this));
 }
 
 KC_RenderSystemProvider::~KC_RenderSystemProvider()
 {
     StopAndWait();
+#if IS_IMGUI
     ImGui::SFML::Shutdown();
+#endif // IS_IMGUI
 }
 
 std::unique_lock<std::mutex> KC_RenderSystemProvider::UpdateFrame()
@@ -37,10 +43,12 @@ void KC_RenderSystemProvider::SetComponents(const KC_MainComponentManager& aMain
     aMainComponentManager.AssignComponents(myComponentManager);
 }
 
+#if IS_IMGUI
 void KC_RenderSystemProvider::ImGuiUpdate(sf::Time elapsedTime)
 {
     ImGui::SFML::Update(myRenderWindow, elapsedTime);
 }
+#endif // IS_IMGUI
 
 void KC_RenderSystemProvider::Ready(std::unique_lock<std::mutex>& aLock)
 {
@@ -54,11 +62,13 @@ void KC_RenderSystemProvider::Ready(std::unique_lock<std::mutex>& aLock)
     myStateConditionVariable.wait(aLock, [this]{ return myRenderThreadState == RenderThreadState::Run; });
 }
 
+#if IS_IMGUI
 void KC_RenderSystemProvider::ImGuiInit()
 {
     KC_ASSERT(ImGui::SFML::Init(myRenderWindow));
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 }
+#endif // IS_IMGUI
 
 void KC_RenderSystemProvider::RenderThread()
 {
@@ -103,9 +113,11 @@ void KC_RenderSystemProvider::Render() const
     myRenderWindow.clear(sf::Color::Black);
 
     RunSystem<KC_CircleRenderSystem>();
-    
+
+#if IS_IMGUI
     ImGui::SFML::Render(myRenderWindow);
-    
+#endif // IS_IMGUI
+
     myRenderWindow.display();
 }
 

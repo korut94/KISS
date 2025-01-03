@@ -25,7 +25,10 @@ target_sources(kiss-test
         src/TestHelper/EntitySet/HasIntervalsMatcher.h
         src/TestHelper/EntitySet/HasIntervalsMatcher.cpp)
 target_link_libraries(kiss-test PRIVATE Kiss GTest::gmock GTest::gtest_main)
-target_compile_definitions(kiss-test PRIVATE IS_DEBUG_BUILD)
+target_compile_definitions(kiss-test
+        PRIVATE
+        $<$<BOOL:${IS_DEBUG_BUILD}>:IS_DEBUG_BUILD>
+        $<$<BOOL:${IS_IMGUI}>:IS_IMGUI>)
 
 include(GoogleTest)
 gtest_discover_tests(kiss-test WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

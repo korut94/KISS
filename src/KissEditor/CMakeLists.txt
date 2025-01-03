@@ -9,4 +9,7 @@ target_sources(KissEditor
         KT_Editor.h)
 
 target_link_libraries(KissEditor PUBLIC Kiss)
-target_compile_definitions(KissEditor PRIVATE IS_DEBUG_BUILD)
+target_compile_definitions(KissEditor
+        PRIVATE
+        $<$<BOOL:${IS_DEBUG_BUILD}>:IS_DEBUG_BUILD>
+        $<$<BOOL:${IS_IMGUI}>:IS_IMGUI>)

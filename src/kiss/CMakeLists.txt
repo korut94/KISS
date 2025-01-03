@@ -56,4 +56,7 @@ target_sources(Kiss
         KC_CircleRenderSystem.cpp
         KC_RenderSystemProvider.cpp)
 target_link_libraries(Kiss PUBLIC sfml-graphics ImGui-SFML::ImGui-SFML)
-target_compile_definitions(Kiss PRIVATE $<$<CONFIG:Debug>:IS_DEBUG_BUILD>)
+target_compile_definitions(Kiss
+        PRIVATE
+        $<$<BOOL:${IS_DEBUG_BUILD}>:IS_DEBUG_BUILD>
+        $<$<BOOL:${IS_IMGUI}>:IS_IMGUI>)
