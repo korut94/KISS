@@ -40,7 +40,6 @@ void KC_RenderSystemProvider::SetComponents(const KC_MainComponentManager& aMain
 void KC_RenderSystemProvider::ImGuiUpdate(sf::Time elapsedTime)
 {
     ImGui::SFML::Update(myRenderWindow, elapsedTime);
-    ImGui::ShowDemoWindow();
 }
 
 void KC_RenderSystemProvider::Ready(std::unique_lock<std::mutex>& aLock)

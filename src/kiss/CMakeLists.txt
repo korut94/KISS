@@ -1,4 +1,3 @@
-project(KissEngine LANGUAGES CXX)
 cmake_minimum_required(VERSION 3.28)
 
 include(FetchContent)
@@ -27,8 +26,10 @@ option(IMGUI_SFML_IMGUI_DEMO "Build imgui_demo.cpp" ON)
 
 FetchContent_MakeAvailable(imgui-sfml)
 
+set(KISS_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/kiss)
+
 add_library(kiss STATIC)
-target_include_directories(kiss PUBLIC ${PROJECT_SOURCE_DIR})
+target_include_directories(kiss PUBLIC ${KISS_SOURCE_DIR})
 target_sources(kiss
     PUBLIC
         KC_Assert.h
@@ -40,6 +41,7 @@ target_sources(kiss
         KC_Entity.h
         KC_EntityManager.h
         KC_EntitySet.h
+        KC_Game.h
         KC_GameManager.h
         KC_RectangleRenderer.h
         KC_RenderSystem.h
@@ -51,7 +53,6 @@ target_sources(kiss
     PRIVATE
         KC_EntityManager.cpp
         KC_EntitySet.cpp
-        KC_GameManager.cpp
         KC_CircleRenderSystem.cpp
         KC_RenderSystemProvider.cpp)
 target_link_libraries(kiss PUBLIC sfml-graphics ImGui-SFML::ImGui-SFML)
