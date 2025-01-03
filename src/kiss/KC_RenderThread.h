@@ -12,13 +12,16 @@ namespace sf { class RenderWindow; }
 
 class KC_RenderThread final
 {
-    enum class State : std::uint8_t { ReadyToStart, Run, Stop, UpdateFrame, Wait };
+    enum class State : std::uint8_t { Ready, Run, Stop, UpdateFrame, Wait };
 
 public:
     KC_RenderThread(sf::RenderWindow& aRenderWindow);
     ~KC_RenderThread();
 
-    void UpdateFrame(const KC_MainComponentManager& aMainComponentManager, sf::Time elapsedTime);
+    std::unique_lock<std::mutex> UpdateFrame();
+    void SetComponents(const KC_MainComponentManager& aMainComponentManager);
+    void ImGuiUpdate(sf::Time elapsedTime);
+    void Ready(std::unique_lock<std::mutex>& aLock);
 
 private:
     void ImGuiInit();

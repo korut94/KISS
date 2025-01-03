@@ -23,25 +23,37 @@ KC_RenderThread::~KC_RenderThread()
     ImGui::SFML::Shutdown();
 }
 
-void KC_RenderThread::UpdateFrame(const KC_MainComponentManager& aMainComponentManager, sf::Time elapsedTime)
+std::unique_lock<std::mutex> KC_RenderThread::UpdateFrame()
 {
     std::unique_lock lock { myStateMutex };
     
     myState = State::UpdateFrame;
     myStateConditionVariable.wait(lock, [this]{ return myState == State::Wait; });
 
+    return lock;
+}
+
+void KC_RenderThread::SetComponents(const KC_MainComponentManager& aMainComponentManager)
+{
     aMainComponentManager.AssignComponents(myRenderSystemProvider.GetComponentManager());
-    
+}
+
+void KC_RenderThread::ImGuiUpdate(sf::Time elapsedTime)
+{
     ImGui::SFML::Update(myRenderWindow, elapsedTime);
     ImGui::ShowDemoWindow();
-    
-    myState = State::ReadyToStart;
+}
 
-    lock.unlock();
+void KC_RenderThread::Ready(std::unique_lock<std::mutex>& aLock)
+{
+    KC_ASSERT(aLock.owns_lock());
+    myState = State::Ready;
+
+    aLock.unlock();
     myStateConditionVariable.notify_one();
 
-    lock.lock();
-    myStateConditionVariable.wait(lock, [this]{ return myState == State::Run; });
+    aLock.lock();
+    myStateConditionVariable.wait(aLock, [this]{ return myState == State::Run; });
 }
 
 void KC_RenderThread::ImGuiInit()
@@ -91,7 +103,7 @@ void KC_RenderThread::Wait()
 
     {
         std::unique_lock lock { myStateMutex };
-        myStateConditionVariable.wait(lock, [this]{ return myState == State::ReadyToStart; });
+        myStateConditionVariable.wait(lock, [this]{ return myState == State::Ready; });
 
         myState = State::Run;
     }

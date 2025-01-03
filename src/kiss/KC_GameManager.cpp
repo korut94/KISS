@@ -41,10 +41,17 @@ void KC_GameManager::Run()
     sf::Clock clock;
     for (;;)
     {
+        const sf::Time elapsedTime = clock.restart();
+
         if (!ProcessEvent(window))
             break;
 
-        renderThread.UpdateFrame(world.GetComponentManager(), clock.restart());
+        {
+            std::unique_lock lock = std::move(renderThread.UpdateFrame());
+            renderThread.SetComponents(world.GetComponentManager());
+            renderThread.ImGuiUpdate(elapsedTime);
+            renderThread.Ready(lock);
+        }
     }
 }
 
