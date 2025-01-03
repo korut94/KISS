@@ -24,7 +24,7 @@ target_sources(kiss-test
         src/TestHelper/EntitySet/HasEntitiesMatcher.cpp
         src/TestHelper/EntitySet/HasIntervalsMatcher.h
         src/TestHelper/EntitySet/HasIntervalsMatcher.cpp)
-target_link_libraries(kiss-test PRIVATE kiss GTest::gmock GTest::gtest_main)
+target_link_libraries(kiss-test PRIVATE Kiss GTest::gmock GTest::gtest_main)
 target_compile_definitions(kiss-test PRIVATE IS_DEBUG_BUILD)
 
 include(GoogleTest)

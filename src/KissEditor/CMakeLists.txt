@@ -8,5 +8,5 @@ target_sources(KissEditor
     PUBLIC
         KT_Editor.h)
 
-target_link_libraries(KissEditor PUBLIC kiss)
+target_link_libraries(KissEditor PUBLIC Kiss)
 target_compile_definitions(KissEditor PRIVATE IS_DEBUG_BUILD)

@@ -9,7 +9,7 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 enable_testing()
 
-add_subdirectory(src/kiss)
+add_subdirectory(src/Kiss)
 add_subdirectory(src/KissEditor)
 add_subdirectory(src/Mosou)
 add_subdirectory(test)

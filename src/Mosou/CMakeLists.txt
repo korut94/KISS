@@ -10,5 +10,5 @@ target_sources(Mosou
     PRIVATE
         MC_Game.cpp)
 
-target_link_libraries(Mosou PUBLIC kiss)
+target_link_libraries(Mosou PUBLIC Kiss)
 target_compile_definitions(Mosou PRIVATE $<$<CONFIG:Debug>:IS_DEBUG_BUILD>)

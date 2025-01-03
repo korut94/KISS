@@ -26,11 +26,11 @@ option(IMGUI_SFML_IMGUI_DEMO "Build imgui_demo.cpp" ON)
 
 FetchContent_MakeAvailable(imgui-sfml)
 
-set(KISS_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/kiss)
+set(KISS_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src/Kiss)
 
-add_library(kiss STATIC)
-target_include_directories(kiss PUBLIC ${KISS_SOURCE_DIR})
-target_sources(kiss
+add_library(Kiss STATIC)
+target_include_directories(Kiss PUBLIC ${KISS_SOURCE_DIR})
+target_sources(Kiss
     PUBLIC
         KC_Assert.h
         KC_CircleRenderer.h
@@ -55,5 +55,5 @@ target_sources(kiss
         KC_EntitySet.cpp
         KC_CircleRenderSystem.cpp
         KC_RenderSystemProvider.cpp)
-target_link_libraries(kiss PUBLIC sfml-graphics ImGui-SFML::ImGui-SFML)
-target_compile_definitions(kiss PRIVATE $<$<CONFIG:Debug>:IS_DEBUG_BUILD>)
+target_link_libraries(Kiss PUBLIC sfml-graphics ImGui-SFML::ImGui-SFML)
+target_compile_definitions(Kiss PRIVATE $<$<CONFIG:Debug>:IS_DEBUG_BUILD>)
