@@ -44,7 +44,6 @@ target_sources(kiss
         KC_RectangleRenderer.h
         KC_RenderSystem.h
         KC_RenderSystemProvider.h
-        KC_RenderThread.h
         KC_ShapeRenderer.h
         KC_TemplateHelper.h
         KC_Transform.h
@@ -54,6 +53,6 @@ target_sources(kiss
         KC_EntitySet.cpp
         KC_GameManager.cpp
         KC_CircleRenderSystem.cpp
-        KC_RenderThread.cpp)
+        KC_RenderSystemProvider.cpp)
 target_link_libraries(kiss PUBLIC sfml-graphics ImGui-SFML::ImGui-SFML)
 target_compile_definitions(kiss PRIVATE $<$<CONFIG:Debug>:IS_DEBUG_BUILD>)

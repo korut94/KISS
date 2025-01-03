@@ -2,7 +2,6 @@
 
 #include "KC_Assert.h"
 #include "KC_RenderSystemProvider.h"
-#include "KC_RenderThread.h"
 
 #include "imgui.h"
 #include "imgui-SFML.h"
@@ -39,18 +38,18 @@ void KC_GameManager::Run()
     sf::Clock clock;
     bool proceed = true;
 
-    KC_RenderThread renderThread(window);
-    
+    KC_RenderSystemProvider renderSystemProvider(window);
+
     while (proceed)
     {
         const sf::Time elapsedTime = clock.restart();
         proceed = ProcessEvent(window); // we will close the application on the next cycle
         // Update frame
         {
-            std::unique_lock lock = std::move(renderThread.UpdateFrame());
-            renderThread.SetComponents(world.GetComponentManager());
-            renderThread.ImGuiUpdate(elapsedTime);
-            renderThread.Ready(lock);
+            std::unique_lock lock = std::move(renderSystemProvider.UpdateFrame());
+            renderSystemProvider.SetComponents(world.GetComponentManager());
+            renderSystemProvider.ImGuiUpdate(elapsedTime);
+            renderSystemProvider.Ready(lock);
         }
     }
 }

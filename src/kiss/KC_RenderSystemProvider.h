@@ -3,35 +3,63 @@
 #include "KC_ComponentManager.h"
 #include "KC_TemplateHelper.h"
 
+#include <SFML/System/Time.hpp>
+
+#include <condition_variable>
+#include <mutex>
+#include <thread>
+
 using namespace KC_TemplateHelper;
 
 namespace sf { class RenderWindow; }
 
 class KC_RenderSystemProvider final
 {
-public:
-    KC_RenderComponentManager& GetComponentManager() { return myComponentManager; }
+    enum class RenderThreadState : std::uint8_t { Ready, Run, Stop, UpdateFrame, Wait };
 
-    template <typename TService>
-    void Run(sf::RenderWindow& aRenderWindow) const;
+public:
+    KC_RenderSystemProvider(sf::RenderWindow& aRenderWindow);
+    ~KC_RenderSystemProvider();
+
+    std::unique_lock<std::mutex> UpdateFrame();
+    void SetComponents(const KC_MainComponentManager& aMainComponentManager);
+    void ImGuiUpdate(sf::Time elapsedTime);
+    void Ready(std::unique_lock<std::mutex>& aLock);
 
 private:
+    void ImGuiInit();
+
+    void RenderThread();
+    RenderThreadState GetState();
+    void Wait();
+    void Render() const;
+    void StopAndWait();
+
+    template <typename TSystem>
+    void RunSystem() const;
     template <typename Tuple>
     void GetEntitySet(KC_EntitySet& outEntitySet) const;
     template <typename... Args>
     void GetEntitySetImpl(KC_EntitySet& outEntitySet, UnpackedTuple<Args...>) const;
 
+    std::thread myRenderThread;
+    sf::RenderWindow& myRenderWindow;
+
+    RenderThreadState myRenderThreadState;
+    std::mutex myStateMutex;
+    std::condition_variable myStateConditionVariable;
+
     KC_RenderComponentManager myComponentManager;
 };
 
-template <typename TService>
-void KC_RenderSystemProvider::Run(sf::RenderWindow& aRenderWindow) const
+template <typename TSystem>
+void KC_RenderSystemProvider::RunSystem() const
 {
     KC_EntitySet entitySet;
-    GetEntitySet<typename TService::Components>(entitySet);
+    GetEntitySet<typename TSystem::Components>(entitySet);
 
-    TService service { entitySet, myComponentManager };
-    service.Run(aRenderWindow);
+    TSystem system { entitySet, myComponentManager };
+    system.Run(myRenderWindow);
 }
 
 template <typename Tuple>
