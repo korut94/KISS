@@ -36,16 +36,16 @@ void KC_GameManager::Run()
     KC_World world;
     myWorld = &world;
 
-    KC_RenderThread renderThread(window);
-
     sf::Clock clock;
-    for (;;)
+    bool proceed = true;
+
+    KC_RenderThread renderThread(window);
+    
+    while (proceed)
     {
         const sf::Time elapsedTime = clock.restart();
-
-        if (!ProcessEvent(window))
-            break;
-
+        proceed = ProcessEvent(window); // we will close the application on the next cycle
+        // Update frame
         {
             std::unique_lock lock = std::move(renderThread.UpdateFrame());
             renderThread.SetComponents(world.GetComponentManager());
