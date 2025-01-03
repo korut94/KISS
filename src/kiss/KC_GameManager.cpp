@@ -32,10 +32,7 @@ void KC_GameManager::Run()
 {
     sf::RenderWindow window = sf::RenderWindow({1280u, 720u}, "KISS");
     window.setActive(false);
-    
-    KC_ASSERT(ImGui::SFML::Init(window));
-    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    
+
     KC_World world;
     myWorld = &world;
 
@@ -49,9 +46,6 @@ void KC_GameManager::Run()
 
         renderThread.UpdateFrame(world.GetComponentManager(), clock.restart());
     }
-
-    renderThread.StopAndWait();
-    ImGui::SFML::Shutdown();
 }
 
 bool KC_GameManager::ProcessEvent(sf::RenderWindow& aRenderWindow)

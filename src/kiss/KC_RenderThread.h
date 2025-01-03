@@ -16,15 +16,19 @@ class KC_RenderThread final
 
 public:
     KC_RenderThread(sf::RenderWindow& aRenderWindow);
+    ~KC_RenderThread();
 
     void UpdateFrame(const KC_MainComponentManager& aMainComponentManager, sf::Time elapsedTime);
-    void StopAndWait();
 
 private:
+    void ImGuiInit();
+
     void Run();
     State GetState();
     void Wait();
     void Render() const;
+
+    void StopAndWait();
 
     std::thread myThread;
     sf::RenderWindow& myRenderWindow;

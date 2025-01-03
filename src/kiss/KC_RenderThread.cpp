@@ -1,5 +1,6 @@
 #include "KC_RenderThread.h"
 
+#include "KC_Assert.h"
 #include "KC_CircleRenderSystem.h"
 
 #include "imgui.h"
@@ -11,7 +12,15 @@ KC_RenderThread::KC_RenderThread(sf::RenderWindow& aRenderWindow)
     : myRenderWindow(aRenderWindow)
     , myState(State::Run)
 {
+    ImGuiInit();
+
     myThread = std::move(std::thread(&KC_RenderThread::Run, this));
+}
+
+KC_RenderThread::~KC_RenderThread()
+{
+    StopAndWait();
+    ImGui::SFML::Shutdown();
 }
 
 void KC_RenderThread::UpdateFrame(const KC_MainComponentManager& aMainComponentManager, sf::Time elapsedTime)
@@ -33,6 +42,12 @@ void KC_RenderThread::UpdateFrame(const KC_MainComponentManager& aMainComponentM
 
     lock.lock();
     myStateConditionVariable.wait(lock, [this]{ return myState == State::Run; });
+}
+
+void KC_RenderThread::ImGuiInit()
+{
+    KC_ASSERT(ImGui::SFML::Init(myRenderWindow));
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 }
 
 void KC_RenderThread::StopAndWait()
