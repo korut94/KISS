@@ -8,7 +8,7 @@ target_sources(KissEditor
     PUBLIC
         ImGui/Profiler.h
         KT_Editor.h
-        KT_ImGuiEditor.h
+        KT_ImGui.h
     PRIVATE
         ImGui/Profiler.cpp)
 target_link_libraries(KissEditor PUBLIC Kiss)

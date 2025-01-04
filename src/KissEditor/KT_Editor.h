@@ -1,5 +1,7 @@
 #pragma once
 
+#include "KT_ImGui.h"
+
 #include "KC_Game.h"
 
 class KC_World;
@@ -9,9 +11,7 @@ class KT_Editor final : public KC_Game
 {
 public:
     void Update(KC_World& aWorld);
-#if IS_IMGUI
     void ImGui();
-#endif // IS_IMGUI
 
 private:
     TGame myGame;
@@ -23,10 +23,10 @@ void KT_Editor<TGame>::Update(KC_World& aWorld)
     myGame.Update(aWorld);
 }
 
-#if IS_IMGUI
 template <typename TGame>
 void KT_Editor<TGame>::ImGui()
 {
+    ImGui::Editor::Profiler();
+    ImGui::ShowDemoWindow();
     myGame.ImGui();
 }
-#endif // IS_IMGUI
