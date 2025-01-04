@@ -6,8 +6,11 @@ add_library(KissEditor STATIC)
 target_include_directories(KissEditor PUBLIC ${KISS_EDITOR_SOURCE_DIR})
 target_sources(KissEditor
     PUBLIC
-        KT_Editor.h)
-
+        ImGui/Profiler.h
+        KT_Editor.h
+        KT_ImGuiEditor.h
+    PRIVATE
+        ImGui/Profiler.cpp)
 target_link_libraries(KissEditor PUBLIC Kiss)
 target_compile_definitions(KissEditor
         PRIVATE

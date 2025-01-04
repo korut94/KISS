@@ -2,6 +2,7 @@
 
 #include "KC_Assert.h"
 #include "KC_CircleRenderSystem.h"
+#include "KC_Profiling.h"
 
 #if IS_IMGUI
 #include "imgui.h"
@@ -93,6 +94,8 @@ KC_RenderSystemProvider::RenderThreadState KC_RenderSystemProvider::GetState()
 
 void KC_RenderSystemProvider::Wait()
 {
+    KC_PROFILE(RenderingWait);
+
     {
         std::lock_guard lock { myStateMutex };
         myRenderThreadState = RenderThreadState::Wait;
@@ -110,6 +113,8 @@ void KC_RenderSystemProvider::Wait()
 
 void KC_RenderSystemProvider::Render() const
 {
+    KC_PROFILE(Rendering);
+
     myRenderWindow.clear(sf::Color::Black);
 
     RunSystem<KC_CircleRenderSystem>();

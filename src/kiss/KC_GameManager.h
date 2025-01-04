@@ -3,6 +3,8 @@
 #include "KC_GameManager.h"
 
 #include "KC_Assert.h"
+#include "KC_Profiler.h"
+#include "KC_Profiling.h"
 #include "KC_RenderSystemProvider.h"
 #include "KC_World.h"
 
@@ -28,6 +30,10 @@ private:
 template <typename TGame>
 void KC_GameManager<TGame>::Run()
 {
+#if IS_DEBUG_BUILD
+    KC_Profiler profiler;
+#endif // IS_DEBUG_BUILD
+
     sf::RenderWindow window = sf::RenderWindow({1280u, 720u}, "KISS");
     window.setActive(false);
 
@@ -35,15 +41,18 @@ void KC_GameManager<TGame>::Run()
     bool proceed = true;
 
     KC_World world;
+
     TGame game;
     KC_RenderSystemProvider renderSystemProvider(window);
 
     while (proceed)
     {
         const sf::Time elapsedTime = clock.restart();
-        proceed = ProcessEvent(window); // we will close the application on the next cycle
+        proceed = ProcessEvent(window); // we will close the application at the next cycle
         // Update frame
         {
+            KC_PROFILE(GameRenderSync);
+
             std::unique_lock lock = std::move(renderSystemProvider.UpdateFrame());
             renderSystemProvider.SetComponents(world.GetComponentManager());
 #if IS_IMGUI
@@ -53,6 +62,7 @@ void KC_GameManager<TGame>::Run()
             renderSystemProvider.Ready(lock);
         }
 
+        KC_PROFILE(Game);
         game.Update(world);
     }
 }
