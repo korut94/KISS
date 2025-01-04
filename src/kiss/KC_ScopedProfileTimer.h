@@ -1,16 +1,13 @@
 #pragma once
 
-#include "KC_ProfileTimerTypes.h"
-
-#include <SFML/System/Clock.hpp>
+#include "KC_ProfileTimer.h"
 
 class KC_ScopedProfileTimer final
 {
 public:
-    KC_ScopedProfileTimer(KC_ProfileTimerType profileTimerType);
+    KC_ScopedProfileTimer(KC_ProfileTimerType aProfileTimerType);
     ~KC_ScopedProfileTimer();
 
 private:
-    KC_ProfileTimerType myProfilerTimerType;
-    sf::Clock myClock;
+    KC_ProfileTimer myProfileTimer;
 };
