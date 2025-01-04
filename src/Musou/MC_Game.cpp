@@ -20,16 +20,16 @@ void MC_Game::Update(KC_World& aWorld)
         KC_EntityManager& entityManager = aWorld.GetEntityManager();
         KC_MainComponentManager& componentManager = aWorld.GetComponentManager();
 
-        for (int i = 0; i < 1000; ++i)
+        for (int i = 0; i < 10000; ++i)
         {
             KC_Entity entity = entityManager.CreateEntity();
 
             KC_Transform& transform = componentManager.AddComponent<KC_Transform>(entity);
-            transform.myPosition = { (i % 50) * 15.f + 150.f, (i / 50) * 15.f + 150.f };
+            transform.myPosition = { (i % 100) * 5.f + 50.f, (i / 100) * 5.f + 50.f };
 
             KC_CircleRenderer& circle = componentManager.AddComponent<KC_CircleRenderer>(entity);
-            circle.myRadius = 10.f;
-            circle.myFillColor = sf::Color::Green;
+            circle.myRadius = 2.f;
+            circle.myFillColor = {255, 0, static_cast<std::uint8_t>(255 * i / 10000)};
         }
 
         myIsInitialized = true;

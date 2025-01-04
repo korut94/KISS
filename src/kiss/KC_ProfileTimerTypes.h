@@ -5,6 +5,12 @@ enum KC_ProfileTimerType
     Game,
     GameRenderSync,
     Rendering,
-    RenderingWait,
+    RenderDraw,
+    RenderSystemGetEntitySet,
+    RenderSystemRun,
+    RenderSystemGetComponent,
+    RenderSystemCreateDrawnable,
+    RenderSystemDraw,
+    RenderDisplay,
     Count
 };

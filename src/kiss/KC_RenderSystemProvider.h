@@ -1,6 +1,7 @@
 #pragma once
 
 #include "KC_ComponentManager.h"
+#include "KC_Profiling.h"
 #include "KC_TemplateHelper.h"
 
 #include <SFML/System/Time.hpp>
@@ -60,10 +61,16 @@ template <typename TSystem>
 void KC_RenderSystemProvider::RunSystem() const
 {
     KC_EntitySet entitySet;
-    GetEntitySet<typename TSystem::Components>(entitySet);
+    {
+        KC_PROFILE(RenderSystemGetEntitySet);
+        GetEntitySet<typename TSystem::Components>(entitySet);
+    }
 
     TSystem system { entitySet, myComponentManager };
-    system.Run(myRenderWindow);
+    {
+        KC_PROFILE(RenderSystemRun);
+        system.Run(myRenderWindow);
+    }
 }
 
 template <typename Tuple>
