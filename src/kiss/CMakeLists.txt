@@ -45,7 +45,6 @@ target_sources(Kiss
         KC_GameManager.h
         KC_Profiler.h
         KC_ProfileTimer.h
-        KC_ProfileTimerTypes.h
         KC_Profiling.h
         KC_RectangleRenderer.h
         KC_RenderSystem.h
@@ -61,6 +60,7 @@ target_sources(Kiss
         KC_CircleRenderSystem.cpp
         KC_Profiler.cpp
         KC_ProfileTimer.cpp
+        KC_Profiling.cpp
         KC_RenderSystemProvider.cpp
         KC_ScopedProfileTimer.cpp)
 target_link_libraries(Kiss PUBLIC sfml-graphics ImGui-SFML::ImGui-SFML)

@@ -1,23 +1,24 @@
 #pragma once
 
-#include "KC_ProfileTimerTypes.h"
-
 #include <SFML/System/Time.hpp>
 
-#include <array>
+#include <string>
+#include <unordered_map>
 
+// No thread safe. It might be necesarray change it in the future but, for the moment,
+// it doesn't harm if we don't read the correct timer value.
 class KC_Profiler final
 {
 public:
     KC_Profiler();
 
-    sf::Time GetTime(KC_ProfileTimerType aProfileTimerType) const;
-    void SetTime(KC_ProfileTimerType aProfileTimerType, sf::Time aTime);
+    sf::Time GetTime(const char* aTimerName) const;
+    void SetTime(const char* aTimerName, sf::Time aTime);
 
     static KC_Profiler& GetProfiler();
 
 private:
-    std::array<sf::Time, KC_ProfileTimerType::Count> myTimes;
+    std::unordered_map<const char*, sf::Time> myTimes;
 
     static KC_Profiler* myInstance;
 };

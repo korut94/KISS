@@ -1,6 +1,7 @@
 #include "Profiler.h"
 
 #include "KC_Profiler.h"
+#include "KC_Profiling.h"
 
 #include "imgui.h"
 
@@ -13,19 +14,18 @@ void Profiler()
     KC_Profiler& profiler = KC_Profiler::GetProfiler();
 
     ImGui::Begin("Profiler");
-    ImGui::Text("FPS: %d", static_cast<int>(1.f / profiler.GetTime(KC_ProfileTimerType::Rendering).asSeconds()));
+    ImGui::Text("FPS: %d", static_cast<int>(1.f / profiler.GetTime(KC_Profiling::ourProfileRenderTag).asSeconds()));
 
     if (ImGui::CollapsingHeader("Game Thread"))
     {
-        ImGui::Text("Game: %dms", profiler.GetTime(KC_ProfileTimerType::Game).asMilliseconds());
-        ImGui::Text("Game-Render Sync: %dms", profiler.GetTime(KC_ProfileTimerType::GameRenderSync).asMilliseconds());
+        ImGui::Text("Game: %dms", profiler.GetTime(KC_Profiling::ourProfileGameTag).asMilliseconds());
+        ImGui::Text("Game-Render Sync: %dms", profiler.GetTime(KC_Profiling::ourProfileGameRenderSyncTag).asMilliseconds());
     }
     if (ImGui::CollapsingHeader("Render Thread"))
     {
-        ImGui::Text("Render: %dms", profiler.GetTime(KC_ProfileTimerType::Rendering).asMilliseconds());
-        ImGui::Text("Display: %dms", profiler.GetTime(KC_ProfileTimerType::RenderDisplay).asMilliseconds());
-        
-        ImGui::Text("Draw: %dms", profiler.GetTime(KC_ProfileTimerType::RenderDraw).asMilliseconds());
+        ImGui::Text("Render: %dms", profiler.GetTime(KC_Profiling::ourProfileRenderTag).asMilliseconds());
+        ImGui::Text("Draw: %dms", profiler.GetTime(KC_Profiling::ourProfileRenderDrawTag).asMilliseconds());
+        /*
         if (ImGui::TreeNode("CircleRenderSystem"))
         {
             ImGui::Text("Run: %dms", profiler.GetTime(KC_ProfileTimerType::RenderSystemRun).asMilliseconds());
@@ -35,6 +35,7 @@ void Profiler()
             ImGui::Text("Draw: %dus * 10000", profiler.GetTime(KC_ProfileTimerType::RenderSystemDraw).asMicroseconds());
             ImGui::TreePop();
         }
+        */
     }
     ImGui::End();
 }

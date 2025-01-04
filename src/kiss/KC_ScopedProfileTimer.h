@@ -5,7 +5,7 @@
 class KC_ScopedProfileTimer final
 {
 public:
-    KC_ScopedProfileTimer(KC_ProfileTimerType aProfileTimerType);
+    KC_ScopedProfileTimer(const char* aTimerName);
     ~KC_ScopedProfileTimer();
 
 private:

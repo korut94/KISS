@@ -10,14 +10,17 @@ KC_Profiler::KC_Profiler()
     myInstance = this;
 }
 
-sf::Time KC_Profiler::GetTime(KC_ProfileTimerType aProfileTimerType) const
+sf::Time KC_Profiler::GetTime(const char* aTimerName) const
 {
-    return myTimes[aProfileTimerType];
+    if (auto itr = myTimes.find(aTimerName); itr != myTimes.cend())
+        return itr->second;
+    
+    return sf::Time();
 }
 
-void KC_Profiler::SetTime(KC_ProfileTimerType aProfileTimerType, sf::Time aTime)
+void KC_Profiler::SetTime(const char* aTimerName, sf::Time aTime)
 {
-    myTimes[aProfileTimerType] = aTime;
+    myTimes[aTimerName] = aTime;
 }
 
 KC_Profiler& KC_Profiler::GetProfiler()

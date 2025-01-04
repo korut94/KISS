@@ -3,10 +3,6 @@
 #include "KC_CircleRenderer.h"
 #include "KC_Transform.h"
 
-#if IS_DEBUG_BUILD
-#include "KC_Profiling.h"
-#endif // IS_DEBUG_BUILD
-
 #include <SFML/Graphics.hpp>
 
 namespace KC_CircleRenderSystem_Private
@@ -22,18 +18,8 @@ void KC_CircleRenderSystem::Run(sf::RenderWindow& aRenderWindow) const
 
     for (KC_Entity entity : myEntitySet)
     {
-#if IS_DEBUG_BUILD
-        KC_ProfileTimer getComponentTimer{ KC_ProfileTimerType::RenderSystemGetComponent };
-#endif // IS_DEBUG_BUILD
-        
         const KC_Transform& transform = GetComponent<KC_Transform>(entity);
         const KC_CircleRenderer& renderer = GetComponent<KC_CircleRenderer>(entity);
-
-#if IS_DEBUG_BUILD
-        getComponentTimer.RecordTime();
-
-        KC_ProfileTimer createCircleTimer{ KC_ProfileTimerType::RenderSystemCreateDrawnable };
-#endif // IS_DEBUG_BUILD
 
         Private::locCircleShape.setPosition(transform.myPosition);
         Private::locCircleShape.setFillColor(renderer.myFillColor);
@@ -45,13 +31,6 @@ void KC_CircleRenderSystem::Run(sf::RenderWindow& aRenderWindow) const
             Private::locCircleShape.setRadius(renderer.myRadius);
         }
         
-#if IS_DEBUG_BUILD
-        createCircleTimer.RecordTime();
-#endif // IS_DEBUG_BUILD
-
-        {
-            KC_PROFILE(RenderSystemDraw);
-            aRenderWindow.draw(Private::locCircleShape);
-        }
+        aRenderWindow.draw(Private::locCircleShape);
     }
 }

@@ -1,7 +1,7 @@
 #include "KC_ScopedProfileTimer.h"
 
-KC_ScopedProfileTimer::KC_ScopedProfileTimer(KC_ProfileTimerType aProfileTimerType)
-    : myProfileTimer(aProfileTimerType)
+KC_ScopedProfileTimer::KC_ScopedProfileTimer(const char* aTimerName)
+    : myProfileTimer(aTimerName)
 {
     myProfileTimer.ResetTime();
 }

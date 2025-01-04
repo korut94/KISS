@@ -2,6 +2,7 @@
 
 #include "KC_Assert.h"
 #include "KC_CircleRenderSystem.h"
+#include "KC_Profiling.h"
 
 #if IS_IMGUI
 #include "imgui.h"
@@ -110,11 +111,11 @@ void KC_RenderSystemProvider::Wait()
 
 void KC_RenderSystemProvider::Render() const
 {
-    KC_PROFILE(Rendering);
-    myRenderWindow.clear(sf::Color::Black);
+    KC_PROFILE_RENDER;
 
+    myRenderWindow.clear(sf::Color::Black);
     {
-        KC_PROFILE(RenderDraw);
+        KC_PROFILE_RENDERDRAW;
         RunSystem<KC_CircleRenderSystem>();
     }
 
@@ -122,10 +123,7 @@ void KC_RenderSystemProvider::Render() const
     ImGui::SFML::Render(myRenderWindow);
 #endif // IS_IMGUI
 
-    {
-        KC_PROFILE(RenderDisplay);
-        myRenderWindow.display();
-    }
+    myRenderWindow.display();
 }
 
 void KC_RenderSystemProvider::StopAndWait()

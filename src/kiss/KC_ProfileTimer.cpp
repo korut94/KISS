@@ -2,8 +2,8 @@
 
 #include "KC_Profiler.h"
 
-KC_ProfileTimer::KC_ProfileTimer(KC_ProfileTimerType aProfilerTimerType)
-    : myProfilerTimerType(aProfilerTimerType)
+KC_ProfileTimer::KC_ProfileTimer(const char* aTimerName)
+    : myTimerName(aTimerName)
 {
 }
 
@@ -14,5 +14,5 @@ void KC_ProfileTimer::ResetTime()
 
 void KC_ProfileTimer::RecordTime()
 {
-    KC_Profiler::GetProfiler().SetTime(myProfilerTimerType, myClock.getElapsedTime());
+    KC_Profiler::GetProfiler().SetTime(myTimerName, myClock.getElapsedTime());
 }

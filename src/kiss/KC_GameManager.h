@@ -51,8 +51,7 @@ void KC_GameManager<TGame>::Run()
         proceed = ProcessEvent(window); // we will close the application at the next cycle
         // Update frame
         {
-            KC_PROFILE(GameRenderSync);
-
+            KC_PROFILE_GAMERENDERSYNC;
             std::unique_lock lock = std::move(renderSystemProvider.UpdateFrame());
             renderSystemProvider.SetComponents(world.GetComponentManager());
 #if IS_IMGUI
@@ -62,7 +61,7 @@ void KC_GameManager<TGame>::Run()
             renderSystemProvider.Ready(lock);
         }
 
-        KC_PROFILE(Game);
+        KC_PROFILE_GAME;
         game.Update(world);
     }
 }
