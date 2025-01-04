@@ -2,11 +2,13 @@
 
 #include "KC_Game.h"
 
+class KC_World;
+
 template <typename TGame>
 class KT_Editor final : public KC_Game
 {
 public:
-    void Update();
+    void Update(KC_World& aWorld);
 #if IS_IMGUI
     void ImGui();
 #endif // IS_IMGUI
@@ -16,9 +18,9 @@ private:
 };
 
 template <typename TGame>
-void KT_Editor<TGame>::Update()
+void KT_Editor<TGame>::Update(KC_World& aWorld)
 {
-    myGame.Update();
+    myGame.Update(aWorld);
 }
 
 #if IS_IMGUI

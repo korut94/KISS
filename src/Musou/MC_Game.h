@@ -5,8 +5,10 @@
 class MC_Game final : public KC_Game
 {
 public:
-    void Update();
-#if IS_IMGUI
-    void ImGui();
-#endif // IS_IMGUI
+    MC_Game();
+
+    void Update(KC_World& aWorld);
+
+private:
+    bool myIsInitialized;
 };
