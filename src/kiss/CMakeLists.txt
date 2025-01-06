@@ -38,20 +38,24 @@ target_sources(Kiss
         KC_ComponentArray.h
         KC_ComponentManager.h
         KC_ComponentsRegistry.h
+        KC_Defines.h
         KC_Entity.h
         KC_EntityManager.h
         KC_EntitySet.h
         KC_Game.h
         KC_GameManager.h
-        KC_Profiler.h
-        KC_ProfileTimer.h
+        KC_Manager.h
+        KC_ProfileBlock.h
+        KC_ProfileBlockTimes.h
+        KC_ProfileManager.h
         KC_Profiling.h
         KC_RectangleRenderer.h
         KC_RenderSystem.h
         KC_RenderSystemProvider.h
-        KC_ScopedProfileTimer.h
+        KC_ScopedProfileBlock.h
         KC_ShapeRenderer.h
         KC_TemplateHelper.h
+        KC_ThreadManager.h
         KC_Time.h
         KC_Transform.h
         KC_World.h
@@ -59,11 +63,11 @@ target_sources(Kiss
         KC_EntityManager.cpp
         KC_EntitySet.cpp
         KC_CircleRenderSystem.cpp
-        KC_Profiler.cpp
-        KC_ProfileTimer.cpp
-        KC_Profiling.cpp
+        KC_ProfileBlock.cpp
+        KC_ProfileManager.cpp
         KC_RenderSystemProvider.cpp
-        KC_ScopedProfileTimer.cpp
+        KC_ScopedProfileBlock.cpp
+        KC_ThreadManager.cpp
         KC_Time.cpp)
 target_link_libraries(Kiss PUBLIC sfml-graphics ImGui-SFML::ImGui-SFML)
 target_compile_definitions(Kiss

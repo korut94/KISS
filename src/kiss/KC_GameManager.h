@@ -3,7 +3,7 @@
 #include "KC_GameManager.h"
 
 #include "KC_Assert.h"
-#include "KC_Profiler.h"
+#include "KC_ProfileManager.h"
 #include "KC_Profiling.h"
 #include "KC_RenderSystemProvider.h"
 #include "KC_Time.h"
@@ -32,13 +32,12 @@ template <typename TGame>
 void KC_GameManager<TGame>::Run()
 {
 #if IS_DEBUG_BUILD
-    KC_Profiler profiler;
+    KC_ProfileManager profileManager;
 #endif // IS_DEBUG_BUILD
 
     sf::RenderWindow window = sf::RenderWindow({1280u, 720u}, "KISS");
     window.setActive(false);
 
-    sf::Clock clock;
     bool proceed = true;
 
     KC_World world;
@@ -51,24 +50,27 @@ void KC_GameManager<TGame>::Run()
 
     while (proceed)
     {
+        KC_PROFILE_GAME
         const KC_Time currentFrameTime = KC_Time::Now();
         const KC_Time elapsedTime = currentFrameTime - previousFrameTime;
 
         proceed = ProcessEvent(window); // we will close the application at the next cycle
         // Update frame
         {
-            KC_PROFILE_GAMERENDERSYNC;
             std::unique_lock lock = std::move(renderSystemProvider.UpdateFrame());
-            renderSystemProvider.SetComponents(world.GetComponentManager());
+            {
+                KC_PROFILE_GAMERENDERSERVICEPROVIDER
+                renderSystemProvider.SetComponents(world.GetComponentManager());
+            }
 #if IS_IMGUI
-            renderSystemProvider.ImGuiUpdate(clock.restart());
+            renderSystemProvider.ImGuiUpdate(sf::microseconds(elapsedTime.AsMicroseconds()));
             game.ImGui();
 #endif // IS_IMGUI
             renderSystemProvider.Ready(lock);
         }
 
         {
-            KC_PROFILE_GAME;
+            KC_PROFILE_GAMEUPDATE
             game.Update(world);
         }
 

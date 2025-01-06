@@ -1,9 +1,10 @@
 #include "Profiler.h"
 
-#include "KC_Profiler.h"
-#include "KC_Profiling.h"
+#include "KC_ProfileManager.h"
 
 #include "imgui.h"
+
+#include <unordered_map>
 
 namespace ImGui
 {
@@ -11,11 +12,19 @@ namespace Editor
 {
 void Profiler()
 {
-    KC_Profiler& profiler = KC_Profiler::GetProfiler();
+    static std::unordered_map<const char*, KC_ProfileBlockTimes> blocksTimes;
+
+    KC_ProfileManager& profiler = KC_ProfileManager::GetManager();
+    profiler.SwapBlocks(blocksTimes);
 
     ImGui::Begin("Profiler");
-    ImGui::Text("FPS: %d", static_cast<int>(1.f / profiler.GetTime(KC_Profiling::ourProfileRenderTag).asSeconds()));
+    for (auto [name, block] : blocksTimes)
+    {
+        ImGui::Text("%s (id: %d) [%dns]", name, block.myThreadId, (block.myEndTime - block.myStartTime).AsNanoseconds());
+    }
 
+    /*
+    ImGui::Text("FPS: %d", static_cast<int>(1.f / profiler.GetTime(KC_Profiling::ourProfileRenderTag).asSeconds()));
     if (ImGui::CollapsingHeader("Game Thread"))
     {
         ImGui::Text("Game: %dms", profiler.GetTime(KC_Profiling::ourProfileGameTag).asMilliseconds());
@@ -25,7 +34,7 @@ void Profiler()
     {
         ImGui::Text("Render: %dms", profiler.GetTime(KC_Profiling::ourProfileRenderTag).asMilliseconds());
         ImGui::Text("Draw: %dms", profiler.GetTime(KC_Profiling::ourProfileRenderDrawTag).asMilliseconds());
-        /*
+        
         if (ImGui::TreeNode("CircleRenderSystem"))
         {
             ImGui::Text("Run: %dms", profiler.GetTime(KC_ProfileTimerType::RenderSystemRun).asMilliseconds());
@@ -35,9 +44,11 @@ void Profiler()
             ImGui::Text("Draw: %dus * 10000", profiler.GetTime(KC_ProfileTimerType::RenderSystemDraw).asMicroseconds());
             ImGui::TreePop();
         }
-        */
     }
+    */
     ImGui::End();
+
+    blocksTimes.clear();
 }
 } // Editor
 } // ImGui

@@ -3,6 +3,7 @@
 #include "KC_Assert.h"
 #include "KC_CircleRenderSystem.h"
 #include "KC_Profiling.h"
+#include "KC_ThreadManager.h"
 
 #if IS_IMGUI
 #include "imgui.h"
@@ -18,7 +19,8 @@ KC_RenderSystemProvider::KC_RenderSystemProvider(sf::RenderWindow& aRenderWindow
 #if IS_IMGUI
     ImGuiInit();
 #endif // IS_IMGUI
-    myRenderThread = std::move(std::thread(&KC_RenderSystemProvider::RenderThread, this));
+    KC_ThreadManager& threadManager = KC_ThreadManager::GetManager();
+    myRenderThread = std::move(threadManager.CreateThread([this](){ RenderThread(); }, "Render Thread"));
 }
 
 KC_RenderSystemProvider::~KC_RenderSystemProvider()
@@ -111,18 +113,17 @@ void KC_RenderSystemProvider::Wait()
 
 void KC_RenderSystemProvider::Render() const
 {
-    KC_PROFILE_RENDER;
-
+    KC_PROFILE_RENDER
     myRenderWindow.clear(sf::Color::Black);
+
     {
-        KC_PROFILE_RENDERDRAW;
+        KC_PROFILE_RENDERDRAW
         RunSystem<KC_CircleRenderSystem>();
     }
 
 #if IS_IMGUI
     ImGui::SFML::Render(myRenderWindow);
 #endif // IS_IMGUI
-
     myRenderWindow.display();
 }
 
