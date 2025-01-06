@@ -52,6 +52,7 @@ target_sources(Kiss
         KC_ScopedProfileTimer.h
         KC_ShapeRenderer.h
         KC_TemplateHelper.h
+        KC_Time.h
         KC_Transform.h
         KC_World.h
     PRIVATE
@@ -62,7 +63,8 @@ target_sources(Kiss
         KC_ProfileTimer.cpp
         KC_Profiling.cpp
         KC_RenderSystemProvider.cpp
-        KC_ScopedProfileTimer.cpp)
+        KC_ScopedProfileTimer.cpp
+        KC_Time.cpp)
 target_link_libraries(Kiss PUBLIC sfml-graphics ImGui-SFML::ImGui-SFML)
 target_compile_definitions(Kiss
         PRIVATE

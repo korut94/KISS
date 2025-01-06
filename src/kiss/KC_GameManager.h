@@ -6,6 +6,7 @@
 #include "KC_Profiler.h"
 #include "KC_Profiling.h"
 #include "KC_RenderSystemProvider.h"
+#include "KC_Time.h"
 #include "KC_World.h"
 
 #if IS_IMGUI
@@ -45,9 +46,14 @@ void KC_GameManager<TGame>::Run()
     TGame game;
     KC_RenderSystemProvider renderSystemProvider(window);
 
+    KC_Time::SetFrameZero();
+    KC_Time previousFrameTime = KC_Time::Now();
+
     while (proceed)
     {
-        const sf::Time elapsedTime = clock.restart();
+        const KC_Time currentFrameTime = KC_Time::Now();
+        const KC_Time elapsedTime = currentFrameTime - previousFrameTime;
+
         proceed = ProcessEvent(window); // we will close the application at the next cycle
         // Update frame
         {
@@ -55,14 +61,18 @@ void KC_GameManager<TGame>::Run()
             std::unique_lock lock = std::move(renderSystemProvider.UpdateFrame());
             renderSystemProvider.SetComponents(world.GetComponentManager());
 #if IS_IMGUI
-            renderSystemProvider.ImGuiUpdate(elapsedTime);
+            renderSystemProvider.ImGuiUpdate(clock.restart());
             game.ImGui();
 #endif // IS_IMGUI
             renderSystemProvider.Ready(lock);
         }
 
-        KC_PROFILE_GAME;
-        game.Update(world);
+        {
+            KC_PROFILE_GAME;
+            game.Update(world);
+        }
+
+        previousFrameTime = currentFrameTime;
     }
 }
 
