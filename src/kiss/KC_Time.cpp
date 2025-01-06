@@ -24,6 +24,11 @@ std::int64_t KC_Time::AsNanoseconds() const
     return myNanoseconds.count();
 }
 
+KC_Time KC_Time::Now()
+{
+    return Clock::now() - ourFrameZero;
+}
+
 KC_Time KC_Time::Seconds(float anAmount)
 {
     return std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::duration<float>(anAmount));
@@ -42,11 +47,6 @@ KC_Time KC_Time::Microseconds(std::int64_t anAmount)
 KC_Time KC_Time::Nanoseconds(std::int64_t anAmount)
 {
     return std::chrono::nanoseconds(anAmount);
-}
-
-KC_Time KC_Time::Now()
-{
-    return Clock::now() - ourFrameZero;
 }
 
 void KC_Time::SetFrameZero()

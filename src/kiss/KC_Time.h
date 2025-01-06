@@ -16,11 +16,11 @@ public:
     std::int64_t AsMicroseconds() const;
     std::int64_t AsNanoseconds() const;
 
+    static KC_Time Now();
     static KC_Time Seconds(float anAmount);
     static KC_Time Milliseconds(std::int32_t anAmount);
     static KC_Time Microseconds(std::int64_t anAmount);
     static KC_Time Nanoseconds(std::int64_t anAmount);
-    static KC_Time Now();
 
     static void SetFrameZero();
 
