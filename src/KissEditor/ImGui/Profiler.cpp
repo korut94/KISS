@@ -17,7 +17,7 @@ namespace Profiler_Private
         return a.second.myThreadId > b.second.myThreadId || a.second.myStartTime > b.second.myStartTime;
     }
 
-    void SortBlocksTimes(
+    void SortProfileBlocks(
         const std::unordered_map<const char*, KC_ProfileBlockTimes>& someProfileBlocks, 
         std::vector<std::pair<const char*, KC_ProfileBlockTimes>>& outSortedBlocks)
     {
@@ -56,7 +56,7 @@ void Profiler()
     profiler.SwapBlocks(profileBlocks);
 
     std::vector<std::pair<const char*, KC_ProfileBlockTimes>> sortedProfileBlocks;
-    Profiler_Private::SortBlocksTimes(profileBlocks, sortedProfileBlocks);
+    Profiler_Private::SortProfileBlocks(profileBlocks, sortedProfileBlocks);
 
     std::size_t index = 0;
     const std::size_t sortedProfileBlocksCount = sortedProfileBlocks.size();
@@ -79,6 +79,7 @@ void Profiler()
         }
         else
         {
+            // Move to next thread profile blocks
             while (index < sortedProfileBlocksCount && sortedProfileBlocks[index].second.myThreadId == threadId)
             {
                 ++index;
