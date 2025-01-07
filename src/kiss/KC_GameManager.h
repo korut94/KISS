@@ -54,14 +54,15 @@ void KC_GameManager<TGame>::Run()
         // Update frame
         {
             std::unique_lock lock = std::move(renderSystemProvider.UpdateFrame());
+#if IS_IMGUI
+            // ImGui update must be the first operation to perform during the lock of the render threads
+            renderSystemProvider.ImGuiUpdate(sf::microseconds(elapsedTime.AsMicroseconds()));
+            game.ImGui();
+#endif // IS_IMGUI
             {
                 KC_PROFILE_GAMERENDERSERVICEPROVIDER
                 renderSystemProvider.SetComponents(world.GetComponentManager());
             }
-#if IS_IMGUI
-            renderSystemProvider.ImGuiUpdate(sf::microseconds(elapsedTime.AsMicroseconds()));
-            game.ImGui();
-#endif // IS_IMGUI
             renderSystemProvider.Ready(lock);
         }
 
