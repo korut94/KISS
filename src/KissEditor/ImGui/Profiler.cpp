@@ -48,7 +48,7 @@ namespace ImGui
 {
 namespace Editor
 {
-void Profiler()
+void Profiler(bool* outIsOpen)
 {
     namespace Private = Profiler_Private;
 
@@ -64,7 +64,7 @@ void Profiler()
     std::size_t index = 0;
     const std::size_t sortedProfileBlocksCount = sortedProfileBlocks.size();
 
-    ImGui::Begin("Profiler");
+    ImGui::Begin("Profiler", outIsOpen);
     while (index < sortedProfileBlocksCount)
     {
         const std::thread::id threadId = sortedProfileBlocks[index].second.myThreadId;

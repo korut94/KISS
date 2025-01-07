@@ -41,8 +41,8 @@ void KT_Editor<TGame>::ImGui()
     }
     ImGui::EndMainMenuBar();
 
-    if (myShowProfiler) ImGui::Editor::Profiler();
-    if (myShowImGuiDemo) ImGui::ShowDemoWindow();
+    if (myShowProfiler) ImGui::Editor::Profiler(&myShowProfiler);
+    if (myShowImGuiDemo) ImGui::ShowDemoWindow(&myShowImGuiDemo);
 
     myGame.ImGui();
 }

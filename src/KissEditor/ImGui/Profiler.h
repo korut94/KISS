@@ -4,6 +4,6 @@ namespace ImGui
 {
 namespace Editor
 {
-void Profiler();
+void Profiler(bool* outIsOpen);
 }
 } // ImGui
