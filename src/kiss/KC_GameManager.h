@@ -32,8 +32,7 @@ void KC_GameManager<TGame>::Run()
 {
     KC_THREAD("Main Thread")
 
-    sf::RenderWindow window = sf::RenderWindow({1280u, 720u}, "KISS");
-    window.setActive(false);
+    sf::RenderWindow window{ sf::VideoMode({1280u, 720u}), "KISS" };
 
     KC_World world;
     bool proceed = true;
@@ -78,13 +77,13 @@ void KC_GameManager<TGame>::Run()
 template <typename TGame>
 bool KC_GameManager<TGame>::ProcessEvent(sf::RenderWindow& aRenderWindow)
 {
-    for (sf::Event event; aRenderWindow.pollEvent(event);)
+    while (const auto event = aRenderWindow.pollEvent())
     {
 #if IS_IMGUI
-        ImGui::SFML::ProcessEvent(aRenderWindow, event);
+        ImGui::SFML::ProcessEvent(aRenderWindow, *event);
 #endif // IS_IMGUI
 
-        if (event.type == sf::Event::Closed)
+        if (event->is<sf::Event::Closed>())
         {
             return false;
         }

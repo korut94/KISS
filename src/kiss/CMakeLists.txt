@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.28)
 include(FetchContent)
 FetchContent_Declare(SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
-    GIT_TAG 2.6.x
+    GIT_TAG 3.0.0
     GIT_SHALLOW ON
     EXCLUDE_FROM_ALL
     SYSTEM)
@@ -17,7 +17,7 @@ FetchContent_MakeAvailable(imgui)
 
 FetchContent_Declare(imgui-sfml
   GIT_REPOSITORY https://github.com/SFML/imgui-sfml.git
-  GIT_TAG 2.6.x
+  GIT_TAG v3.0
 )
 
 set(IMGUI_DIR ${imgui_SOURCE_DIR})

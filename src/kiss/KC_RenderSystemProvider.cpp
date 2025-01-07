@@ -1,6 +1,7 @@
 #include "KC_RenderSystemProvider.h"
 
 #include "KC_Assert.h"
+#include "KC_Defines.h"
 #include "KC_DrawCircleSystem.h"
 #include "KC_ThreadManager.h"
 
@@ -18,6 +19,7 @@ KC_RenderSystemProvider::KC_RenderSystemProvider(sf::RenderWindow& aRenderWindow
 #if IS_IMGUI
     ImGuiInit();
 #endif // IS_IMGUI
+    KC_UNUSED(myRenderWindow.setActive(false));
     myRenderThread = std::move(std::thread(&KC_RenderSystemProvider::RenderThread, this));
 }
 
