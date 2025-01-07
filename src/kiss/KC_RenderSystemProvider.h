@@ -24,9 +24,6 @@ public:
 
     std::unique_lock<std::mutex> UpdateFrame();
     void SetComponents(const KC_MainComponentManager& aMainComponentManager);
-#if IS_IMGUI
-    void ImGuiUpdate(KC_Time anElapsedTime);
-#endif // IS_IMGUI
     void Ready(std::unique_lock<std::mutex>& aLock);
 
 private:

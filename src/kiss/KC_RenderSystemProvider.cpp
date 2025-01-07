@@ -46,13 +46,6 @@ void KC_RenderSystemProvider::SetComponents(const KC_MainComponentManager& aMain
     aMainComponentManager.AssignComponents(myComponentManager);
 }
 
-#if IS_IMGUI
-void KC_RenderSystemProvider::ImGuiUpdate(KC_Time anElapsedTime)
-{
-    ImGui::SFML::Update(myRenderWindow, sf::microseconds(anElapsedTime.AsMicroseconds()));
-}
-#endif // IS_IMGUI
-
 void KC_RenderSystemProvider::Ready(std::unique_lock<std::mutex>& aLock)
 {
     KC_ASSERT(aLock.owns_lock());
@@ -68,7 +61,9 @@ void KC_RenderSystemProvider::Ready(std::unique_lock<std::mutex>& aLock)
 #if IS_IMGUI
 void KC_RenderSystemProvider::ImGuiInit()
 {
-    KC_ASSERT(ImGui::SFML::Init(myRenderWindow));
+    const bool isInitialized = ImGui::SFML::Init(myRenderWindow);
+    KC_ASSERT(isInitialized);
+
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 }
 #endif // IS_IMGUI
