@@ -15,6 +15,9 @@ public:
 
 private:
     TGame myGame;
+
+    bool myShowProfiler = false;
+    bool myShowImGuiDemo = false;
 };
 
 template <typename TGame>
@@ -26,7 +29,20 @@ void KT_Editor<TGame>::Update(KC_World& aWorld)
 template <typename TGame>
 void KT_Editor<TGame>::ImGui()
 {
-    ImGui::Editor::Profiler();
-    ImGui::ShowDemoWindow();
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("Tools"))
+        {
+            ImGui::MenuItem("Profiler", nullptr, &myShowProfiler);
+            ImGui::MenuItem("Show ImGui Demo", nullptr, &myShowImGuiDemo);
+
+            ImGui::EndMenu();
+        }
+    }
+    ImGui::EndMainMenuBar();
+
+    if (myShowProfiler) ImGui::Editor::Profiler();
+    if (myShowImGuiDemo) ImGui::ShowDemoWindow();
+
     myGame.ImGui();
 }
