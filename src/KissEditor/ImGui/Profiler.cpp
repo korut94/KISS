@@ -5,11 +5,15 @@
 
 #include "imgui.h"
 
+#include <string>
 #include <unordered_map>
 #include <vector>
 
 namespace Profiler_Private
 {
+    static constexpr const std::uint64_t locMaxNanoseconds = 10000;
+    static constexpr const std::uint64_t locMaxMicroseconds = 1000;
+
     bool IsGreaterBlockTime(
         const std::pair<const char*, KC_ProfileBlockTimes>& a,
         const std::pair<const char*, KC_ProfileBlockTimes>& b)
@@ -50,13 +54,15 @@ namespace Editor
 {
 void Profiler()
 {
+    namespace Private = Profiler_Private;
+
     static std::unordered_map<const char*, KC_ProfileBlockTimes> profileBlocks;
 
     KC_ProfileManager& profiler = KC_ProfileManager::GetManager();
     profiler.SwapBlocks(profileBlocks);
 
     std::vector<std::pair<const char*, KC_ProfileBlockTimes>> sortedProfileBlocks;
-    Profiler_Private::SortProfileBlocks(profileBlocks, sortedProfileBlocks);
+    Private::SortProfileBlocks(profileBlocks, sortedProfileBlocks);
 
     std::size_t index = 0;
     const std::size_t sortedProfileBlocksCount = sortedProfileBlocks.size();
@@ -72,9 +78,28 @@ void Profiler()
             while (index < sortedProfileBlocksCount && sortedProfileBlocks[index].second.myThreadId == threadId)
             {
                 const std::pair<const char*, KC_ProfileBlockTimes>& profileBlock = sortedProfileBlocks[index++];
-                const std::uint64_t duration = (profileBlock.second.myEndTime - profileBlock.second.myStartTime).AsNanoseconds();
+                const KC_Time duration = profileBlock.second.myEndTime - profileBlock.second.myStartTime;
 
-                ImGui::Text("%s: %dns", profileBlock.first, duration);
+                float value = 0.f;
+                std::string unit;
+
+                if (duration.AsNanoseconds() < Private::locMaxNanoseconds)
+                {
+                    value = static_cast<float>(duration.AsNanoseconds());
+                    unit = "ns";
+                }
+                else if (duration.AsMicroseconds() < Private::locMaxMicroseconds)
+                {
+                    value = static_cast<float>(duration.AsNanoseconds()) / 1000.f;
+                    unit = "us";
+                }
+                else
+                {
+                    value = static_cast<float>(duration.AsMicroseconds()) / 1000.f;
+                    unit = "ms";
+                }
+
+                ImGui::Text("%s: %.2f%s", profileBlock.first, value, unit.c_str());
             }
         }
         else
