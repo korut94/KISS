@@ -74,6 +74,12 @@
             "displayName": "MusouEditor [x64 Release]",
             "configurePreset": "editor_x64_release",
             "targets": ["musou-editor"]
+        },
+        {
+            "name": "experiment_sfmlimgui",
+            "displayName": "SFML-ImGui (Experiment)",
+            "configurePreset": "x64_release",
+            "targets": ["experiment-sfmlimgui"]
         }
     ],
     "testPresets": [

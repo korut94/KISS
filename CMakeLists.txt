@@ -12,6 +12,7 @@ enable_testing()
 add_subdirectory(src/Kiss)
 add_subdirectory(src/KissEditor)
 add_subdirectory(src/Musou)
+add_subdirectory(experiments)
 add_subdirectory(test)
 
 if(${IS_EDITOR_BUILD})
