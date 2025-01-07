@@ -2,8 +2,24 @@
 
 #include "KC_ComponentManager.h"
 #include "KC_EntitySet.h"
+#include "KC_Profiling.h"
 
 #include <tuple>
+
+#if IS_DEBUG_BUILD
+#define KC_DRAWSYSTEM_PROFILETAGS(aSystem)\
+    static constexpr const char* GetEntitiesFetchTag() { return KC_PROFILE_STEP_TAG(#aSystem, "EntitesFetch"); }\
+    static constexpr const char* GetRunTag() { return KC_PROFILE_STEP_TAG(#aSystem, "Run"); }
+#else
+#define KC_DRAWSYSTEM_PROFILETAGS(aSystem)
+#endif // IS_DEBUG_BUILD
+
+#define KC_DRAWSYSTEM(aSystem)\
+    public:\
+        using KC_DrawSystem::KC_DrawSystem;\
+        KC_DRAWSYSTEM_PROFILETAGS(aSystem)
+
+namespace sf { class RenderWindow; }
 
 template <typename T, typename... Args>
 class KC_DrawSystem

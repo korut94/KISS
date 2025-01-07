@@ -1,6 +1,7 @@
 #include "KC_DrawCircleSystem.h"
 
 #include "KC_CircleRenderer.h"
+#include "KC_Profiling.h"
 #include "KC_Transform.h"
 
 #include <SFML/Graphics.hpp>
@@ -21,6 +22,7 @@ void KC_DrawCircleSystem::Run(sf::RenderWindow& aRenderWindow) const
         const KC_Transform& transform = GetComponent<KC_Transform>(entity);
         const KC_CircleRenderer& renderer = GetComponent<KC_CircleRenderer>(entity);
 
+        KC_PROFILE_STEP("KC_DrawCircleSystem", "Draw")
         Private::locCircleShape.setPosition(transform.myPosition);
         Private::locCircleShape.setFillColor(renderer.myFillColor);
         Private::locCircleShape.setOutlineColor(renderer.myOutlineColor);

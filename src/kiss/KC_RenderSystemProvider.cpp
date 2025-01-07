@@ -2,7 +2,6 @@
 
 #include "KC_Assert.h"
 #include "KC_DrawCircleSystem.h"
-#include "KC_Profiling.h"
 #include "KC_ThreadManager.h"
 
 #if IS_IMGUI
