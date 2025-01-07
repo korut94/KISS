@@ -1,10 +1,48 @@
 #include "Profiler.h"
 
 #include "KC_ProfileManager.h"
+#include "KC_ThreadManager.h"
 
 #include "imgui.h"
 
 #include <unordered_map>
+#include <vector>
+
+namespace Profiler_Private
+{
+    bool IsGreaterBlockTime(
+        const std::pair<const char*, KC_ProfileBlockTimes>& a,
+        const std::pair<const char*, KC_ProfileBlockTimes>& b)
+    {
+        return a.second.myThreadId > b.second.myThreadId || a.second.myStartTime > b.second.myStartTime;
+    }
+
+    void SortBlocksTimes(
+        const std::unordered_map<const char*, KC_ProfileBlockTimes>& someProfileBlocks, 
+        std::vector<std::pair<const char*, KC_ProfileBlockTimes>>& outSortedBlocks)
+    {
+        outSortedBlocks.reserve(someProfileBlocks.size());
+
+        for (auto pair : someProfileBlocks)
+        {
+            if (outSortedBlocks.size() == 0)
+            {
+                outSortedBlocks.push_back(pair);
+            }
+            else
+            {
+                const auto begin = outSortedBlocks.begin();
+                auto itr = outSortedBlocks.end();
+                while (itr != begin && IsGreaterBlockTime(*(itr - 1), pair))
+                {
+                    --itr;
+                }
+
+                outSortedBlocks.insert(itr, pair);
+            }
+        }
+    }
+}
 
 namespace ImGui
 {
@@ -12,43 +50,44 @@ namespace Editor
 {
 void Profiler()
 {
-    static std::unordered_map<const char*, KC_ProfileBlockTimes> blocksTimes;
+    static std::unordered_map<const char*, KC_ProfileBlockTimes> profileBlocks;
 
     KC_ProfileManager& profiler = KC_ProfileManager::GetManager();
-    profiler.SwapBlocks(blocksTimes);
+    profiler.SwapBlocks(profileBlocks);
+
+    std::vector<std::pair<const char*, KC_ProfileBlockTimes>> sortedProfileBlocks;
+    Profiler_Private::SortBlocksTimes(profileBlocks, sortedProfileBlocks);
+
+    std::size_t index = 0;
+    const std::size_t sortedProfileBlocksCount = sortedProfileBlocks.size();
 
     ImGui::Begin("Profiler");
-    for (auto [name, block] : blocksTimes)
+    while (index < sortedProfileBlocksCount)
     {
-        ImGui::Text("%s (id: %d) [%dns]", name, block.myThreadId, (block.myEndTime - block.myStartTime).AsNanoseconds());
-    }
+        const std::thread::id threadId = sortedProfileBlocks[index].second.myThreadId;
 
-    /*
-    ImGui::Text("FPS: %d", static_cast<int>(1.f / profiler.GetTime(KC_Profiling::ourProfileRenderTag).asSeconds()));
-    if (ImGui::CollapsingHeader("Game Thread"))
-    {
-        ImGui::Text("Game: %dms", profiler.GetTime(KC_Profiling::ourProfileGameTag).asMilliseconds());
-        ImGui::Text("Game-Render Sync: %dms", profiler.GetTime(KC_Profiling::ourProfileGameRenderSyncTag).asMilliseconds());
-    }
-    if (ImGui::CollapsingHeader("Render Thread"))
-    {
-        ImGui::Text("Render: %dms", profiler.GetTime(KC_Profiling::ourProfileRenderTag).asMilliseconds());
-        ImGui::Text("Draw: %dms", profiler.GetTime(KC_Profiling::ourProfileRenderDrawTag).asMilliseconds());
-        
-        if (ImGui::TreeNode("CircleRenderSystem"))
+        const char* threadName = KC_ThreadManager::GetManager().GetThreadName(threadId);
+        if (ImGui::CollapsingHeader(threadName))
         {
-            ImGui::Text("Run: %dms", profiler.GetTime(KC_ProfileTimerType::RenderSystemRun).asMilliseconds());
-            ImGui::Text("Get EntitySet: %dus", profiler.GetTime(KC_ProfileTimerType::RenderSystemGetEntitySet).asMicroseconds());
-            ImGui::Text("Get Components: %dus * 10000", profiler.GetTime(KC_ProfileTimerType::RenderSystemGetComponent).asMicroseconds());
-            ImGui::Text("Create: %dus * 10000", profiler.GetTime(KC_ProfileTimerType::RenderSystemCreateDrawnable).asMicroseconds());
-            ImGui::Text("Draw: %dus * 10000", profiler.GetTime(KC_ProfileTimerType::RenderSystemDraw).asMicroseconds());
-            ImGui::TreePop();
+            while (index < sortedProfileBlocksCount && sortedProfileBlocks[index].second.myThreadId == threadId)
+            {
+                const std::pair<const char*, KC_ProfileBlockTimes>& profileBlock = sortedProfileBlocks[index++];
+                const std::uint64_t duration = (profileBlock.second.myEndTime - profileBlock.second.myStartTime).AsNanoseconds();
+
+                ImGui::Text("%s: %dns", profileBlock.first, duration);
+            }
+        }
+        else
+        {
+            while (index < sortedProfileBlocksCount && sortedProfileBlocks[index].second.myThreadId == threadId)
+            {
+                ++index;
+            }
         }
     }
-    */
     ImGui::End();
 
-    blocksTimes.clear();
+    profileBlocks.clear();
 }
 } // Editor
 } // ImGui
