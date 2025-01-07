@@ -8,7 +8,7 @@
 
 #if IS_DEBUG_BUILD
 #define KC_DRAWSYSTEM_PROFILETAGS(aSystem)\
-    static constexpr const char* GetEntitiesFetchTag() { return KC_PROFILE_STEP_TAG(#aSystem, "EntitesFetch"); }\
+    static constexpr const char* GetEntitiesFetchTag() { return KC_PROFILE_STEP_TAG(#aSystem, "EntitiesFetch"); }\
     static constexpr const char* GetRunTag() { return KC_PROFILE_STEP_TAG(#aSystem, "Run"); }
 #else
 #define KC_DRAWSYSTEM_PROFILETAGS(aSystem)
