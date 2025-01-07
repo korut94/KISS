@@ -1,34 +1,18 @@
 #include "KC_ThreadManager.h"
 
+#include "KC_Assert.h"
+
 #if IS_DEBUG_BUILD
-#include <algorithm>
-
-KC_ThreadManager::KC_ThreadManager()
+const char* KC_ThreadManager::GetThreadName(std::thread::id aThreadId) const
 {
-    myThreadMetadata.reserve(4);
+    auto itr = myThreadNames.find(aThreadId);
+    KC_ASSERT(itr != myThreadNames.cend());
+
+    return itr->second;
 }
 
-const char *KC_ThreadManager::GetThreadName(std::thread::id aThreadId) const
+void KC_ThreadManager::SetThreadName(const char* aThreadName)
 {
-    auto itr = FindThreadMetadata(aThreadId);
-    KC_ASSERT(itr != myThreadMetadata.cend());
-
-    return itr->myThreadName;
-}
-
-std::vector<KC_ThreadManager::ThreadMetadata>::const_iterator KC_ThreadManager::FindThreadByName(const char* aThreadName) const
-{
-    return std::find_if(myThreadMetadata.cbegin(), myThreadMetadata.cend(), [aThreadName](const ThreadMetadata& aThreadMetadata)
-    {
-        return aThreadMetadata.myThreadName == aThreadName;
-    });
-}
-
-std::vector<KC_ThreadManager::ThreadMetadata>::const_iterator KC_ThreadManager::FindThreadMetadata(std::thread::id aThreadId) const
-{
-    return std::find_if(myThreadMetadata.cbegin(), myThreadMetadata.cend(), [aThreadId](const ThreadMetadata& aThreadMetadata)
-    {
-        return aThreadMetadata.myThreadId == aThreadId;
-    });
+    myThreadNames[std::this_thread::get_id()] = aThreadName;
 }
 #endif // IS_DEBUG_BUILD

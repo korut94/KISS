@@ -19,8 +19,7 @@ KC_RenderSystemProvider::KC_RenderSystemProvider(sf::RenderWindow& aRenderWindow
 #if IS_IMGUI
     ImGuiInit();
 #endif // IS_IMGUI
-    KC_ThreadManager& threadManager = KC_ThreadManager::GetManager();
-    myRenderThread = std::move(threadManager.CreateThread([this](){ RenderThread(); }, "Render Thread"));
+    myRenderThread = std::move(std::thread(&KC_RenderSystemProvider::RenderThread, this));
 }
 
 KC_RenderSystemProvider::~KC_RenderSystemProvider()
@@ -75,6 +74,8 @@ void KC_RenderSystemProvider::ImGuiInit()
 
 void KC_RenderSystemProvider::RenderThread()
 {
+    KC_THREAD("Render Thread")
+
     myRenderWindow.setActive(true);
 
     while (myRenderWindow.isOpen())

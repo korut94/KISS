@@ -3,9 +3,9 @@
 #include "KC_GameManager.h"
 
 #include "KC_Assert.h"
-#include "KC_ProfileManager.h"
 #include "KC_Profiling.h"
 #include "KC_RenderSystemProvider.h"
+#include "KC_ThreadManager.h"
 #include "KC_Time.h"
 #include "KC_World.h"
 
@@ -15,7 +15,6 @@
 #endif // IS_IMGUI
 
 #include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/System/Clock.hpp>
 #include <SFML/Window/Event.hpp>
 
 template <typename TGame>
@@ -31,16 +30,13 @@ private:
 template <typename TGame>
 void KC_GameManager<TGame>::Run()
 {
-#if IS_DEBUG_BUILD
-    KC_ProfileManager profileManager;
-#endif // IS_DEBUG_BUILD
+    KC_THREAD("Main Thread")
 
     sf::RenderWindow window = sf::RenderWindow({1280u, 720u}, "KISS");
     window.setActive(false);
 
-    bool proceed = true;
-
     KC_World world;
+    bool proceed = true;
 
     TGame game;
     KC_RenderSystemProvider renderSystemProvider(window);
