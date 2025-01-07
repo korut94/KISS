@@ -45,9 +45,9 @@ void KC_RenderSystemProvider::SetComponents(const KC_MainComponentManager& aMain
 }
 
 #if IS_IMGUI
-void KC_RenderSystemProvider::ImGuiUpdate(sf::Time elapsedTime)
+void KC_RenderSystemProvider::ImGuiUpdate(KC_Time anElapsedTime)
 {
-    ImGui::SFML::Update(myRenderWindow, elapsedTime);
+    ImGui::SFML::Update(myRenderWindow, sf::microseconds(anElapsedTime.AsMicroseconds()));
 }
 #endif // IS_IMGUI
 
