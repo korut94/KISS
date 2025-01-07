@@ -34,11 +34,12 @@ target_sources(Kiss
     PUBLIC
         KC_Assert.h
         KC_CircleRenderer.h
-        KC_CircleRenderSystem.h
         KC_ComponentArray.h
         KC_ComponentManager.h
         KC_ComponentsRegistry.h
         KC_Defines.h
+        KC_DrawCircleSystem.h
+        KC_DrawSystem.h
         KC_Entity.h
         KC_EntityManager.h
         KC_EntitySet.h
@@ -50,7 +51,6 @@ target_sources(Kiss
         KC_ProfileManager.h
         KC_Profiling.h
         KC_RectangleRenderer.h
-        KC_RenderSystem.h
         KC_RenderSystemProvider.h
         KC_ScopedProfileBlock.h
         KC_ShapeRenderer.h
@@ -62,7 +62,7 @@ target_sources(Kiss
     PRIVATE
         KC_EntityManager.cpp
         KC_EntitySet.cpp
-        KC_CircleRenderSystem.cpp
+        KC_DrawCircleSystem.cpp
         KC_ProfileBlock.cpp
         KC_ProfileManager.cpp
         KC_RenderSystemProvider.cpp

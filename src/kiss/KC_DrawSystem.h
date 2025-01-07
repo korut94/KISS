@@ -6,13 +6,13 @@
 #include <tuple>
 
 template <typename T, typename... Args>
-class KC_RenderSystem
+class KC_DrawSystem
 {
 public:
     using Components = std::tuple<T, Args...>;
 
 public:
-    KC_RenderSystem(const KC_EntitySet& anEntitySet, const KC_RenderComponentManager& aComponentManager);
+    KC_DrawSystem(const KC_EntitySet& anEntitySet, const KC_RenderComponentManager& aComponentManager);
 
     template <typename G>
     const G& GetComponent(KC_Entity anEntity) const;
@@ -25,7 +25,7 @@ private:
 };
 
 template <typename T, typename... Args>
-KC_RenderSystem<T, Args...>::KC_RenderSystem(const KC_EntitySet& anEntitySet, const KC_RenderComponentManager& aComponentManager)
+KC_DrawSystem<T, Args...>::KC_DrawSystem(const KC_EntitySet& anEntitySet, const KC_RenderComponentManager& aComponentManager)
     : myEntitySet(anEntitySet)
     , myComponentManager(aComponentManager)
 {
@@ -33,7 +33,7 @@ KC_RenderSystem<T, Args...>::KC_RenderSystem(const KC_EntitySet& anEntitySet, co
 
 template <typename T, typename... Args>
 template <typename G>
-const G& KC_RenderSystem<T, Args...>::GetComponent(KC_Entity anEntity) const
+const G& KC_DrawSystem<T, Args...>::GetComponent(KC_Entity anEntity) const
 {
     return myComponentManager.GetComponent<G>(anEntity);
 }

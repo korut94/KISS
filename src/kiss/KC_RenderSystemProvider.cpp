@@ -1,7 +1,7 @@
 #include "KC_RenderSystemProvider.h"
 
 #include "KC_Assert.h"
-#include "KC_CircleRenderSystem.h"
+#include "KC_DrawCircleSystem.h"
 #include "KC_Profiling.h"
 #include "KC_ThreadManager.h"
 
@@ -119,7 +119,7 @@ void KC_RenderSystemProvider::Render() const
 
     {
         KC_PROFILE_RENDERDRAW
-        RunSystem<KC_CircleRenderSystem>();
+        RunSystem<KC_DrawCircleSystem>();
     }
 
 #if IS_IMGUI

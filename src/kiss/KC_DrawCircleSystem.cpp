@@ -1,4 +1,4 @@
-#include "KC_CircleRenderSystem.h"
+#include "KC_DrawCircleSystem.h"
 
 #include "KC_CircleRenderer.h"
 #include "KC_Transform.h"
@@ -12,7 +12,7 @@ namespace KC_CircleRenderSystem_Private
     static sf::CircleShape locCircleShape;
 }
 
-void KC_CircleRenderSystem::Run(sf::RenderWindow& aRenderWindow) const
+void KC_DrawCircleSystem::Run(sf::RenderWindow& aRenderWindow) const
 {
     namespace Private = KC_CircleRenderSystem_Private;
 
