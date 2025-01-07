@@ -2,10 +2,20 @@
 
 bool operator<(const KC_ProfileBlockTimes& a, const KC_ProfileBlockTimes& b)
 {
-    return a.myThreadId < b.myThreadId || a.myStartTime < b.myStartTime;
+    if (a.myThreadId < b.myThreadId)
+        return true;
+    if (a.myThreadId == b.myThreadId && a.myStartTime < b.myStartTime)
+        return true;
+    else
+        return false;
 }
 
-bool operator>(const KC_ProfileBlockTimes &a, const KC_ProfileBlockTimes &b)
+bool operator>(const KC_ProfileBlockTimes& a, const KC_ProfileBlockTimes& b)
 {
-    return a.myThreadId > b.myThreadId || a.myStartTime > b.myStartTime;
+    if (a.myThreadId > b.myThreadId)
+        return true;
+    if (a.myThreadId == b.myThreadId && a.myStartTime > b.myStartTime)
+        return true;
+    else
+        return false;
 }
