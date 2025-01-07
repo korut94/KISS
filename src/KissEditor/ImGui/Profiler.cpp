@@ -17,13 +17,6 @@ namespace Profiler_Private
     static constexpr const char* locMicrosecondsUnit = "us";
     static constexpr const char* locMillisecondsUnit = "ms";
 
-    bool IsGreaterBlockTime(
-        const std::pair<const char*, KC_ProfileBlockTimes>& a,
-        const std::pair<const char*, KC_ProfileBlockTimes>& b)
-    {
-        return a.second.myThreadId > b.second.myThreadId || a.second.myStartTime > b.second.myStartTime;
-    }
-
     void SortProfileBlocks(
         const std::unordered_map<const char*, KC_ProfileBlockTimes>& someProfileBlocks, 
         std::vector<std::pair<const char*, KC_ProfileBlockTimes>>& outSortedBlocks)
@@ -32,21 +25,21 @@ namespace Profiler_Private
 
         for (auto pair : someProfileBlocks)
         {
-            if (outSortedBlocks.size() == 0)
-            {
-                outSortedBlocks.push_back(pair);
-            }
-            else
-            {
-                const auto begin = outSortedBlocks.begin();
-                auto itr = outSortedBlocks.end();
-                while (itr != begin && IsGreaterBlockTime(*(itr - 1), pair))
-                {
-                    --itr;
-                }
+            const auto end = outSortedBlocks.end();
 
-                outSortedBlocks.insert(itr, pair);
+            auto itr = outSortedBlocks.begin();
+            while (itr != end && pair.first != itr->first) { ++itr; }
+            
+            if (itr != end)
+            {
+                itr->second = pair.second;
+                continue;
             }
+            
+            itr = outSortedBlocks.begin();
+            while (itr != end && pair.second > itr->second) { ++itr; }
+
+            outSortedBlocks.insert(itr, pair);
         }
     }
 }
@@ -59,12 +52,13 @@ void Profiler()
 {
     namespace Private = Profiler_Private;
 
-    static std::unordered_map<const char*, KC_ProfileBlockTimes> profileBlocks;
+    static std::vector<std::pair<const char*, KC_ProfileBlockTimes>> sortedProfileBlocks;
 
     KC_ProfileManager& profiler = KC_ProfileManager::GetManager();
+    
+    std::unordered_map<const char*, KC_ProfileBlockTimes> profileBlocks;
     profiler.SwapBlocks(profileBlocks);
 
-    std::vector<std::pair<const char*, KC_ProfileBlockTimes>> sortedProfileBlocks;
     Private::SortProfileBlocks(profileBlocks, sortedProfileBlocks);
 
     std::size_t index = 0;
@@ -115,8 +109,6 @@ void Profiler()
         }
     }
     ImGui::End();
-
-    profileBlocks.clear();
 }
 } // Editor
 } // ImGui

@@ -64,6 +64,7 @@ target_sources(Kiss
         KC_EntitySet.cpp
         KC_DrawCircleSystem.cpp
         KC_ProfileBlock.cpp
+        KC_ProfileBlockTimes.cpp
         KC_ProfileManager.cpp
         KC_RenderSystemProvider.cpp
         KC_ScopedProfileBlock.cpp
