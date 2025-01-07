@@ -13,6 +13,9 @@ namespace Profiler_Private
 {
     static constexpr const std::uint64_t locMaxNanoseconds = 10000;
     static constexpr const std::uint64_t locMaxMicroseconds = 1000;
+    static constexpr const char* locNanosecondsUnit = "ns";
+    static constexpr const char* locMicrosecondsUnit = "us";
+    static constexpr const char* locMillisecondsUnit = "ms";
 
     bool IsGreaterBlockTime(
         const std::pair<const char*, KC_ProfileBlockTimes>& a,
@@ -86,17 +89,17 @@ void Profiler()
                 if (duration.AsNanoseconds() < Private::locMaxNanoseconds)
                 {
                     value = static_cast<float>(duration.AsNanoseconds());
-                    unit = "ns";
+                    unit = Private::locNanosecondsUnit;
                 }
                 else if (duration.AsMicroseconds() < Private::locMaxMicroseconds)
                 {
                     value = static_cast<float>(duration.AsNanoseconds()) / 1000.f;
-                    unit = "us";
+                    unit = Private::locMicrosecondsUnit;
                 }
                 else
                 {
                     value = static_cast<float>(duration.AsMicroseconds()) / 1000.f;
-                    unit = "ms";
+                    unit = Private::locMillisecondsUnit;
                 }
 
                 ImGui::Text("%s: %.2f%s", profileBlock.first, value, unit.c_str());
