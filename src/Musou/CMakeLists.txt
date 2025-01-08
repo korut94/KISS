@@ -7,8 +7,12 @@ target_include_directories(Musou PUBLIC ${MUSOU_SOURCE_DIR})
 target_sources(Musou
     PUBLIC
         MC_Game.h
+        MC_BounceOnBorderSystem.h
+        MC_MoveSystem.h
     PRIVATE
-        MC_Game.cpp)
+        MC_Game.cpp
+        MC_BounceOnBorderSystem.cpp
+        MC_MoveSystem.cpp)
 
 target_link_libraries(Musou PUBLIC Kiss)
 target_compile_definitions(Musou

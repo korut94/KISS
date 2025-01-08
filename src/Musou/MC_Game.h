@@ -1,6 +1,7 @@
 #pragma once
 
 #include "KC_Game.h"
+#include "KC_GameSystemProvider.h"
 
 class MC_Game final : public KC_Game
 {
@@ -11,7 +12,11 @@ public:
 
     void Init();
     void Update(float anElapsedTime);
+#if IS_IMGUI
+    void ImGui();
+#endif // IS_IMGUI
 
 private:
     KC_World& myWorld;
+    KC_GameSystemProvider myGameSystemProvider;
 };
