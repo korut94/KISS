@@ -63,7 +63,7 @@ void KC_RenderSystemProvider::RunSystem() const
         GetEntitySet<typename TSystem::Components>(entitySet);
     }
     
-    TSystem system { entitySet, myComponentManager };
+    TSystem system{ entitySet, myComponentManager };
     {
         KC_PROFILE(TSystem::GetRunTag())
         system.Run(myRenderWindow);
