@@ -65,7 +65,6 @@ target_sources(Kiss
         KC_EntityManager.cpp
         KC_EntitySet.cpp
         KC_DrawCircleSystem.cpp
-        KC_Game.cpp
         KC_GameSystemProvider.cpp
         KC_ProfileBlock.cpp
         KC_ProfileBlockTimes.cpp

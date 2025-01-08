@@ -6,6 +6,7 @@
 
 MC_Game::MC_Game(KC_World& aWorld)
     : Super(aWorld)
+    , myWorld(aWorld)
 {
 }
 

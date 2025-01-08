@@ -11,4 +11,7 @@ public:
 
     void Init();
     void Update();
+
+private:
+    KC_World& myWorld;
 };
