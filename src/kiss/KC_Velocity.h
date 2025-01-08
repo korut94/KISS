@@ -4,5 +4,5 @@
 
 struct KC_Velocity
 {
-    sf::Vector2f myVelocity;
+    sf::Vector2f myVector;
 };
