@@ -23,8 +23,11 @@ void KC_RenderViewSystem::Run(sf::RenderWindow& aRenderWindow) const
     
     const sf::Vector2u windowSize = aRenderWindow.getSize();
 
+    Private::locView = aRenderWindow.getDefaultView();
+    // Define world coordinates
     Private::locView.setCenter(transform.myPosition);
-    Private::locView.setSize(sf::Vector2f(static_cast<float>(windowSize.x), static_cast<float>(windowSize.y)) * camera.myZoom);
+    // Apply zoom
+    Private::locView.zoom(1.f / camera.myZoom);
 
     aRenderWindow.setView(Private::locView);
 }
