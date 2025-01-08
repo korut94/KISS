@@ -19,4 +19,8 @@ public:
 private:
     KC_World& myWorld;
     KC_GameSystemProvider myGameSystemProvider;
+
+#if IS_IMGUI
+    float* myCameraZoom;
+#endif // IS_IMGUI
 };
