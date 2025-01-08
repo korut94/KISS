@@ -7,7 +7,7 @@
 namespace KC_RenderViewSystem_Private
 {
     static sf::View locView;
-    static constexpr float locUnitScale = 10.f; 
+    static constexpr float locUnitScale = 10.f; // pixel/meter
 }
 
 void KC_RenderViewSystem::Run(sf::RenderWindow& aRenderWindow) const
