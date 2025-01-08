@@ -7,7 +7,7 @@ class KC_Transform;
 
 class KC_DrawCircleSystem final : public KC_DrawSystem<KC_Transform, KC_CircleRenderer>
 {
-    KC_DRAWSYSTEM(KC_DrawCircleSystem)
+    KC_SYSTEM(KC_DrawCircleSystem)
 
 public:
     void Run(sf::RenderWindow& aRenderWindow) const;
