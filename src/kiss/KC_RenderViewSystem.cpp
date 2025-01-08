@@ -7,6 +7,7 @@
 namespace KC_RenderViewSystem_Private
 {
     static sf::View locView;
+    static constexpr float locUnitScale = 10.f; 
 }
 
 void KC_RenderViewSystem::Run(sf::RenderWindow& aRenderWindow) const
@@ -27,7 +28,7 @@ void KC_RenderViewSystem::Run(sf::RenderWindow& aRenderWindow) const
     // Define world center coordinate
     Private::locView.setCenter(transform.myPosition);
     // Apply zoom
-    Private::locView.zoom(1.f / camera.myZoom);
+    Private::locView.zoom(1.f / (Private::locUnitScale * camera.myZoom));
 
     aRenderWindow.setView(Private::locView);
 }
