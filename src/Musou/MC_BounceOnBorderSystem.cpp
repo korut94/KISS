@@ -12,7 +12,7 @@ void MC_BounceOnBorderSystem::Run(float anElapsedTime)
 
         const sf::Vector2f& position = transform.myPosition;
 
-        if (position.x < 320.f || position.x > 960.f || position.y < 180.f || position.y > 540.f)
+        if (position.x < -640.f || position.x > 640.f || position.y < -320.f || position.y > 320.f)
         {
             velocity.myVector = -velocity.myVector;
         }

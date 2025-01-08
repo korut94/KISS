@@ -3,6 +3,7 @@
 #include "MC_BounceOnBorderSystem.h"
 #include "MC_MoveSystem.h"
 
+#include "KC_Camera.h"
 #include "KC_CircleRenderer.h"
 #include "KC_Transform.h"
 #include "KC_World.h"
@@ -30,14 +31,16 @@ void MC_Game::Init()
     KC_EntityManager& entityManager = myWorld.GetEntityManager();
     KC_MainComponentManager& componentManager = myWorld.GetComponentManager();
 
+    KC_Entity cameraEntity = entityManager.CreateEntity();
+    componentManager.AddComponent<KC_Transform>(cameraEntity);
+    componentManager.AddComponent<KC_Camera>(cameraEntity);
+
     for (int i = 0; i < 5000; ++i)
     {
         KC_Entity entity = entityManager.CreateEntity();
 
         KC_Transform& transform = componentManager.AddComponent<KC_Transform>(entity);
-        const float x = static_cast<float>(600 + std::rand() % 80);
-        const float y = static_cast<float>(280 + std::rand() % 60);
-        transform.myPosition = { x, y };
+        transform.myPosition = { 0.f, 0.f };
 
         KC_Velocity& velocity = componentManager.AddComponent<KC_Velocity>(entity);
         velocity.myVector = sf::Transform().rotate(sf::degrees(std::rand() % 365)) * sf::Vector2f(0.f, 1.f) * 50.f;
