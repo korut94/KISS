@@ -59,6 +59,7 @@ target_sources(Kiss
         KC_ThreadManager.h
         KC_Time.h
         KC_Transform.h
+        KC_Velocity.h
         KC_World.h
     PRIVATE
         KC_EntityManager.cpp

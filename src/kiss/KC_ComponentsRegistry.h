@@ -3,6 +3,7 @@
 #include "KC_CircleRenderer.h"
 #include "KC_RectangleRenderer.h"
 #include "KC_Transform.h"
+#include "KC_Velocity.h"
 
 #include <tuple>
 
@@ -12,7 +13,8 @@ namespace KC_ComponentsRegistry
     using Components = std::tuple<
         KC_CircleRenderer,
         KC_RectangleRenderer,
-        KC_Transform
+        KC_Transform,
+        KC_Velocity
     >;
     
     using MainComponents = Components;
