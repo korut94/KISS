@@ -3,25 +3,17 @@
 #include "KC_ComponentManager.h"
 #include "KC_EntitySet.h"
 #include "KC_Profiling.h"
-#include "KC_TemplateHelper.h"
+#include "KC_SystemProvider.h"
 
-using namespace KC_TemplateHelper;
-
-class KC_GameSystemProvider final
+class KC_GameSystemProvider final : public KC_SystemProvider<KC_MainComponentManager&>
 {
+    using Super = KC_SystemProvider<KC_MainComponentManager&>;
+
 public:
     explicit KC_GameSystemProvider(KC_MainComponentManager& aComponentManager);
 
     template <typename TSystem>
     void RunSystem(float anElapsedTime) const;
-
-private:
-    template <typename Tuple>
-    void GetEntitySet(KC_EntitySet& outEntitySet) const;
-    template <typename... Args>
-    void GetEntitySetImpl(KC_EntitySet& outEntitySet, UnpackedTuple<Args...>) const;
-
-    KC_MainComponentManager& myComponentManager;
 };
 
 template <typename TSystem>
@@ -38,16 +30,4 @@ void KC_GameSystemProvider::RunSystem(float anElapsedTime) const
         KC_PROFILE(TSystem::GetRunTag())
         system.Run(anElapsedTime);
     }
-}
-
-template <typename Tuple>
-void KC_GameSystemProvider::GetEntitySet(KC_EntitySet &outEntitySet) const
-{
-    GetEntitySetImpl(outEntitySet, Unpack<Tuple>{});
-}
-
-template <typename... Args>
-void KC_GameSystemProvider::GetEntitySetImpl(KC_EntitySet &outEntitySet, UnpackedTuple<Args...>) const
-{
-    myComponentManager.GetEntitySet<Args...>(outEntitySet);
 }

@@ -55,6 +55,7 @@ target_sources(Kiss
         KC_RenderSystemProvider.h
         KC_ScopedProfileBlock.h
         KC_ShapeRenderer.h
+        KC_SystemProvider.h
         KC_TemplateHelper.h
         KC_ThreadManager.h
         KC_Time.h

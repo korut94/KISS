@@ -2,7 +2,7 @@
 
 #include "KC_ComponentManager.h"
 #include "KC_Profiling.h"
-#include "KC_TemplateHelper.h"
+#include "KC_SystemProvider.h"
 
 #include <SFML/System/Time.hpp>
 
@@ -10,11 +10,9 @@
 #include <mutex>
 #include <thread>
 
-using namespace KC_TemplateHelper;
-
 namespace sf { class RenderWindow; }
 
-class KC_RenderSystemProvider final
+class KC_RenderSystemProvider final : public KC_SystemProvider<KC_RenderComponentManager>
 {
     enum class RenderThreadState : std::uint8_t { Ready, Run, Stop, UpdateFrame, Wait };
 
@@ -39,10 +37,6 @@ private:
 
     template <typename TSystem>
     void RunSystem() const;
-    template <typename Tuple>
-    void GetEntitySet(KC_EntitySet& outEntitySet) const;
-    template <typename... Args>
-    void GetEntitySetImpl(KC_EntitySet& outEntitySet, UnpackedTuple<Args...>) const;
 
     std::thread myRenderThread;
     sf::RenderWindow& myRenderWindow;
@@ -50,8 +44,6 @@ private:
     RenderThreadState myRenderThreadState;
     std::mutex myStateMutex;
     std::condition_variable myStateConditionVariable;
-
-    KC_RenderComponentManager myComponentManager;
 };
 
 template <typename TSystem>
@@ -68,16 +60,4 @@ void KC_RenderSystemProvider::RunSystem() const
         KC_PROFILE(TSystem::GetRunTag())
         system.Run(myRenderWindow);
     }
-}
-
-template <typename Tuple>
-void KC_RenderSystemProvider::GetEntitySet(KC_EntitySet& outEntitySet) const
-{
-    GetEntitySetImpl(outEntitySet, Unpack<Tuple>{});
-}
-
-template <typename... Args>
-void KC_RenderSystemProvider::GetEntitySetImpl(KC_EntitySet& outEntitySet, UnpackedTuple<Args...>) const
-{
-    myComponentManager.GetEntitySet<Args...>(outEntitySet);
 }
