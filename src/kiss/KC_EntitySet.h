@@ -41,10 +41,12 @@ public:
     Iterator end() const;
     Iterator End() const;
 
+    KC_Entity At(EntityIndex anIndex) const;
     EntityIndex Count() const;
     bool Contains(KC_Entity anEntity) const;
     EntityIndex GetIndex(KC_Entity anEntity) const;
     KC_EntitySet Intersect(const KC_EntitySet& anOther) const;
+    bool IsEmpty() const;
 
     void Insert(KC_Entity anEntity);
 

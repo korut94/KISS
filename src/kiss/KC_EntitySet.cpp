@@ -72,6 +72,21 @@ KC_EntitySet::Iterator KC_EntitySet::End() const
     return Iterator(*this, myIntervals.size());
 }
 
+KC_Entity KC_EntitySet::At(EntityIndex anIndex) const
+{
+    std::size_t intervalIndex = 0;
+    const std::size_t intervalCount = myIntervals.size();
+
+    while (intervalIndex < intervalCount && myIntervals[intervalIndex].myTotalCount < anIndex)
+    {
+        anIndex -= myIntervals[intervalIndex].myTotalCount;
+        ++intervalIndex;
+    }
+
+    KC_ASSERT(intervalIndex < intervalCount, "Entity index out of bound");
+    return myIntervals[intervalIndex].myFirstEntity + anIndex;
+}
+
 KC_EntitySet::EntityIndex KC_EntitySet::Count() const
 {
     EntityIndex count = 0;
@@ -171,6 +186,11 @@ KC_EntitySet KC_EntitySet::Intersect(const KC_EntitySet& anOther) const
     }
 
     return result;
+}
+
+bool KC_EntitySet::IsEmpty() const
+{
+    return myIntervals.size() == 0;
 }
 
 void KC_EntitySet::Insert(KC_Entity anEntity)
