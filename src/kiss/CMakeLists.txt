@@ -33,13 +33,13 @@ target_include_directories(Kiss PUBLIC ${KISS_SOURCE_DIR})
 target_sources(Kiss
     PUBLIC
         KC_Assert.h
+        KC_Camera.h
         KC_CircleRenderer.h
         KC_ComponentArray.h
         KC_ComponentManager.h
         KC_ComponentsRegistry.h
         KC_Defines.h
         KC_DrawCircleSystem.h
-        KC_DrawSystem.h
         KC_Entity.h
         KC_EntityManager.h
         KC_EntitySet.h
@@ -52,7 +52,9 @@ target_sources(Kiss
         KC_ProfileManager.h
         KC_Profiling.h
         KC_RectangleRenderer.h
+        KC_RenderSystem.h
         KC_RenderSystemProvider.h
+        KC_RenderViewSystem.h
         KC_ScopedProfileBlock.h
         KC_ShapeRenderer.h
         KC_SystemProvider.h
@@ -71,6 +73,7 @@ target_sources(Kiss
         KC_ProfileBlockTimes.cpp
         KC_ProfileManager.cpp
         KC_RenderSystemProvider.cpp
+        KC_RenderViewSystem.cpp
         KC_ScopedProfileBlock.cpp
         KC_ThreadManager.cpp
         KC_Time.cpp)

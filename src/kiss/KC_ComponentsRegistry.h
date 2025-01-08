@@ -1,5 +1,6 @@
 #pragma once
 
+#include "KC_Camera.h"
 #include "KC_CircleRenderer.h"
 #include "KC_RectangleRenderer.h"
 #include "KC_Transform.h"
@@ -11,6 +12,7 @@ namespace KC_ComponentsRegistry
 {
      // Add new components here
     using Components = std::tuple<
+        KC_Camera,
         KC_CircleRenderer,
         KC_RectangleRenderer,
         KC_Transform,
@@ -20,6 +22,7 @@ namespace KC_ComponentsRegistry
     using MainComponents = Components;
     // Add components to use in the render thread here
     using RenderComponents = std::tuple<
+        KC_Camera,
         KC_CircleRenderer,
         KC_Transform
     >;
