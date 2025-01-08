@@ -32,7 +32,7 @@ void KC_GameManager<TGame>::Run()
 {
     KC_THREAD("Main Thread")
 
-    sf::RenderWindow window{ sf::VideoMode({1280u, 720u}), "KISS" };
+    sf::RenderWindow window{ sf::VideoMode::getFullscreenModes()[0], "KISS" };
 
     KC_World world;
     bool proceed = true;
