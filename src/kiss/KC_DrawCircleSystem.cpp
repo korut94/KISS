@@ -23,17 +23,20 @@ void KC_DrawCircleSystem::Run(sf::RenderWindow& aRenderWindow) const
         const KC_CircleRenderer& renderer = GetComponent<KC_CircleRenderer>(entity);
 
         KC_PROFILE_STEP("KC_DrawCircleSystem", "Draw")
-        Private::locCircleShape.setPosition(transform.myPosition);
-        Private::locCircleShape.setFillColor(renderer.myFillColor);
-        Private::locCircleShape.setOutlineColor(renderer.myOutlineColor);
-
         // It's pretty expensive changing the circle shape radius. Do it only when necessary.
         if (abs(Private::locCircleShape.getRadius() - renderer.myRadius) > 0.001f)
         {
             Private::locCircleShape.setRadius(renderer.myRadius);
         }
 
-        // TODO: Do visibility check
+        const sf::View& view = aRenderWindow.getView();
+        if (!view.getViewport().findIntersection(Private::locCircleShape.getGlobalBounds()))
+            return;
+
+        Private::locCircleShape.setPosition(transform.myPosition);
+        Private::locCircleShape.setFillColor(renderer.myFillColor);
+        Private::locCircleShape.setOutlineColor(renderer.myOutlineColor);
+
         aRenderWindow.draw(Private::locCircleShape);
     }
 }
