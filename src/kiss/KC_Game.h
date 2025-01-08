@@ -8,7 +8,7 @@ public:
     explicit KC_Game(KC_World& /*aWorld*/) {}
 
     void Init() {}
-    void Update() {}
+    void Update(float /*anElapsedTime*/) {}
 #if IS_IMGUI
     void ImGui() {}
 #endif // IS_IMGUI

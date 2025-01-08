@@ -10,7 +10,7 @@ public:
     explicit MC_Game(KC_World& aWorld);
 
     void Init();
-    void Update();
+    void Update(float anElapsedTime);
 
 private:
     KC_World& myWorld;

@@ -69,7 +69,7 @@ void KC_GameManager<TGame>::Run()
 
         {
             KC_PROFILE_GAMEUPDATE
-            game.Update();
+            game.Update(elapsedTime.AsSeconds());
         }
 
         previousFrameTime = currentFrameTime;

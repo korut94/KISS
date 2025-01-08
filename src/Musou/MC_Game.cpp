@@ -28,6 +28,6 @@ void MC_Game::Init()
     }
 }
 
-void MC_Game::Update()
+void MC_Game::Update(float anElapsedTime)
 {
 }

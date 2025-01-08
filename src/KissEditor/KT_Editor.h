@@ -14,7 +14,7 @@ public:
     explicit KT_Editor(KC_World& aWorld);
 
     void Init();
-    void Update();
+    void Update(float anElapsedTime);
     void ImGui();
 
 private:
@@ -38,9 +38,9 @@ void KT_Editor<TGame>::Init()
 }
 
 template <typename TGame>
-void KT_Editor<TGame>::Update()
+void KT_Editor<TGame>::Update(float anElapsedTime)
 {
-    myGame.Update();
+    myGame.Update(anElapsedTime);
 }
 
 template <typename TGame>

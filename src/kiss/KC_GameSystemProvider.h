@@ -13,7 +13,7 @@ public:
     explicit KC_GameSystemProvider(KC_MainComponentManager& aComponentManager);
 
     template <typename TSystem>
-    void RunSystem() const;
+    void RunSystem(float anElapsedTime) const;
 
 private:
     template <typename Tuple>
@@ -25,7 +25,7 @@ private:
 };
 
 template <typename TSystem>
-void KC_GameSystemProvider::RunSystem() const
+void KC_GameSystemProvider::RunSystem(float anElapsedTime) const
 {
     KC_EntitySet entitySet;
     {
@@ -36,7 +36,7 @@ void KC_GameSystemProvider::RunSystem() const
     TSystem system{ entitySet, myComponentManager };
     {
         KC_PROFILE(TSystem::GetRunTag())
-        system.Run();
+        system.Run(anElapsedTime);
     }
 }
 
