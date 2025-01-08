@@ -45,6 +45,7 @@ target_sources(Kiss
         KC_EntitySet.h
         KC_Game.h
         KC_GameManager.h
+        KC_GameSystemProvider.h
         KC_Manager.h
         KC_ProfileBlock.h
         KC_ProfileBlockTimes.h
@@ -63,6 +64,8 @@ target_sources(Kiss
         KC_EntityManager.cpp
         KC_EntitySet.cpp
         KC_DrawCircleSystem.cpp
+        KC_Game.cpp
+        KC_GameSystemProvider.cpp
         KC_ProfileBlock.cpp
         KC_ProfileBlockTimes.cpp
         KC_ProfileManager.cpp
