@@ -4,11 +4,11 @@
 
 class MC_Game final : public KC_Game
 {
+    using Super = KC_Game;
+
 public:
-    MC_Game();
+    explicit MC_Game(KC_World& aWorld);
 
-    void Update(KC_World& aWorld);
-
-private:
-    bool myIsInitialized;
+    void Init();
+    void Update();
 };

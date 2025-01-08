@@ -37,7 +37,9 @@ void KC_GameManager<TGame>::Run()
     KC_World world;
     bool proceed = true;
 
-    TGame game;
+    TGame game{ world };
+    game.Init();
+
     KC_RenderSystemProvider renderSystemProvider(window);
 
     KC_Time::SetFrameZero();
@@ -67,7 +69,7 @@ void KC_GameManager<TGame>::Run()
 
         {
             KC_PROFILE_GAMEUPDATE
-            game.Update(world);
+            game.Update();
         }
 
         previousFrameTime = currentFrameTime;
