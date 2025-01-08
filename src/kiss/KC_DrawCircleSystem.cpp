@@ -28,7 +28,7 @@ void KC_DrawCircleSystem::Run(sf::RenderWindow& aRenderWindow) const
         {
             Private::locCircleShape.setRadius(renderer.myRadius);
         }
-
+        // Is it visible?
         const sf::View& view = aRenderWindow.getView();
         if (!view.getViewport().findIntersection(Private::locCircleShape.getGlobalBounds()))
             return;
