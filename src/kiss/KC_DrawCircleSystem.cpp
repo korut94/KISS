@@ -32,7 +32,8 @@ void KC_DrawCircleSystem::Run(sf::RenderWindow& aRenderWindow) const
         {
             Private::locCircleShape.setRadius(renderer.myRadius);
         }
-        
+
+        // TODO: Do visibility check
         aRenderWindow.draw(Private::locCircleShape);
     }
 }
