@@ -52,6 +52,11 @@ KC_EntitySet::Iterator KC_EntitySet::Iterator::operator++(int)
     return itr;
 }
 
+KC_EntitySet::KC_EntitySet(KC_Entity anEntity)
+{
+    Insert(anEntity);
+}
+
 KC_EntitySet::Iterator KC_EntitySet::begin() const
 {
     return Iterator(*this, 0);

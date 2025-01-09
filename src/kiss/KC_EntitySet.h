@@ -36,6 +36,9 @@ private:
     };
 
 public:
+    KC_EntitySet() = default;
+    KC_EntitySet(KC_Entity anEntity);
+
     Iterator begin() const;
     Iterator Begin() const;
     Iterator end() const;
