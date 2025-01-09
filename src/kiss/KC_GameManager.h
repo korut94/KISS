@@ -3,6 +3,7 @@
 #include "KC_GameManager.h"
 
 #include "KC_Assert.h"
+#include "KC_GameSystemProvider.h"
 #include "KC_Profiling.h"
 #include "KC_RenderSystemProvider.h"
 #include "KC_ThreadManager.h"
@@ -35,12 +36,14 @@ void KC_GameManager<TGame>::Run()
     sf::RenderWindow window{ sf::VideoMode::getFullscreenModes()[0], "KISS" };
 
     KC_World world;
+
+    KC_RenderSystemProvider renderSystemProvider{ window };
+    KC_GameSystemProvider gameSystemProvider{ world.GetComponentManager() };
+
+    TGame game;
+    game.Init(world);
+
     bool proceed = true;
-
-    TGame game{ world };
-    game.Init();
-
-    KC_RenderSystemProvider renderSystemProvider(window);
 
     KC_Time::SetFrameZero();
     KC_Time previousFrameTime = KC_Time::Now();
@@ -49,7 +52,7 @@ void KC_GameManager<TGame>::Run()
     {
         KC_PROFILE_GAME
         const KC_Time currentFrameTime = KC_Time::Now();
-        const KC_Time elapsedTime = currentFrameTime - previousFrameTime;
+        gameSystemProvider.myElapsedTime = currentFrameTime - previousFrameTime;
 
         proceed = ProcessEvent(window); // we will close the application at the next cycle
         // Update frame
@@ -57,7 +60,7 @@ void KC_GameManager<TGame>::Run()
             std::unique_lock lock = std::move(renderSystemProvider.UpdateFrame());
 #if IS_IMGUI
             // ImGui update must be the first operation to perform during the lock of the render thread
-            ImGui::SFML::Update(window, sf::microseconds(elapsedTime.AsMicroseconds()));
+            ImGui::SFML::Update(window, sf::microseconds(gameSystemProvider.myElapsedTime.AsMicroseconds()));
             game.ImGui();
 #endif // IS_IMGUI
             {
@@ -69,7 +72,7 @@ void KC_GameManager<TGame>::Run()
 
         {
             KC_PROFILE_GAMEUPDATE
-            game.Update(elapsedTime.AsSeconds());
+            game.Update(gameSystemProvider);
         }
 
         previousFrameTime = currentFrameTime;

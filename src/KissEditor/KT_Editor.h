@@ -3,18 +3,13 @@
 #include "KT_ImGui.h"
 
 #include "KC_Game.h"
-#include "KC_World.h"
 
 template <typename TGame>
 class KT_Editor final : public KC_Game
 {
-    using Super = KC_Game;
-
 public:
-    explicit KT_Editor(KC_World& aWorld);
-
-    void Init();
-    void Update(float anElapsedTime);
+    void Init(KC_World& aWorld);
+    void Update(KC_GameSystemProvider& aGameSystemProvider);
     void ImGui();
 
 private:
@@ -25,22 +20,15 @@ private:
 };
 
 template <typename TGame>
-KT_Editor<TGame>::KT_Editor(KC_World& aWorld)
-    : Super(aWorld)
-    , myGame(aWorld)
+void KT_Editor<TGame>::Init(KC_World& aWorld)
 {
+    myGame.Init(aWorld);
 }
 
 template <typename TGame>
-void KT_Editor<TGame>::Init()
+void KT_Editor<TGame>::Update(KC_GameSystemProvider& aGameSystemProvider)
 {
-    myGame.Init();
-}
-
-template <typename TGame>
-void KT_Editor<TGame>::Update(float anElapsedTime)
-{
-    myGame.Update(anElapsedTime);
+    myGame.Update(aGameSystemProvider);
 }
 
 template <typename TGame>

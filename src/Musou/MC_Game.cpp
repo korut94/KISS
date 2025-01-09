@@ -6,6 +6,7 @@
 #include "KC_Camera.h"
 #include "KC_CircleRenderer.h"
 #include "KC_Defines.h"
+#include "KC_GameSystemProvider.h"
 #include "KC_Transform.h"
 #include "KC_World.h"
 
@@ -18,22 +19,19 @@
 #include <cstdlib>
 #include <ctime>
 
-MC_Game::MC_Game(KC_World& aWorld)
-    : Super(aWorld)
-    , myWorld(aWorld)
-    , myGameSystemProvider(myWorld.GetComponentManager())
+MC_Game::MC_Game()
 #if IS_IMGUI
-    , myCameraZoom(nullptr)
+    : myCameraZoom(nullptr)
 #endif // IS_IMGUI
 {
 }
 
-void MC_Game::Init()
+void MC_Game::Init(KC_World& aWorld)
 {
     std::srand(std::time(nullptr));
 
-    KC_EntityManager& entityManager = myWorld.GetEntityManager();
-    KC_MainComponentManager& componentManager = myWorld.GetComponentManager();
+    KC_EntityManager& entityManager = aWorld.GetEntityManager();
+    KC_MainComponentManager& componentManager = aWorld.GetComponentManager();
 
     KC_Entity cameraEntity = entityManager.CreateEntity();
     componentManager.AddComponent<KC_Transform>(cameraEntity);
@@ -49,21 +47,23 @@ void MC_Game::Init()
         KC_Entity entity = entityManager.CreateEntity();
 
         KC_Transform& transform = componentManager.AddComponent<KC_Transform>(entity);
-        transform.myPosition = { static_cast<float>(std::rand() % 800) - 400.f, static_cast<float>(std::rand() % 600) - 300.f };
+        transform.myPosition = { 0.f, 0.f };
 
         KC_Velocity& velocity = componentManager.AddComponent<KC_Velocity>(entity);
-        velocity.myVector = sf::Transform().rotate(sf::degrees(std::rand() % 365)) * sf::Vector2f(0.f, 1.f) * 100.f;
+        velocity.myVector = sf::Transform().rotate(sf::degrees(std::rand() % 365)) * sf::Vector2f(0.f, 1.f) * 5.f;
 
         KC_CircleRenderer& circle = componentManager.AddComponent<KC_CircleRenderer>(entity);
-        circle.myRadius = 2.f;
+        circle.myRadius = 1.f;
         circle.myFillColor = {255, 0, static_cast<std::uint8_t>(255 * i / 10000)};
     }
 }
 
-void MC_Game::Update(float anElapsedTime)
+void MC_Game::Update(KC_GameSystemProvider& aGameSystemProvider)
 {
-    myGameSystemProvider.RunSystem<MC_MoveSystem>(anElapsedTime);
-    myGameSystemProvider.RunSystem<MC_BounceOnBorderSystem>();
+    const float elapsedTime = aGameSystemProvider.GetElapsedTime();
+
+    aGameSystemProvider.RunSystem<MC_MoveSystem>(elapsedTime);
+    aGameSystemProvider.RunSystem<MC_BounceOnBorderSystem>();
 }
 
 #if IS_IMGUI

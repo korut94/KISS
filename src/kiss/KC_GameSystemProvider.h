@@ -9,11 +9,18 @@ class KC_GameSystemProvider final : public KC_SystemProvider<KC_MainComponentMan
 {
     using Super = KC_SystemProvider<KC_MainComponentManager&>;
 
+    template <typename TGame>
+    friend class KC_GameManager;
+
 public:
     explicit KC_GameSystemProvider(KC_MainComponentManager& aComponentManager);
 
+    float GetElapsedTime() const;
     template <typename TSystem, typename... Args>
     void RunSystem(Args&&... args) const;
+
+private:
+    KC_Time myElapsedTime;
 };
 
 template <typename TSystem, typename... Args>

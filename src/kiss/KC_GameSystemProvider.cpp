@@ -4,3 +4,8 @@ KC_GameSystemProvider::KC_GameSystemProvider(KC_MainComponentManager& aComponent
     : Super(aComponentManager)
 {
 }
+
+float KC_GameSystemProvider::GetElapsedTime() const
+{
+    return myElapsedTime.AsSeconds();
+}
