@@ -89,11 +89,11 @@ void MC_Game::ImGui()
 #if IS_DEBUG_BUILD
     if (mySpatialGrid)
     {
-        ImGui::Text("Spatial Grid:");
+        ImGui::SeparatorText("Spatial Grid");
         auto gridCells = mySpatialGrid->GetGridCells();
         std::int32_t newLine = 0;
 
-        ImGui::Text("Cells Count: %d [%dx%dm]", gridCells.size(), mySpatialGrid->GetGridCellSize(), mySpatialGrid->GetGridCellSize());
+        ImGui::Text("Cells Count: %d [%dx%d]", gridCells.size(), mySpatialGrid->GetGridCellSize(), mySpatialGrid->GetGridCellSize());
         ImGui::Text("Cells:");
         for (auto [index, entitySet] : gridCells)
         {
