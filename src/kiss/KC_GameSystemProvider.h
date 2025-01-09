@@ -12,12 +12,12 @@ class KC_GameSystemProvider final : public KC_SystemProvider<KC_MainComponentMan
 public:
     explicit KC_GameSystemProvider(KC_MainComponentManager& aComponentManager);
 
-    template <typename TSystem>
-    void RunSystem(float anElapsedTime) const;
+    template <typename TSystem, typename... Args>
+    void RunSystem(Args&&... args) const;
 };
 
-template <typename TSystem>
-void KC_GameSystemProvider::RunSystem(float anElapsedTime) const
+template <typename TSystem, typename... Args>
+void KC_GameSystemProvider::RunSystem(Args&&... args) const
 {
     KC_EntitySet entitySet;
     {
@@ -28,6 +28,6 @@ void KC_GameSystemProvider::RunSystem(float anElapsedTime) const
     TSystem system{ entitySet, myComponentManager };
     {
         KC_PROFILE(TSystem::GetRunTag())
-        system.Run(anElapsedTime);
+        system.Run(std::forward<decltype(args)>(args)...);
     }
 }

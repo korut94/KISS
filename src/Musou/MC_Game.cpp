@@ -63,7 +63,7 @@ void MC_Game::Init()
 void MC_Game::Update(float anElapsedTime)
 {
     myGameSystemProvider.RunSystem<MC_MoveSystem>(anElapsedTime);
-    myGameSystemProvider.RunSystem<MC_BounceOnBorderSystem>(anElapsedTime);
+    myGameSystemProvider.RunSystem<MC_BounceOnBorderSystem>();
 }
 
 #if IS_IMGUI

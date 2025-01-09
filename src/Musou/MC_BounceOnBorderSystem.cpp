@@ -3,7 +3,7 @@
 #include "KC_Transform.h"
 #include "KC_Velocity.h"
 
-void MC_BounceOnBorderSystem::Run(float anElapsedTime)
+void MC_BounceOnBorderSystem::Run()
 {
     for (KC_Entity entity : myEntitySet)
     {

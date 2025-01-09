@@ -10,5 +10,5 @@ class MC_BounceOnBorderSystem final : public KC_GameSystem<KC_Transform, KC_Velo
     KC_SYSTEM(MC_BounceOnBorderSystem)
 
 public:
-    void Run(float anElapsedTime);
+    void Run();
 };
