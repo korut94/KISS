@@ -52,13 +52,14 @@ target_sources(Kiss
         KC_ProfileManager.h
         KC_Profiling.h
         KC_Rect.h
-        KC_RectangleRenderer.h
+        KC_RectCollider.h
         KC_RenderSystem.h
         KC_RenderSystemProvider.h
         KC_RenderViewSystem.h
         KC_ScopedProfileBlock.h
         KC_ShapeRenderer.h
         KC_SpatialGrid.h
+        KC_SpatialGridSystem.h
         KC_SystemProvider.h
         KC_TemplateHelper.h
         KC_ThreadManager.h
@@ -78,8 +79,10 @@ target_sources(Kiss
         KC_RenderViewSystem.cpp
         KC_ScopedProfileBlock.cpp
         KC_SpatialGrid.cpp
+        KC_SpatialGridSystem.cpp
         KC_ThreadManager.cpp
-        KC_Time.cpp)
+        KC_Time.cpp
+        KC_World.cpp)
 target_link_libraries(Kiss PUBLIC sfml-graphics ImGui-SFML::ImGui-SFML)
 target_compile_definitions(Kiss
         PRIVATE

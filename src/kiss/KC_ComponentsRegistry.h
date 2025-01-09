@@ -2,7 +2,7 @@
 
 #include "KC_Camera.h"
 #include "KC_CircleRenderer.h"
-#include "KC_RectangleRenderer.h"
+#include "KC_RectCollider.h"
 #include "KC_Transform.h"
 #include "KC_Velocity.h"
 
@@ -14,7 +14,7 @@ namespace KC_ComponentsRegistry
     using Components = std::tuple<
         KC_Camera,
         KC_CircleRenderer,
-        KC_RectangleRenderer,
+        KC_RectCollider,
         KC_Transform,
         KC_Velocity
     >;

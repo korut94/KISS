@@ -2,6 +2,8 @@
 
 #include "KC_Game.h"
 
+class KC_SpatialGrid;
+
 class MC_Game final : public KC_Game
 {
 public:
@@ -14,6 +16,8 @@ public:
 #endif // IS_IMGUI
 
 private:
+    KC_SpatialGrid* mySpatialGrid;
+
 #if IS_IMGUI
     float* myCameraZoom;
 #endif // IS_IMGUI

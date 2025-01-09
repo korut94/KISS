@@ -31,6 +31,11 @@ std::int32_t KC_SpatialGrid::GetIndex(const sf::Vector2f& aPosition) const
     return gridCoordinate.x + gridCoordinate.y * GetOneDimensionCellsCount();
 }
 
+void KC_SpatialGrid::Clear()
+{
+    myGridCells.clear();
+}
+
 void KC_SpatialGrid::InsertEntity(KC_Entity anEntity, const KC_FloatRect& aBoundingRect)
 {
     // See https://miro.com/app/board/uXjVL3mClFw=/?moveToWidget=3458764612608170994&cot=14

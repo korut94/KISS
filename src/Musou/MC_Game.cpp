@@ -7,6 +7,8 @@
 #include "KC_CircleRenderer.h"
 #include "KC_Defines.h"
 #include "KC_GameSystemProvider.h"
+#include "KC_RectCollider.h"
+#include "KC_SpatialGridSystem.h"
 #include "KC_Transform.h"
 #include "KC_World.h"
 
@@ -20,8 +22,9 @@
 #include <ctime>
 
 MC_Game::MC_Game()
+    : mySpatialGrid(nullptr)
 #if IS_IMGUI
-    : myCameraZoom(nullptr)
+    , myCameraZoom(nullptr)
 #endif // IS_IMGUI
 {
 }
@@ -29,6 +32,8 @@ MC_Game::MC_Game()
 void MC_Game::Init(KC_World& aWorld)
 {
     std::srand(std::time(nullptr));
+
+    mySpatialGrid = &aWorld.AddSpatialGrid(5);
 
     KC_EntityManager& entityManager = aWorld.GetEntityManager();
     KC_MainComponentManager& componentManager = aWorld.GetComponentManager();
@@ -42,15 +47,21 @@ void MC_Game::Init(KC_World& aWorld)
     KC_UNUSED(camera);
 #endif // IS_IMGUI
 
-    for (int i = 0; i < 10000; ++i)
+    for (int i = 0; i < 100; ++i)
     {
         KC_Entity entity = entityManager.CreateEntity();
 
         KC_Transform& transform = componentManager.AddComponent<KC_Transform>(entity);
-        transform.myPosition = { 0.f, 0.f };
+        const float randomX = (static_cast<float>(std::rand()) / RAND_MAX) * 10.f;
+        const float randomY = (static_cast<float>(std::rand()) / RAND_MAX) * 10.f;
+        transform.myPosition = { randomX, randomY };
+
+        KC_RectCollider& collider = componentManager.AddComponent<KC_RectCollider>(entity);
+        collider.myBound.SetPosition(sf::Vector2f(-0.5f, -0.5f));
+        collider.myBound.SetSize(sf::Vector2f(1.f, 1.f));
 
         KC_Velocity& velocity = componentManager.AddComponent<KC_Velocity>(entity);
-        velocity.myVector = sf::Transform().rotate(sf::degrees(std::rand() % 365)) * sf::Vector2f(0.f, 1.f) * 5.f;
+        velocity.myVector = sf::Transform().rotate(sf::degrees(std::rand() % 365)) * sf::Vector2f(0.f, 1.f) * 10.f;
 
         KC_CircleRenderer& circle = componentManager.AddComponent<KC_CircleRenderer>(entity);
         circle.myRadius = 1.f;
@@ -60,9 +71,12 @@ void MC_Game::Init(KC_World& aWorld)
 
 void MC_Game::Update(KC_GameSystemProvider& aGameSystemProvider)
 {
+    KC_ASSERT(mySpatialGrid != nullptr);
+
     const float elapsedTime = aGameSystemProvider.GetElapsedTime();
 
     aGameSystemProvider.RunSystem<MC_MoveSystem>(elapsedTime);
+    aGameSystemProvider.RunSystem<KC_SpatialGridSystem>(*mySpatialGrid);
     aGameSystemProvider.RunSystem<MC_BounceOnBorderSystem>();
 }
 
@@ -71,6 +85,27 @@ void MC_Game::ImGui()
 {
     ImGui::Begin("Musou");
     ImGui::SliderFloat("Camera Zoom", myCameraZoom, 0.5f, 3.f);
+
+#if IS_DEBUG_BUILD
+    if (mySpatialGrid)
+    {
+        ImGui::Text("Spatial Grid:");
+        auto gridCells = mySpatialGrid->GetGridCells();
+        std::int32_t newLine = 0;
+
+        ImGui::Text("Cells Count: %d [%dx%dm]", gridCells.size(), mySpatialGrid->GetGridCellSize(), mySpatialGrid->GetGridCellSize());
+        ImGui::Text("Cells:");
+        for (auto [index, entitySet] : gridCells)
+        {
+            ImGui::Text("[%d, %d]", index, entitySet.Count());
+            if (++newLine % 4 != 3)
+            {
+                ImGui::SameLine();
+            }
+        }
+    }
+#endif // IS_DEBUG_BUILD
+
     ImGui::End();
 }
 #endif // IS_IMGUI
