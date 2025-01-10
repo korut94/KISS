@@ -2,6 +2,8 @@
 
 #include "KC_Game.h"
 
+#include <SFML/System/Vector2.hpp>
+
 class KC_SpatialGrid;
 
 class MC_Game final : public KC_Game
@@ -20,5 +22,6 @@ private:
 
 #if IS_IMGUI
     float* myCameraZoom;
+    sf::Vector2f* myPosition;
 #endif // IS_IMGUI
 };

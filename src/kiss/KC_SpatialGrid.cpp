@@ -85,5 +85,5 @@ std::int32_t KC_SpatialGrid::GetIndex(const sf::Vector2f &aPosition) const
 
 constexpr std::int32_t KC_SpatialGrid::GetOneDimensionCellsCount() const
 {
-    return KC_SpatialGrid_Private::locMaxGridSide / myGridCellSize;
+    return KC_SpatialGrid_Private::locHalfMaxGridSide / myGridCellSize;
 }
