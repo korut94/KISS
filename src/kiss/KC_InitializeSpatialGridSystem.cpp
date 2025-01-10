@@ -15,13 +15,6 @@ void KC_InitializeSpatialGridSystem::Run(KC_SpatialGrid& aSpatialGrid)
         const KC_Transform& transform = GetComponent<KC_Transform>(entity);
         const KC_RectCollider& collider = GetComponent<KC_RectCollider>(entity);
 
-        const sf::Transform transformationMatrix
-        {
-            transform.myScale.x, 0, transform.myPosition.x,
-            0, transform.myScale.y, transform.myPosition.y,
-            0, 0, 1
-        };
-
-        aSpatialGrid.InsertEntity(entity, transformationMatrix * collider.myBound);
+        aSpatialGrid.InsertEntity(entity, transform * collider.myBound);
     }
 }

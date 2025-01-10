@@ -23,6 +23,7 @@ void KC_PaintSystem<T, Args...>::DrawRectangle(KC_Canvas& aCanvas, sf::Vector2f 
 {
     std::vector<sf::Vertex>& vertexes = aCanvas.myVertexes;
 
+    // TODO: Duplication of vertexes, is it necessary with SFML?
     const std::array<sf::Vertex, 6> rectangleVertexes =
     {{
         {{ aCenter.x - aSize.x / 2.f, aCenter.y - aSize.y / 2.f }, aColor}, // Top-left

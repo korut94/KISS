@@ -1,17 +1,20 @@
 #pragma once
 
-#include <cstdint>
+#include "KC_Transform.h"
 
-#include <SFML/Graphics/Transform.hpp>
 #include <SFML/System/Vector2.hpp>
+
+#include <cstdint>
 
 template <typename T>
 class KC_Rect final
 {
+    template <typename G>
+    friend KC_Rect<G> operator*(const KC_Transform&, const KC_Rect<G>&);
+
 public:
     KC_Rect() = default;
     KC_Rect(sf::Vector2<T> aPosition, sf::Vector2<T> aSize);
-    KC_Rect(sf::Vector2<T> aTopLeftCorner, sf::Vector2<T> aTopRightCorner, sf::Vector2<T> aBottomLeftCorner);
 
     sf::Vector2<T> GetBottomLeft() const;
     sf::Vector2<T> GetBottomRight() const;
@@ -31,7 +34,7 @@ private:
 };
 
 template <typename T>
-KC_Rect<T> operator*(const sf::Transform& aTransform);
+KC_Rect<T> operator*(const KC_Transform& aTransform);
 
 using KC_IntRect = KC_Rect<std::int32_t>;
 using KC_FloatRect = KC_Rect<float>;
@@ -40,13 +43,6 @@ template <typename T>
 KC_Rect<T>::KC_Rect(sf::Vector2<T> aPosition, sf::Vector2<T> aSize)
     : myPosition(aPosition)
     , mySize(aSize)
-{
-}
-
-template <typename T>
-KC_Rect<T>::KC_Rect(sf::Vector2<T> aTopLeftCorner, sf::Vector2<T> aTopRightCorner, sf::Vector2<T> aBottomLeftCorner)
-    : myPosition(aTopLeftCorner)
-    , mySize({ aTopRightCorner.x - aTopLeftCorner.x, aBottomLeftCorner.y - aTopLeftCorner.y })
 {
 }
 
@@ -82,12 +78,11 @@ bool KC_Rect<T>::IsPointInside(sf::Vector2<T> aPoint) const
 }
 
 template <typename T>
-KC_Rect<T> operator*(const sf::Transform& aTransform, const KC_Rect<T>& aRect)
+KC_Rect<T> operator*(const KC_Transform& aTransform, const KC_Rect<T>& aRect)
 {
     return
-    { 
-        aTransform.transformPoint(aRect.GetTopLeft()),
-        aTransform.transformPoint(aRect.GetTopRight()),
-        aTransform.transformPoint(aRect.GetBottomLeft())
+    {
+        aRect.myPosition + aTransform.myPosition, 
+        { aRect.mySize.x * aTransform.myScale.x, aRect.mySize.y * aTransform.myScale.y }
     };
 }

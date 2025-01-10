@@ -4,6 +4,7 @@
 #include "KC_Camera.h"
 #include "KC_CircleRenderer.h"
 #include "KC_RectCollider.h"
+#include "KC_RectColliderPalette.h"
 #include "KC_SpatialGridPalette.h"
 #include "KC_Transform.h"
 #include "KC_Velocity.h"
@@ -18,6 +19,7 @@ namespace KC_ComponentsRegistry
         KC_Canvas,
         KC_CircleRenderer,
         KC_RectCollider,
+        KC_RectColliderPalette,
         KC_SpatialGridPalette,
         KC_Transform,
         KC_Velocity
