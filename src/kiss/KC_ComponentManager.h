@@ -16,6 +16,7 @@ class KC_ComponentManager final
 
 public:
     KC_ComponentManager();
+    ~KC_ComponentManager();
 
     template <typename TOtherComponents>
     void AssignComponents(KC_ComponentManager<TOtherComponents>& anOther) const;
@@ -37,18 +38,28 @@ private:
     template <typename... Args>
     void AssignComponentsImpl(KC_ComponentManager<std::tuple<Args...>>& anOther) const;
 
-    template <std::size_t Index, std::size_t Count>
-    inline void RegisterComponents();
-    template <std::size_t Index, typename T>
+    template <std::size_t... Index>
+    inline void RegisterComponents(std::index_sequence<Index...>);
+    template <std::size_t Index>
     void RegisterComponent();
+    template <std::size_t... Index>
+    inline void DeleteComponents(std::index_sequence<Index...>);
+    template <std::size_t Index>
+    void DeleteComponent();
 
-    std::array<std::unique_ptr<KC_ComponentArray>, ComponentsCount> myComponentArrays;
+    std::array<KC_ComponentArray*, ComponentsCount> myComponentArrays;
 };
 
 template <typename TComponents>
 KC_ComponentManager<TComponents>::KC_ComponentManager()
 {
-    RegisterComponents<0, ComponentsCount>();
+    RegisterComponents(std::make_index_sequence<ComponentsCount>());
+}
+
+template <typename TComponents>
+KC_ComponentManager<TComponents>::~KC_ComponentManager()
+{
+    DeleteComponents(std::make_index_sequence<ComponentsCount>());
 }
 
 template <typename TComponents>
@@ -115,25 +126,37 @@ void KC_ComponentManager<TComponents>::AssignComponentsImpl(KC_ComponentManager<
 }
 
 template <typename TComponents>
-template <std::size_t Index, std::size_t Count>
-void KC_ComponentManager<TComponents>::RegisterComponents()
+template <std::size_t... Index>
+inline void KC_ComponentManager<TComponents>::RegisterComponents(std::index_sequence<Index...>)
 {
-    using ComponentType = typename std::tuple_element<Index, TComponents>::type;
-
-    RegisterComponent<Index, ComponentType>();
-
-    if constexpr (Index + 1 < Count)
-    {
-        RegisterComponents<Index + 1, Count>();
-    }
+    ((RegisterComponent<Index>()), ...);
 }
 
 template <typename TComponents>
-template <std::size_t Index, typename T>
+template <std::size_t Index>
 void KC_ComponentManager<TComponents>::RegisterComponent()
 {
+    using ComponentType = typename std::tuple_element<Index, TComponents>::type;
+
     KC_ASSERT(myComponentArrays[Index] == nullptr, "Component already registered");
-    myComponentArrays[Index] = std::move(std::make_unique<KC_ComponentArrayImpl<T>>());
+    myComponentArrays[Index] = new KC_ComponentArrayImpl<ComponentType>();
+}
+
+template <typename TComponents>
+template <std::size_t... Index>
+inline void KC_ComponentManager<TComponents>::DeleteComponents(std::index_sequence<Index...>)
+{
+    ((DeleteComponent<Index>()), ...);
+}
+
+template <typename TComponents>
+template <std::size_t Index>
+void KC_ComponentManager<TComponents>::DeleteComponent()
+{
+    using ComponentType = typename std::tuple_element<Index, TComponents>::type;
+
+    delete static_cast<KC_ComponentArrayImpl<ComponentType>*>(myComponentArrays[Index]);
+    myComponentArrays[Index] = nullptr;
 }
 
 using KC_MainComponentManager = KC_ComponentManager<KC_ComponentsRegistry::MainComponents>;

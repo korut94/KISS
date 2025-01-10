@@ -5,13 +5,7 @@
 
 #include <vector>
 
-class KC_ComponentArray
-{
-public:
-    // TODO: Remove virtual since it's useless. In the ComponentManager destructor,
-    // we can make a static cast of the pointer and call the proper delete function (if it's necessary)
-    virtual ~KC_ComponentArray() {}
-};
+class KC_ComponentArray {};
 
 template <typename T>
 class KC_ComponentArrayImpl final : public KC_ComponentArray
