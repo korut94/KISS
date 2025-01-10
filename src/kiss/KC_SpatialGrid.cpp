@@ -7,8 +7,8 @@
 
 namespace KC_SpatialGrid_Private
 {
-    static constexpr std::int32_t locMaxGridSide = std::numeric_limits<std::int32_t>::max();
-    static constexpr std::int32_t locHalfMaxGridSide = locMaxGridSide >> 1;
+    static constexpr const std::int32_t locMaxGridSide = std::numeric_limits<std::int32_t>::max();
+    static constexpr const std::int32_t locHalfMaxGridSide = locMaxGridSide >> 1;
 
     bool IsInsideGrid(const sf::Vector2f& aPosition)
     {

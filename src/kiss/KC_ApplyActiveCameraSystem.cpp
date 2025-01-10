@@ -7,7 +7,7 @@
 namespace KC_ApplyActiveCameraSystem_Private
 {
     static sf::View locView;
-    static constexpr float locUnitScale = 10.f; // pixel/meter
+    static constexpr const float locUnitScale = 10.f; // pixel/meter
 }
 
 void KC_ApplyActiveCameraSystem::Run(sf::RenderWindow& aRenderWindow) const
