@@ -47,6 +47,7 @@ target_sources(Kiss
         KC_Entity.h
         KC_EntityManager.h
         KC_EntitySet.h
+        KC_InitializeSpatialGridSystem.h
         KC_Game.h
         KC_GameManager.h
         KC_GameSystemProvider.h
@@ -65,7 +66,6 @@ target_sources(Kiss
         KC_ShapeRenderer.h
         KC_SpatialGrid.h
         KC_SpatialGridPalette.h
-        KC_SpatialGridSystem.h
         KC_SystemProvider.h
         KC_TemplateHelper.h
         KC_ThreadManager.h
@@ -80,6 +80,7 @@ target_sources(Kiss
         KC_ClearCanvasSystem.cpp
         KC_DrawCanvasSystem.cpp
         KC_DrawCircleSystem.cpp
+        KC_InitializeSpatialGridSystem.cpp
         KC_GameSystemProvider.cpp
         KC_PaintSpatialGridSystem.cpp
         KC_ProfileBlock.cpp
@@ -88,7 +89,6 @@ target_sources(Kiss
         KC_RenderSystemProvider.cpp
         KC_ScopedProfileBlock.cpp
         KC_SpatialGrid.cpp
-        KC_SpatialGridSystem.cpp
         KC_ThreadManager.cpp
         KC_Time.cpp
         KC_World.cpp)

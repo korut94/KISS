@@ -8,11 +8,11 @@
 #include "KC_CircleRenderer.h"
 #include "KC_ClearCanvasSystem.h"
 #include "KC_Defines.h"
+#include "KC_InitializeSpatialGridSystem.h"
 #include "KC_GameSystemProvider.h"
 #include "KC_PaintSpatialGridSystem.h"
 #include "KC_RectCollider.h"
 #include "KC_SpatialGridPalette.h"
-#include "KC_SpatialGridSystem.h"
 #include "KC_Transform.h"
 #include "KC_World.h"
 
@@ -85,7 +85,7 @@ void MC_Game::Update(KC_GameSystemProvider& aGameSystemProvider)
     const float elapsedTime = aGameSystemProvider.GetElapsedTime();
 
     aGameSystemProvider.RunSystem<MC_MoveSystem>(elapsedTime);
-    aGameSystemProvider.RunSystem<KC_SpatialGridSystem>(*mySpatialGrid);
+    aGameSystemProvider.RunSystem<KC_InitializeSpatialGridSystem>(*mySpatialGrid);
     aGameSystemProvider.RunSystem<MC_BounceOnBorderSystem>();
 
     aGameSystemProvider.RunSystem<KC_ClearCanvasSystem>(); // Maybe move it in engine and create a function game.Draw()?

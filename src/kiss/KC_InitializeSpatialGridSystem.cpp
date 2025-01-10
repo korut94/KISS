@@ -1,4 +1,4 @@
-#include "KC_SpatialGridSystem.h"
+#include "KC_InitializeSpatialGridSystem.h"
 
 #include "KC_RectCollider.h"
 #include "KC_SpatialGrid.h"
@@ -6,7 +6,7 @@
 
 #include <SFML/Graphics/Transform.hpp>
 
-void KC_SpatialGridSystem::Run(KC_SpatialGrid& aSpatialGrid)
+void KC_InitializeSpatialGridSystem::Run(KC_SpatialGrid& aSpatialGrid)
 {
     aSpatialGrid.Clear();
 
