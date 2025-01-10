@@ -15,7 +15,7 @@
 
 #define KC_SYSTEM(aSystem)\
     public:\
-        using KC_System::KC_System;\
+        using BaseClass::BaseClass;\
         KC_SYSTEM_PROFILETAGS(aSystem)
 
 template <typename TComponentManager, typename T, typename... Args>
@@ -33,6 +33,8 @@ public:
     G& GetComponent(KC_Entity anEntity);
 
 protected:
+    using BaseClass = KC_System; // Override it when making new base System classes
+
     const KC_EntitySet& myEntitySet;
 
 private:
