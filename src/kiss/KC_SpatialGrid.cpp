@@ -23,12 +23,29 @@ KC_SpatialGrid::KC_SpatialGrid(std::int32_t aCellGridSize)
     KC_ASSERT(aCellGridSize > 0);
 }
 
-std::int32_t KC_SpatialGrid::GetIndex(const sf::Vector2f& aPosition) const
+sf::Vector2i KC_SpatialGrid::GetGridCoordinate(std::int32_t anIndex) const
 {
-    KC_ASSERT(KC_SpatialGrid_Private::IsInsideGrid(aPosition));
+    return { anIndex % GetOneDimensionCellsCount(), anIndex / GetOneDimensionCellsCount() };
+}
 
-    const sf::Vector2i gridCoordinate = static_cast<sf::Vector2i>(aPosition) / myGridCellSize;
-    return gridCoordinate.x + gridCoordinate.y * GetOneDimensionCellsCount();
+void KC_SpatialGrid::GetGridCoordinates(std::vector<sf::Vector2i>& outSomeGridCoordinates) const
+{
+    outSomeGridCoordinates.reserve(myGridCells.size());
+
+    for (auto itr = myGridCells.cbegin(), end = myGridCells.cend(); itr != end; ++itr)
+    {
+        outSomeGridCoordinates.push_back(GetGridCoordinate(itr->first));
+    }
+}
+
+void KC_SpatialGrid::GetIndexs(std::vector<std::int32_t>& outSomeIndexs) const
+{
+    outSomeIndexs.reserve(myGridCells.size());
+
+    for (auto itr = myGridCells.cbegin(), end = myGridCells.cend(); itr != end; ++itr)
+    {
+        outSomeIndexs.push_back(itr->first);
+    }
 }
 
 void KC_SpatialGrid::Clear()
@@ -56,6 +73,14 @@ void KC_SpatialGrid::InsertEntity(KC_Entity anEntity, const KC_FloatRect& aBound
 
         myGridCells[row + cellGridIndexs[0] + column].Insert(anEntity);
     }
+}
+
+std::int32_t KC_SpatialGrid::GetIndex(const sf::Vector2f &aPosition) const
+{
+    KC_ASSERT(KC_SpatialGrid_Private::IsInsideGrid(aPosition));
+
+    const sf::Vector2i gridCoordinate = static_cast<sf::Vector2i>(aPosition) / myGridCellSize;
+    return gridCoordinate.x + gridCoordinate.y * GetOneDimensionCellsCount();
 }
 
 constexpr std::int32_t KC_SpatialGrid::GetOneDimensionCellsCount() const

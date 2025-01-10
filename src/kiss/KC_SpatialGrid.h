@@ -13,7 +13,9 @@ public:
     KC_SpatialGrid(std::int32_t aGridCellSize);
 
     std::int32_t GetGridCellSize() const { return myGridCellSize; }
-    std::int32_t GetIndex(const sf::Vector2f& aPosition) const;
+    sf::Vector2i GetGridCoordinate(std::int32_t anIndex) const;
+    void GetGridCoordinates(std::vector<sf::Vector2i>& outSomeGridCoordinates) const;
+    void GetIndexs(std::vector<std::int32_t>& outSomeIndexes) const;
 
     void Clear();
     void InsertEntity(KC_Entity anEntity, const KC_FloatRect& aBoundingRect);
@@ -23,6 +25,7 @@ public:
 #endif // IS_DEBUG_BUILD
 
 private:
+    std::int32_t GetIndex(const sf::Vector2f& aPosition) const;
     constexpr std::int32_t GetOneDimensionCellsCount() const;
 
     const std::int32_t myGridCellSize;
