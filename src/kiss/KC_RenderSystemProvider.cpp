@@ -1,10 +1,10 @@
 #include "KC_RenderSystemProvider.h"
 
+#include "KC_ApplyActiveCameraSystem.h"
 #include "KC_Assert.h"
 #include "KC_Defines.h"
 #include "KC_DrawCanvasSystem.h"
 #include "KC_DrawCircleSystem.h"
-#include "KC_RenderViewSystem.h"
 #include "KC_ThreadManager.h"
 
 #if IS_IMGUI
@@ -115,7 +115,7 @@ void KC_RenderSystemProvider::Render() const
     KC_PROFILE_RENDER
     myRenderWindow.clear(sf::Color::Black);
 
-    RunSystem<KC_RenderViewSystem>();
+    RunSystem<KC_ApplyActiveCameraSystem>();
     {
         KC_PROFILE_RENDERDRAW
         RunSystem<KC_DrawCanvasSystem>();

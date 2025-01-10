@@ -32,6 +32,7 @@ add_library(Kiss STATIC)
 target_include_directories(Kiss PUBLIC ${KISS_SOURCE_DIR})
 target_sources(Kiss
     PUBLIC
+        KC_ApplyActiveCameraSystem.h
         KC_Assert.h
         KC_Camera.h
         KC_Canvas.h
@@ -60,7 +61,6 @@ target_sources(Kiss
         KC_RectCollider.h
         KC_RenderSystem.h
         KC_RenderSystemProvider.h
-        KC_RenderViewSystem.h
         KC_ScopedProfileBlock.h
         KC_ShapeRenderer.h
         KC_SpatialGrid.h
@@ -74,6 +74,7 @@ target_sources(Kiss
         KC_Velocity.h
         KC_World.h
     PRIVATE
+        KC_ApplyActiveCameraSystem.cpp
         KC_EntityManager.cpp
         KC_EntitySet.cpp
         KC_ClearCanvasSystem.cpp
@@ -85,7 +86,6 @@ target_sources(Kiss
         KC_ProfileBlockTimes.cpp
         KC_ProfileManager.cpp
         KC_RenderSystemProvider.cpp
-        KC_RenderViewSystem.cpp
         KC_ScopedProfileBlock.cpp
         KC_SpatialGrid.cpp
         KC_SpatialGridSystem.cpp

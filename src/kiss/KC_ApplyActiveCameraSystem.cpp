@@ -1,18 +1,18 @@
-#include "KC_RenderViewSystem.h"
+#include "KC_ApplyActiveCameraSystem.h"
 
 #include "KC_Camera.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
 
-namespace KC_RenderViewSystem_Private
+namespace KC_ApplyActiveCameraSystem_Private
 {
     static sf::View locView;
     static constexpr float locUnitScale = 10.f; // pixel/meter
 }
 
-void KC_RenderViewSystem::Run(sf::RenderWindow& aRenderWindow) const
+void KC_ApplyActiveCameraSystem::Run(sf::RenderWindow& aRenderWindow) const
 {
-    namespace Private = KC_RenderViewSystem_Private;
+    namespace Private = KC_ApplyActiveCameraSystem_Private;
 
     if (myEntitySet.IsEmpty())
         return;
