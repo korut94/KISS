@@ -10,10 +10,7 @@ void KC_PaintSpatialGridSystem::Run()
     {
         KC_Canvas& canvas = GetComponent<KC_Canvas>(entity);
         const KC_SpatialGridPalette& palette = GetComponent<KC_SpatialGridPalette>(entity);
-
-        KC_ASSERT(palette.mySpatialGrid);
-
-        const KC_SpatialGrid& spatialGrid = *palette.mySpatialGrid;
+        const KC_SpatialGrid& spatialGrid = palette.mySpatialGrid;
 
         DrawRectangle(canvas, {0.f, 0.f}, {10.f, 10.f}, sf::Color::Green);
     }

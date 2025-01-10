@@ -24,8 +24,8 @@ public:
     const T& GetComponent(KC_Entity anEntity) const;
     T& GetComponent(KC_Entity anEntity);
     const KC_EntitySet& GetEntitySet() const { return myEntitySet; }
-    // TODO: Allow to pass arguments at the component constructor (necessary if they store references)
-    T& InsertComponent(KC_Entity anEntity);
+    template <typename... Args>
+    T& InsertComponent(KC_Entity anEntity, Args&&... args);
 
     KC_ComponentArrayImpl<T>& operator=(const KC_ComponentArrayImpl<T>& anOther);
 
@@ -71,12 +71,13 @@ T& KC_ComponentArrayImpl<T>::GetComponent(KC_Entity anEntity)
 }
 
 template <typename T>
-T& KC_ComponentArrayImpl<T>::InsertComponent(KC_Entity anEntity)
+template <typename... Args>
+T& KC_ComponentArrayImpl<T>::InsertComponent(KC_Entity anEntity, Args&&... args)
 {
     KC_ASSERT(!myEntitySet.Contains(anEntity), "Provided entity has already an instance of the specified component");
 
     myEntitySet.Insert(anEntity);
-    return myComponentInstances.emplace_back();
+    return myComponentInstances.emplace_back(std::forward<Args>(args)...);
 }
 
 template <typename T>

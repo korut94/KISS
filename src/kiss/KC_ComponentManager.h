@@ -30,8 +30,8 @@ public:
     template <typename T, typename... OtherArgs>
     void GetEntitySet(KC_EntitySet& outEntitySet) const;
 
-    template <typename T>
-    T& AddComponent(KC_Entity anEntity);
+    template <typename T, typename... Args>
+    T& AddComponent(KC_Entity anEntity, Args&&... args);
 
 private:
     template <typename... Args>
@@ -73,10 +73,10 @@ const T& KC_ComponentManager<TComponents>::GetComponent(KC_Entity anEntity) cons
 }
 
 template <typename TComponents>
-template <typename T>
-T& KC_ComponentManager<TComponents>::AddComponent(KC_Entity anEntity)
+template <typename T, typename... Args>
+T& KC_ComponentManager<TComponents>::AddComponent(KC_Entity anEntity, Args&&... args)
 {
-    return GetComponentArray<T>().InsertComponent(anEntity);
+    return GetComponentArray<T>().InsertComponent(anEntity, std::forward<Args>(args)...);
 }
 
 template <typename TComponents>

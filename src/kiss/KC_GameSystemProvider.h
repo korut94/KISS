@@ -35,6 +35,6 @@ void KC_GameSystemProvider::RunSystem(Args&&... args) const
     TSystem system{ entitySet, myComponentManager };
     {
         KC_PROFILE(TSystem::GetRunTag())
-        system.Run(std::forward<decltype(args)>(args)...);
+        system.Run(std::forward<Args>(args)...);
     }
 }

@@ -53,8 +53,7 @@ void MC_Game::Init(KC_World& aWorld)
 
     KC_Entity spatialGrid = entityManager.CreateEntity();
     componentManager.AddComponent<KC_Canvas>(spatialGrid);
-    KC_SpatialGridPalette& spatialGridPalette = componentManager.AddComponent<KC_SpatialGridPalette>(spatialGrid);
-    spatialGridPalette.mySpatialGrid = mySpatialGrid;
+    componentManager.AddComponent<KC_SpatialGridPalette>(spatialGrid, *mySpatialGrid);
 
     for (int i = 0; i < 100; ++i)
     {
