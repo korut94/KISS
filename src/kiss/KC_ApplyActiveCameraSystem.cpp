@@ -21,8 +21,6 @@ void KC_ApplyActiveCameraSystem::Run(sf::RenderWindow& aRenderWindow) const
 
     const KC_Transform& transform = GetComponent<KC_Transform>(cameraEntity);
     const KC_Camera& camera = GetComponent<KC_Camera>(cameraEntity);
-    
-    const sf::Vector2u windowSize = aRenderWindow.getSize();
 
     Private::locView = aRenderWindow.getDefaultView();
     // Define world center coordinate
