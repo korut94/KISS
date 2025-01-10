@@ -53,6 +53,7 @@ private:
 template <typename TComponents>
 KC_ComponentManager<TComponents>::KC_ComponentManager()
 {
+    myComponentArrays.fill(nullptr);
     RegisterComponents(std::make_index_sequence<ComponentsCount>());
 }
 

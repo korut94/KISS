@@ -20,6 +20,7 @@ protected:
 
 void Test_KC_ComponentManager::SetUp()
 {
+    // TODO: Make a test to assure the component manager is initialized with all value to nullptr
     myComponentManager.AddComponent<KC_Transform>(0);
     myComponentManager.AddComponent<KC_CircleRenderer>(0);
 
