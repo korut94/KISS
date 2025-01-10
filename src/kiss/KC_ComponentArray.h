@@ -8,6 +8,8 @@
 class KC_ComponentArray
 {
 public:
+    // TODO: Remove virtual since it's useless. In the ComponentManager destructor,
+    // we can make a static cast of the pointer and call the proper delete function (if it's necessary)
     virtual ~KC_ComponentArray() {}
 };
 
@@ -22,7 +24,7 @@ public:
     const T& GetComponent(KC_Entity anEntity) const;
     T& GetComponent(KC_Entity anEntity);
     const KC_EntitySet& GetEntitySet() const { return myEntitySet; }
-
+    // TODO: Allow to pass arguments at the component constructor (necessary if they store references)
     T& InsertComponent(KC_Entity anEntity);
 
     KC_ComponentArrayImpl<T>& operator=(const KC_ComponentArrayImpl<T>& anOther);
