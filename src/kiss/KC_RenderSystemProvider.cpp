@@ -2,6 +2,7 @@
 
 #include "KC_Assert.h"
 #include "KC_Defines.h"
+#include "KC_DrawCanvasSystem.h"
 #include "KC_DrawCircleSystem.h"
 #include "KC_RenderViewSystem.h"
 #include "KC_ThreadManager.h"
@@ -117,6 +118,7 @@ void KC_RenderSystemProvider::Render() const
     RunSystem<KC_RenderViewSystem>();
     {
         KC_PROFILE_RENDERDRAW
+        RunSystem<KC_DrawCanvasSystem>();
         RunSystem<KC_DrawCircleSystem>();
     }
 

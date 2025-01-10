@@ -4,10 +4,14 @@
 #include "MC_MoveSystem.h"
 
 #include "KC_Camera.h"
+#include "KC_Canvas.h"
 #include "KC_CircleRenderer.h"
+#include "KC_ClearCanvasSystem.h"
 #include "KC_Defines.h"
 #include "KC_GameSystemProvider.h"
+#include "KC_PaintSpatialGridSystem.h"
 #include "KC_RectCollider.h"
+#include "KC_SpatialGridPalette.h"
 #include "KC_SpatialGridSystem.h"
 #include "KC_Transform.h"
 #include "KC_World.h"
@@ -33,8 +37,6 @@ void MC_Game::Init(KC_World& aWorld)
 {
     std::srand(std::time(nullptr));
 
-    mySpatialGrid = &aWorld.AddSpatialGrid(5);
-
     KC_EntityManager& entityManager = aWorld.GetEntityManager();
     KC_MainComponentManager& componentManager = aWorld.GetComponentManager();
 
@@ -46,6 +48,13 @@ void MC_Game::Init(KC_World& aWorld)
 #else
     KC_UNUSED(camera);
 #endif // IS_IMGUI
+
+    mySpatialGrid = &aWorld.AddSpatialGrid(5);
+
+    KC_Entity spatialGrid = entityManager.CreateEntity();
+    componentManager.AddComponent<KC_Canvas>(spatialGrid);
+    KC_SpatialGridPalette& spatialGridPalette = componentManager.AddComponent<KC_SpatialGridPalette>(spatialGrid);
+    spatialGridPalette.mySpatialGrid = mySpatialGrid;
 
     for (int i = 0; i < 100; ++i)
     {
@@ -78,6 +87,9 @@ void MC_Game::Update(KC_GameSystemProvider& aGameSystemProvider)
     aGameSystemProvider.RunSystem<MC_MoveSystem>(elapsedTime);
     aGameSystemProvider.RunSystem<KC_SpatialGridSystem>(*mySpatialGrid);
     aGameSystemProvider.RunSystem<MC_BounceOnBorderSystem>();
+
+    aGameSystemProvider.RunSystem<KC_ClearCanvasSystem>(); // Maybe move it in engine and create a function game.Draw()?
+    aGameSystemProvider.RunSystem<KC_PaintSpatialGridSystem>();
 }
 
 #if IS_IMGUI

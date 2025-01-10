@@ -34,11 +34,14 @@ target_sources(Kiss
     PUBLIC
         KC_Assert.h
         KC_Camera.h
+        KC_Canvas.h
         KC_CircleRenderer.h
+        KC_ClearCanvasSystem.h
         KC_ComponentArray.h
         KC_ComponentManager.h
         KC_ComponentsRegistry.h
         KC_Defines.h
+        KC_DrawCanvasSystem.h
         KC_DrawCircleSystem.h
         KC_Entity.h
         KC_EntityManager.h
@@ -47,6 +50,8 @@ target_sources(Kiss
         KC_GameManager.h
         KC_GameSystemProvider.h
         KC_Manager.h
+        KC_PaintSystem.h
+        KC_PaintSpatialGridSystem.h
         KC_ProfileBlock.h
         KC_ProfileBlockTimes.h
         KC_ProfileManager.h
@@ -59,6 +64,7 @@ target_sources(Kiss
         KC_ScopedProfileBlock.h
         KC_ShapeRenderer.h
         KC_SpatialGrid.h
+        KC_SpatialGridPalette.h
         KC_SpatialGridSystem.h
         KC_SystemProvider.h
         KC_TemplateHelper.h
@@ -70,8 +76,11 @@ target_sources(Kiss
     PRIVATE
         KC_EntityManager.cpp
         KC_EntitySet.cpp
+        KC_ClearCanvasSystem.cpp
+        KC_DrawCanvasSystem.cpp
         KC_DrawCircleSystem.cpp
         KC_GameSystemProvider.cpp
+        KC_PaintSpatialGridSystem.cpp
         KC_ProfileBlock.cpp
         KC_ProfileBlockTimes.cpp
         KC_ProfileManager.cpp
