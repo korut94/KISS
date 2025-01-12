@@ -13,7 +13,7 @@ public:
     KC_SpatialGrid(std::int32_t aGridCellSize);
 
     std::int32_t GetGridCellSize() const { return myGridCellSize; }
-    sf::Vector2i GetGridCoordinate(std::int32_t anIndex) const;
+    sf::Vector2i GetGridCoordinate(std::uint32_t anIndex) const;
     void GetGridCoordinates(std::vector<sf::Vector2i>& outSomeGridCoordinates) const;
     void GetIndexs(std::vector<std::int32_t>& outSomeIndexes) const;
 
@@ -21,13 +21,13 @@ public:
     void InsertEntity(KC_Entity anEntity, const KC_FloatRect& aBoundingRect);
 
 #if IS_DEBUG_BUILD
-    const std::unordered_map<std::int32_t, KC_EntitySet>& GetGridCells() const { return myGridCells; };
+    const std::unordered_map<std::uint32_t, KC_EntitySet>& GetGridCells() const { return myGridCells; };
 #endif // IS_DEBUG_BUILD
 
 private:
-    std::int32_t GetIndex(const sf::Vector2f& aPosition) const;
-    constexpr std::int32_t GetOneDimensionCellsCount() const;
+    sf::Vector2i GetGridCoordinate(sf::Vector2f aPosition) const;
+    std::uint32_t GetIndex(sf::Vector2i aGridCoordinate) const;
 
     const std::int32_t myGridCellSize;
-    std::unordered_map<std::int32_t, KC_EntitySet> myGridCells;
+    std::unordered_map<std::uint32_t, KC_EntitySet> myGridCells;
 };
