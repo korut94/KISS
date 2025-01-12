@@ -13,7 +13,7 @@ namespace KC_SpatialGrid_Private
 {
     static constexpr const std::uint32_t locCoordinateSize = 16;
     static constexpr const std::uint32_t locXShift = locCoordinateSize;
-    static constexpr const std::uint32_t locYShit = 0;
+    static constexpr const std::uint32_t locYShift = 0;
     static constexpr const sf::Vector2f locOffset = { (1 << (locCoordinateSize - 1)) - 1, (1 << (locCoordinateSize - 1)) - 1 };
 
     bool IsWithinBounds(sf::Vector2i aGridCoordinate)
@@ -145,7 +145,7 @@ sf::Vector2i KC_SpatialGrid::GetGridCoordinate(sf::Vector2f aPosition) const
 std::uint32_t KC_SpatialGrid::GetIndex(sf::Vector2i aGridCoordinate) const
 {
     namespace Private = KC_SpatialGrid_Private;
-    return aGridCoordinate.x << Private::locXShift | aGridCoordinate.y << Private::locYShit;
+    return aGridCoordinate.x << Private::locXShift | aGridCoordinate.y << Private::locYShift;
 }
 
 #if IS_IMGUI
