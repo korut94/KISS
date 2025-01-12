@@ -40,7 +40,7 @@ KC_SpatialGrid::KC_SpatialGrid(std::int32_t aGridCellSize)
 
 std::int32_t KC_SpatialGrid::AverageEntityCountInGridCells() const
 {
-    using Pair = std::pair<std::uint32_t, KC_EntitySet>;
+    using Pair = std::pair<std::uint32_t, std::vector<KC_Entity>>;
 
     if (myGridCells.empty())
         return 0;
@@ -48,7 +48,7 @@ std::int32_t KC_SpatialGrid::AverageEntityCountInGridCells() const
     std::int32_t totalEntitiesCount = 0;
     for (const Pair& pair : myGridCells)
     {
-        totalEntitiesCount += pair.second.Count();
+        totalEntitiesCount += pair.second.size();
     }
 
     return totalEntitiesCount / myGridCells.size();
@@ -106,30 +106,30 @@ void KC_SpatialGrid::InsertEntity(KC_Entity anEntity, const KC_FloatRect& aBound
     for (std::int32_t index = 0, count = distance.x * distance.y; index < count; ++index)
     {
         const sf::Vector2i offset = { index % distance.x, index / distance.x };
-        myGridCells[GetIndex(cornerGridCoorindate[0] + offset)].Insert(anEntity);
+        myGridCells[GetIndex(cornerGridCoorindate[0] + offset)].push_back(anEntity);
     }
 }
 
 std::int32_t KC_SpatialGrid::MinEntitiesCountInGridCells() const
 {
-    using Pair = std::pair<std::uint32_t, KC_EntitySet>;
+    using Pair = std::pair<std::uint32_t, std::vector<KC_Entity>>;
     auto itr = std::min_element(myGridCells.cbegin(), myGridCells.cend(), [](const Pair& a, const Pair& b)
     {
-        return a.second.Count() < b.second.Count();
+        return a.second.size() < b.second.size();
     });
 
-    return itr != myGridCells.cend() ? itr->second.Count() : 0;
+    return itr != myGridCells.cend() ? itr->second.size() : 0;
 }
 
 std::int32_t KC_SpatialGrid::MaxEntitiesCountInGridCells() const
 {
-    using Pair = std::pair<std::uint32_t, KC_EntitySet>;
+    using Pair = std::pair<std::uint32_t, std::vector<KC_Entity>>;
     auto itr = std::max_element(myGridCells.cbegin(), myGridCells.cend(), [](const Pair& a, const Pair& b)
     {
-        return a.second.Count() < b.second.Count();
+        return a.second.size() < b.second.size();
     });
 
-    return itr != myGridCells.cend() ? itr->second.Count() : 0;
+    return itr != myGridCells.cend() ? itr->second.size() : 0;
 }
 
 sf::Vector2i KC_SpatialGrid::GetGridCoordinate(sf::Vector2f aPosition) const

@@ -5,6 +5,7 @@
 
 #include <SFML/System/Vector2.hpp>
 
+#include <vector>
 #include <unordered_map>
 
 class KC_SpatialGrid final
@@ -28,7 +29,7 @@ private:
     std::uint32_t GetIndex(sf::Vector2i aGridCoordinate) const;
 
     const std::int32_t myGridCellSize;
-    std::unordered_map<std::uint32_t, KC_EntitySet> myGridCells;
+    std::unordered_map<std::uint32_t, std::vector<KC_Entity>> myGridCells;
 };
 
 #if IS_IMGUI
