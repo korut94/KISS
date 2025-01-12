@@ -33,16 +33,15 @@ void KC_GameManager<TGame>::Run()
 {
     KC_THREAD("Main Thread")
 
-    sf::RenderWindow window{ sf::VideoMode::getFullscreenModes()[0], "KISS" };
+    sf::RenderWindow window{ sf::VideoMode({ 1920u, 1080u }), "KISS" };
 
     KC_World world;
-
-    KC_RenderSystemProvider renderSystemProvider{ window };
-    KC_GameSystemProvider gameSystemProvider{ world.GetComponentManager() };
 
     TGame game;
     game.Init(world);
 
+    KC_GameSystemProvider gameSystemProvider{ world.GetComponentManager() };
+    KC_RenderSystemProvider renderSystemProvider{ window };
     bool proceed = true;
 
     KC_Time::SetFrameZero();
