@@ -78,6 +78,7 @@ void KC_RenderSystemProvider::RenderThread()
 
     while (myRenderWindow.isOpen())
     {
+        KC_PROFILE_RENDER
         switch (GetState())
         {
         case RenderThreadState::UpdateFrame: Wait();
@@ -112,7 +113,6 @@ void KC_RenderSystemProvider::Wait()
 
 void KC_RenderSystemProvider::Render() const
 {
-    KC_PROFILE_RENDER
     myRenderWindow.clear(sf::Color::Black);
 
     RunSystem<KC_ApplyActiveCameraSystem>();
