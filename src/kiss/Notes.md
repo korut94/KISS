@@ -1,4 +1,4 @@
-# Implementation note
+# Development Note
 
 ## Spatial Grid
 ### First version:
