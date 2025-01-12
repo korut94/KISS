@@ -20,8 +20,8 @@
 ### Problems:
 - The max value for a `gridCoordinate` is `sqrt(INT_MAX) = 46340`, otherwise `gridCoordinate.y * #virtualCellsInRow` will go in overflow.
 - Idea: `46340` is less than `2^16`, therefore composing the key by putting 16 bits for x and 16 bits for y is just better!
-### Third version:
+### Third version [final]:
 - `key = x << 16 | y`
 - It might be interesting adding a factor scale in order to have spatial grid for meters and centimeters.
-### Additional Notes
-- Instead of a `KC_EntitySet`, moved to `std::vector` since it's faster to create (we save the sorting time) and we cant assume about the entity id distribution 
+### Updates
+- Instead of a `KC_EntitySet`, moved to `std::vector` since it's faster to create (we save the sorting time) and we cant make assumption about the entity ids distribution 
