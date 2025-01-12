@@ -31,7 +31,6 @@ MC_Game::MC_Game()
     : mySpatialGrid(nullptr)
 #if IS_IMGUI
     , myCameraZoom(nullptr)
-    , myPosition(nullptr)
 #endif // IS_IMGUI
 {
 }
@@ -101,13 +100,6 @@ void MC_Game::ImGui()
 {
     ImGui::Begin("Musou");
     ImGui::SliderFloat("Camera Zoom", myCameraZoom, 0.5f, 3.f);
-
-    if (myPosition)
-    {
-        float position[2] = {myPosition->x, myPosition->y}; 
-        ImGui::SliderFloat2("Position:", position, -30.f, 30.f);
-        *myPosition = sf::Vector2f(position[0], position[1]);
-    }
 
     if (mySpatialGrid)
     { 

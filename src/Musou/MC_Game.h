@@ -22,6 +22,5 @@ private:
 
 #if IS_IMGUI
     float* myCameraZoom;
-    sf::Vector2f* myPosition;
 #endif // IS_IMGUI
 };
