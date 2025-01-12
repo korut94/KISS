@@ -1,16 +1,17 @@
 #pragma once
 
+#include "KC_Canvas.h"
 #include "KC_GameSystem.h"
 
 #include <SFML/Graphics/Vertex.hpp>
 #include <SFML/System/Vector2.hpp>
 
-class KC_Canvas;
-
 template <typename T, typename... Args>
 class KC_PaintSystem : public KC_GameSystem<KC_Canvas, T, Args...>
 {
 protected:
+    KC_Canvas& GetCanvas(KC_Entity anEntity);
+    
     static void DrawRectangle(KC_Canvas& aCanvas, sf::Vector2f aCenter, sf::Vector2f aSize, sf::Color aColor);
 
 protected:
@@ -19,7 +20,13 @@ protected:
 };
 
 template <typename T, typename... Args>
-void KC_PaintSystem<T, Args...>::DrawRectangle(KC_Canvas& aCanvas, sf::Vector2f aCenter, sf::Vector2f aSize, sf::Color aColor)
+KC_Canvas& KC_PaintSystem<T, Args...>::GetCanvas(KC_Entity anEntity)
+{
+    return this->template GetComponent<KC_Canvas>(anEntity);
+}
+
+template <typename T, typename... Args>
+void KC_PaintSystem<T, Args...>::DrawRectangle(KC_Canvas &aCanvas, sf::Vector2f aCenter, sf::Vector2f aSize, sf::Color aColor)
 {
     std::vector<sf::Vertex>& vertexes = aCanvas.myVertexes;
 
