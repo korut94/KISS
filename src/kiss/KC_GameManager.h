@@ -63,7 +63,7 @@ void KC_GameManager<TGame>::Run()
             game.ImGui();
 #endif // IS_IMGUI
             {
-                KC_PROFILE_GAMERENDERSERVICEPROVIDER
+                KC_PROFILE_GAMERENDERCOPYCOMPONENTS
                 renderSystemProvider.SetComponents(world.GetComponentManager());
             }
             renderSystemProvider.Ready(lock);
