@@ -22,4 +22,6 @@
 - Idea: `46340` is less than `2^16`, therefore composing the key by putting 16 bits for x and 16 bits for y is just better!
 ### Third version:
 - `key = x << 16 | y`
-- It might be interesting adding a factor scale in order to have spatial grid for meters and centimeters. 
+- It might be interesting adding a factor scale in order to have spatial grid for meters and centimeters.
+### Additional Notes
+- Instead of a `KC_EntitySet`, moved to `std::vector` since it's faster to create (we save the sorting time) and we cant assume about the entity id distribution 
