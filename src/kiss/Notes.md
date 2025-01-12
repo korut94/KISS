@@ -18,7 +18,7 @@
 - `key = gridCoordinate.x + gridCoordinate.y * #virtualCellsInRow`
 - offset the world position by `(-gridCellSize / 2, -gridCellSize / 2)`
 ### Problems:
-- The max value of `gridCoordinate` is `sqrt(#virtualCellsInRow)` (i.e `46340`), otherwise `gridCoordinate.y * #virtualCellsInRow` will go in overflow.
+- The max value for a `gridCoordinate` is `sqrt(INT_MAX) = 46340`, otherwise `gridCoordinate.y * #virtualCellsInRow` will go in overflow.
 - Idea: `46340` is less than `2^16`, therefore composing the key by putting 16 bits for x and 16 bits for y is just better!
 ### Third version:
 - `key = x << 16 | y`
