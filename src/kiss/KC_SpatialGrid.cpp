@@ -2,6 +2,11 @@
 
 #include "KC_Assert.h"
 
+#if IS_IMGUI
+#include "imgui.h"
+#endif // IS_IMGUI
+
+#include <algorithm>
 #include <array>
 
 namespace KC_SpatialGrid_Private
@@ -31,6 +36,22 @@ KC_SpatialGrid::KC_SpatialGrid(std::int32_t aGridCellSize)
     : myGridCellSize(aGridCellSize)
 {
     KC_ASSERT(aGridCellSize >= 1);
+}
+
+std::int32_t KC_SpatialGrid::AverageEntityCountInGridCells() const
+{
+    using Pair = std::pair<std::uint32_t, KC_EntitySet>;
+
+    if (myGridCells.empty())
+        return 0;
+
+    std::int32_t totalEntitiesCount = 0;
+    for (const Pair& pair : myGridCells)
+    {
+        totalEntitiesCount += pair.second.Count();
+    }
+
+    return totalEntitiesCount / myGridCells.size();
 }
 
 sf::Vector2i KC_SpatialGrid::GetGridCoordinate(std::uint32_t anIndex) const
@@ -89,6 +110,28 @@ void KC_SpatialGrid::InsertEntity(KC_Entity anEntity, const KC_FloatRect& aBound
     }
 }
 
+std::int32_t KC_SpatialGrid::MinEntitiesCountInGridCells() const
+{
+    using Pair = std::pair<std::uint32_t, KC_EntitySet>;
+    auto itr = std::min_element(myGridCells.cbegin(), myGridCells.cend(), [](const Pair& a, const Pair& b)
+    {
+        return a.second.Count() < b.second.Count();
+    });
+
+    return itr != myGridCells.cend() ? itr->second.Count() : 0;
+}
+
+std::int32_t KC_SpatialGrid::MaxEntitiesCountInGridCells() const
+{
+    using Pair = std::pair<std::uint32_t, KC_EntitySet>;
+    auto itr = std::max_element(myGridCells.cbegin(), myGridCells.cend(), [](const Pair& a, const Pair& b)
+    {
+        return a.second.Count() < b.second.Count();
+    });
+
+    return itr != myGridCells.cend() ? itr->second.Count() : 0;
+}
+
 sf::Vector2i KC_SpatialGrid::GetGridCoordinate(sf::Vector2f aPosition) const
 {
     namespace Private = KC_SpatialGrid_Private;
@@ -104,3 +147,18 @@ std::uint32_t KC_SpatialGrid::GetIndex(sf::Vector2i aGridCoordinate) const
     namespace Private = KC_SpatialGrid_Private;
     return aGridCoordinate.x << Private::locXShift | aGridCoordinate.y << Private::locYShit;
 }
+
+#if IS_IMGUI
+void KC_ImGui(KC_SpatialGrid& aSpatialGrid)
+{
+    const std::int32_t gridCellSize = aSpatialGrid.GetGridCellSize();
+
+    ImGui::SeparatorText("Spatial Grid");
+    std::vector<sf::Vector2i> gridCoordinates;
+    aSpatialGrid.GetGridCoordinates(gridCoordinates);
+    ImGui::Text("Cells Count: %d [%dx%d]", gridCoordinates.size(), gridCellSize, gridCellSize);
+    ImGui::Text("Min Entities: %d", aSpatialGrid.MinEntitiesCountInGridCells());
+    ImGui::Text("Max Entities: %d", aSpatialGrid.MaxEntitiesCountInGridCells());
+    ImGui::Text("Avg Entities: %d", aSpatialGrid.AverageEntityCountInGridCells());
+}
+#endif // IS_IMGUI
