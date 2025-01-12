@@ -3,14 +3,14 @@
 #include "KC_CircleRenderer.h"
 #include "KC_ComponentManager.h"
 #include "KC_EntitySet.h"
-#include "KC_RectangleRenderer.h"
+#include "KC_RectCollider.h"
 #include "KC_Transform.h"
 
 using namespace TestHelper;
 
 class Test_KC_ComponentManager : public testing::Test
 {
-    using Components = std::tuple<KC_Transform, KC_CircleRenderer, KC_RectangleRenderer>;
+    using Components = std::tuple<KC_Transform, KC_CircleRenderer, KC_RectCollider>;
 
 protected:
     void SetUp() override;
@@ -25,7 +25,7 @@ void Test_KC_ComponentManager::SetUp()
     myComponentManager.AddComponent<KC_CircleRenderer>(0);
 
     myComponentManager.AddComponent<KC_Transform>(1);
-    myComponentManager.AddComponent<KC_RectangleRenderer>(1);
+    myComponentManager.AddComponent<KC_RectCollider>(1);
 
     myComponentManager.AddComponent<KC_Transform>(2);
     myComponentManager.AddComponent<KC_CircleRenderer>(2);
@@ -47,7 +47,7 @@ TEST_F(Test_KC_ComponentManager, AddComponent)
 
 TEST_F(Test_KC_ComponentManager, AssignComponents)
 {
-    using SubComponents = std::tuple<KC_CircleRenderer, KC_RectangleRenderer>;
+    using SubComponents = std::tuple<KC_CircleRenderer, KC_RectCollider>;
     
     KC_ComponentManager<SubComponents> otherComponentManager;
     myComponentManager.AssignComponents(otherComponentManager);
@@ -58,7 +58,7 @@ TEST_F(Test_KC_ComponentManager, AssignComponents)
     EXPECT_THAT(entitySet, EntitySet::Counts(2));
     EXPECT_THAT(entitySet, EntitySet::HasEntities({0, 2}));
 
-    otherComponentManager.GetEntitySet<KC_RectangleRenderer>(entitySet);
+    otherComponentManager.GetEntitySet<KC_RectCollider>(entitySet);
     EXPECT_THAT(entitySet, EntitySet::Counts(1));
     EXPECT_THAT(entitySet, EntitySet::HasEntities({1}));
 }
@@ -77,7 +77,7 @@ TEST_F(Test_KC_ComponentManager, GetEntitySetMultipleComponentsDifferentOrder)
 TEST_F(Test_KC_ComponentManager, GetEntitySetMultipleComponentsSingleEntity)
 {
     KC_EntitySet entitySet;
-    myComponentManager.GetEntitySet<KC_Transform, KC_RectangleRenderer>(entitySet);
+    myComponentManager.GetEntitySet<KC_Transform, KC_RectCollider>(entitySet);
 
     EXPECT_THAT(entitySet, EntitySet::Counts(1)) << "Must select only the entity '1' having both KC_Transform and KC_RectangleRenderer";
     EXPECT_THAT(entitySet, EntitySet::HasEntities({1}));
