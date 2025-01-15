@@ -11,36 +11,28 @@
 
 namespace KC_SpatialGrid_Private
 {
-    static constexpr const std::uint32_t locCoordinateSize = 16;
-    static constexpr const std::uint32_t locXShift = locCoordinateSize;
-    static constexpr const std::uint32_t locYShift = 0;
-    static constexpr const sf::Vector2f locOffset = { (1 << (locCoordinateSize - 1)) - 1, (1 << (locCoordinateSize - 1)) - 1 };
+    static constexpr const std::uint32_t locXShift = 16;
+    static constexpr const std::uint32_t locYMask = (1 << locXShift) - 1;
 
-    bool IsWithinBounds(sf::Vector2i aGridCoordinate)
-    {
-        return (aGridCoordinate.x >> locCoordinateSize) == 0 && (aGridCoordinate.y >> locCoordinateSize) == 0;
-    }
-
-    std::uint32_t X(std::uint32_t anIndex)
+    std::int32_t X(std::int32_t anIndex)
     {
         return anIndex >> locXShift;
     }
 
-    std::uint32_t Y(std::uint32_t anIndex)
+    std::int32_t Y(std::int32_t anIndex)
     {
-        return anIndex & ((1 << locXShift) - 1);
+        return static_cast<std::int16_t>(anIndex & locYMask);
     }
 }
 
-KC_SpatialGrid::KC_SpatialGrid(std::int32_t aGridCellSize)
-    : myGridCellSize(aGridCellSize)
+KC_SpatialGrid::KC_SpatialGrid(float aGridCellSize)
+    : myGridCellScale(1.f / aGridCellSize)
 {
-    KC_ASSERT(aGridCellSize >= 1);
 }
 
 std::int32_t KC_SpatialGrid::AverageEntityCountInGridCells() const
 {
-    using Pair = std::pair<std::uint32_t, std::vector<KC_Entity>>;
+    using Pair = std::pair<std::int32_t, std::vector<KC_Entity>>;
 
     if (myGridCells.empty())
         return 0;
@@ -54,10 +46,10 @@ std::int32_t KC_SpatialGrid::AverageEntityCountInGridCells() const
     return totalEntitiesCount / myGridCells.size();
 }
 
-sf::Vector2i KC_SpatialGrid::GetGridCoordinate(std::uint32_t anIndex) const
+sf::Vector2i KC_SpatialGrid::GetGridCoordinate(std::int32_t anIndex) const
 {
     namespace Private = KC_SpatialGrid_Private;
-    return sf::Vector2i(Private::X(anIndex), Private::Y(anIndex)) - static_cast<sf::Vector2i>(Private::locOffset) / myGridCellSize;
+    return sf::Vector2i(Private::X(anIndex), Private::Y(anIndex));
 }
 
 void KC_SpatialGrid::GetGridCoordinates(std::vector<sf::Vector2i>& outSomeGridCoordinates) const
@@ -112,7 +104,7 @@ void KC_SpatialGrid::InsertEntity(KC_Entity anEntity, const KC_FloatRect& aBound
 
 std::int32_t KC_SpatialGrid::MinEntitiesCountInGridCells() const
 {
-    using Pair = std::pair<std::uint32_t, std::vector<KC_Entity>>;
+    using Pair = std::pair<std::int32_t, std::vector<KC_Entity>>;
     auto itr = std::min_element(myGridCells.cbegin(), myGridCells.cend(), [](const Pair& a, const Pair& b)
     {
         return a.second.size() < b.second.size();
@@ -123,7 +115,7 @@ std::int32_t KC_SpatialGrid::MinEntitiesCountInGridCells() const
 
 std::int32_t KC_SpatialGrid::MaxEntitiesCountInGridCells() const
 {
-    using Pair = std::pair<std::uint32_t, std::vector<KC_Entity>>;
+    using Pair = std::pair<std::int32_t, std::vector<KC_Entity>>;
     auto itr = std::max_element(myGridCells.cbegin(), myGridCells.cend(), [](const Pair& a, const Pair& b)
     {
         return a.second.size() < b.second.size();
@@ -135,23 +127,19 @@ std::int32_t KC_SpatialGrid::MaxEntitiesCountInGridCells() const
 sf::Vector2i KC_SpatialGrid::GetGridCoordinate(sf::Vector2f aPosition) const
 {
     namespace Private = KC_SpatialGrid_Private;
-
-    const sf::Vector2i gridCoordinate = static_cast<sf::Vector2i>(aPosition + Private::locOffset) / myGridCellSize;
-    KC_ASSERT(Private::IsWithinBounds(gridCoordinate));
-
-    return gridCoordinate;
+    return static_cast<sf::Vector2i>(aPosition * myGridCellScale);
 }
 
-std::uint32_t KC_SpatialGrid::GetIndex(sf::Vector2i aGridCoordinate) const
+std::int32_t KC_SpatialGrid::GetIndex(sf::Vector2i aGridCoordinate) const
 {
     namespace Private = KC_SpatialGrid_Private;
-    return aGridCoordinate.x << Private::locXShift | aGridCoordinate.y << Private::locYShift;
+    return (aGridCoordinate.x << Private::locXShift) | (aGridCoordinate.y & Private::locYMask);
 }
 
 #if IS_IMGUI
 void KC_ImGui(KC_SpatialGrid& aSpatialGrid)
 {
-    const std::int32_t gridCellSize = aSpatialGrid.GetGridCellSize();
+    const float gridCellSize = aSpatialGrid.GetGridCellSize();
 
     ImGui::SeparatorText("Spatial Grid");
     std::vector<sf::Vector2i> gridCoordinates;

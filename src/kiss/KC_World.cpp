@@ -5,7 +5,7 @@ KC_World::KC_World()
     mySpatialGrids.reserve(4);
 }
 
-KC_SpatialGrid& KC_World::AddSpatialGrid(std::int32_t aGridCellSize)
+KC_SpatialGrid& KC_World::AddSpatialGrid(float aGridCellSize)
 {
     return mySpatialGrids.emplace_back(aGridCellSize);
 }

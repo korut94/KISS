@@ -11,11 +11,11 @@
 class KC_SpatialGrid final
 {
 public:
-    KC_SpatialGrid(std::int32_t aGridCellSize);
+    KC_SpatialGrid(float aGridCellSize);
 
     std::int32_t AverageEntityCountInGridCells() const;
-    std::int32_t GetGridCellSize() const { return myGridCellSize; }
-    sf::Vector2i GetGridCoordinate(std::uint32_t anIndex) const;
+    float GetGridCellSize() const { return 1.f / myGridCellScale; }
+    sf::Vector2i GetGridCoordinate(std::int32_t anIndex) const;
     void GetGridCoordinates(std::vector<sf::Vector2i>& outSomeGridCoordinates) const;
     void GetIndexs(std::vector<std::int32_t>& outSomeIndexes) const;
     std::int32_t MinEntitiesCountInGridCells() const;
@@ -26,10 +26,10 @@ public:
 
 private:
     sf::Vector2i GetGridCoordinate(sf::Vector2f aPosition) const;
-    std::uint32_t GetIndex(sf::Vector2i aGridCoordinate) const;
+    std::int32_t GetIndex(sf::Vector2i aGridCoordinate) const;
 
-    const std::int32_t myGridCellSize;
-    std::unordered_map<std::uint32_t, std::vector<KC_Entity>> myGridCells;
+    const float myGridCellScale;
+    std::unordered_map<std::int32_t, std::vector<KC_Entity>> myGridCells;
 };
 
 #if IS_IMGUI

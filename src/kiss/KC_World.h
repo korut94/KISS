@@ -17,7 +17,7 @@ public:
     const KC_EntityManager& GetEntityManager() const { return myEntityManager; }
     KC_EntityManager& GetEntityManager() { return myEntityManager; }
 
-    KC_SpatialGrid& AddSpatialGrid(std::int32_t aGridCellSize);
+    KC_SpatialGrid& AddSpatialGrid(float aGridCellSize);
 
 private:
     KC_MainComponentManager myComponentManager;

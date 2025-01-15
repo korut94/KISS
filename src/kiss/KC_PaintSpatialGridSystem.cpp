@@ -2,6 +2,7 @@
 
 #include "KC_Assert.h"
 #include "KC_Canvas.h"
+#include "KC_Math.h"
 #include "KC_SpatialGrid.h"
 #include "KC_SpatialGridPalette.h"
 
@@ -16,14 +17,23 @@ void KC_PaintSpatialGridSystem::Run()
         std::vector<sf::Vector2i> gridCoordinates;
         spatialGrid.GetGridCoordinates(gridCoordinates);
 
-        const std::int32_t gridCellSize = spatialGrid.GetGridCellSize();
-        const float gridCellSideLenght = static_cast<float>(gridCellSize) ;
+        const float gridCellSize = spatialGrid.GetGridCellSize();
 
         for (sf::Vector2i gridCoordinate : gridCoordinates)
-        {
-            const sf::Vector2f center = { gridCoordinate.x * gridCellSideLenght, gridCoordinate.y * gridCellSideLenght };
-            const sf::Vector2f size = { gridCellSideLenght, gridCellSideLenght };
+        {   
+            const sf::Vector2f offset = 
+            {
+                KC_Math::Sign(gridCoordinate.x) * gridCellSize * 0.5f,
+                KC_Math::Sign(gridCoordinate.y) * gridCellSize * 0.5f
+            };
 
+            const sf::Vector2f center = sf::Vector2f(gridCoordinate.x * gridCellSize, gridCoordinate.y * gridCellSize) + offset;
+            const sf::Vector2f size =
+            {
+                (gridCoordinate.x == 0 ? 2.f : 1.f) * gridCellSize, 
+                (gridCoordinate.y == 0 ? 2.f : 1.f) * gridCellSize
+            };
+            
             DrawRectangle(canvas, center, size, sf::Color::Green);
         }
     }
