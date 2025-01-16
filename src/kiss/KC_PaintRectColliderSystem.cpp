@@ -10,6 +10,6 @@ void KC_PaintRectColliderSystem::Run()
         const KC_RectColliderPalette& palette = GetComponent<KC_RectColliderPalette>(entity);
 
         const KC_FloatRect bound = transform * collider.myBound;
-        DrawRectangle(canvas, bound.GetCenter(), bound.GetSize(), palette.myColor);
+        DrawRectangle(canvas, bound.GetCenter(), bound.GetSize(), palette);
     }
 }

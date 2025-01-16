@@ -13,6 +13,7 @@ void KC_PaintSpatialGridSystem::Run()
         KC_Canvas& canvas = GetCanvas(entity);
         const KC_SpatialGridPalette& palette = GetComponent<KC_SpatialGridPalette>(entity);
         const KC_SpatialGrid& spatialGrid = palette.mySpatialGrid;
+        const KC_CanvasRectanglePalette gridPalette = { palette.myGridCellFillColor, palette.myGridLineColor, palette.myGridLineThickness };
 
         std::vector<sf::Vector2i> gridCoordinates;
         spatialGrid.GetGridCoordinates(gridCoordinates);
@@ -34,7 +35,7 @@ void KC_PaintSpatialGridSystem::Run()
                 (gridCoordinate.y == 0 ? 2.f : 1.f) * gridCellSize
             };
             
-            DrawRectangle(canvas, center, size, sf::Color::Green);
+            DrawRectangle(canvas, center, size, gridPalette);
         }
     }
 }

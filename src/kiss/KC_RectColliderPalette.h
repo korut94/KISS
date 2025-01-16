@@ -1,8 +1,7 @@
 #pragma once
 
-#include <SFML/Graphics/Color.hpp>
+#include "KC_CanvasRectanglePalette.h"
 
-struct KC_RectColliderPalette
+struct KC_RectColliderPalette : public KC_CanvasRectanglePalette
 {
-    sf::Color myColor;
 };
