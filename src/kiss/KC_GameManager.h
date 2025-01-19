@@ -42,12 +42,12 @@ void KC_GameManager<TGame>::Run()
 
     KC_GameSystemProvider gameSystemProvider{ world.GetComponentManager() };
     KC_RenderSystemProvider renderSystemProvider{ window };
-    bool proceed = true;
 
     KC_Time::SetFrameZero();
     KC_Time previousFrameTime = KC_Time::Now();
     KC_Time cumulativeUpdateTime;
 
+    bool proceed = true;
     while (proceed)
     {
         KC_PROFILE_GAME
@@ -56,7 +56,7 @@ void KC_GameManager<TGame>::Run()
         cumulativeUpdateTime += gameSystemProvider.myElapsedTime;
 
         proceed = ProcessEvent(window); // we will close the application at the next cycle
-        // Update frame
+        // Update render frame
         {
             std::unique_lock lock = std::move(renderSystemProvider.UpdateFrame());
 #if IS_IMGUI
