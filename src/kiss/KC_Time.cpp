@@ -90,8 +90,19 @@ KC_Time operator-(KC_Time a, KC_Time b)
     return KC_Time::Nanoseconds(a.AsNanoseconds() - b.AsNanoseconds());
 }
 
+KC_Time operator+(KC_Time a, KC_Time b)
+{
+    return KC_Time::Nanoseconds(a.AsNanoseconds() + b.AsNanoseconds());
+}
+
 KC_Time& operator-=(KC_Time& a, KC_Time b)
 {
     a = a - b;
+    return a;
+}
+
+KC_Time& operator+=(KC_Time& a, KC_Time b)
+{
+    a = a + b;
     return a;
 }
