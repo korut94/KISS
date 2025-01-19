@@ -40,7 +40,7 @@ void KC_GameManager<TGame>::Run()
     TGame game;
     game.Init(world);
 
-    KC_GameSystemProvider gameSystemProvider{ world.GetComponentManager() };
+    KC_GameSystemProvider gameSystemProvider{ world };
     KC_RenderSystemProvider renderSystemProvider{ window };
 
     KC_Time::SetFrameZero();

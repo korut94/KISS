@@ -2,6 +2,8 @@
 
 #include "KC_PaintSystem.h"
 
+#include <vector>
+
 class KC_SpatialGrid;
 class KC_SpatialGridPalette;
 
@@ -10,5 +12,5 @@ class KC_PaintSpatialGridSystem final : public KC_PaintSystem<KC_SpatialGridPale
     KC_SYSTEM(KC_PaintSpatialGridSystem)
 
 public:
-    void Run();
+    void Run(const std::vector<KC_SpatialGrid>& someSpatialGrids);
 };

@@ -17,6 +17,8 @@ public:
     const KC_EntityManager& GetEntityManager() const { return myEntityManager; }
     KC_EntityManager& GetEntityManager() { return myEntityManager; }
 
+    const std::vector<KC_SpatialGrid>& GetSpatialGrids() const { return mySpatialGrids; }
+    std::vector<KC_SpatialGrid>& GetSpatialGrids() { return mySpatialGrids; }
     KC_SpatialGrid& AddSpatialGrid(float aGridCellSize);
 
 private:

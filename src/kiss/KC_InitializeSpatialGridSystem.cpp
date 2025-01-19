@@ -6,15 +6,18 @@
 
 #include <SFML/Graphics/Transform.hpp>
 
-void KC_InitializeSpatialGridSystem::Run(KC_SpatialGrid& aSpatialGrid)
+void KC_InitializeSpatialGridSystem::Run(std::vector<KC_SpatialGrid>& someSpatialGrids)
 {
-    aSpatialGrid.Clear();
-
-    for (KC_Entity entity : myEntitySet)
+    for (KC_SpatialGrid& spatialGrid : someSpatialGrids)
     {
-        const KC_Transform& transform = GetComponent<KC_Transform>(entity);
-        const KC_RectCollider& collider = GetComponent<KC_RectCollider>(entity);
+        spatialGrid.Clear();
 
-        aSpatialGrid.InsertEntity(entity, transform * collider.myBound);
+        for (KC_Entity entity : myEntitySet)
+        {
+            const KC_Transform& transform = GetComponent<KC_Transform>(entity);
+            const KC_RectCollider& collider = GetComponent<KC_RectCollider>(entity);
+
+            spatialGrid.InsertEntity(entity, transform * collider.myBound);
+        }
     }
 }
