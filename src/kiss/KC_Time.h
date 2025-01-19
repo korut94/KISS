@@ -37,6 +37,7 @@ bool operator>(KC_Time a, KC_Time b);
 bool operator<=(KC_Time a, KC_Time b);
 bool operator>=(KC_Time a, KC_Time b);
 KC_Time operator-(KC_Time a, KC_Time b);
+KC_Time& operator-=(KC_Time& a, KC_Time b);
 
 template <typename TRep, typename TPeriod>
 KC_Time::KC_Time(const std::chrono::duration<TRep, TPeriod>& aDuration)
