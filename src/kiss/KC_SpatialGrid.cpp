@@ -7,7 +7,6 @@
 #endif // IS_IMGUI
 
 #include <algorithm>
-#include <array>
 
 namespace KC_SpatialGrid_Private
 {
@@ -46,6 +45,21 @@ std::int32_t KC_SpatialGrid::AverageEntityCountInGridCells() const
     return totalEntitiesCount / myGridCells.size();
 }
 
+void KC_SpatialGrid::GetEntitiesInsideBound(const KC_FloatRect& aBoundingRect, std::vector<KC_Entity>& outSomeEntities) const
+{
+    ForEachCell(aBoundingRect, [&outSomeEntities](const std::vector<KC_Entity>& someEntitiesInCell)
+    {
+        for (KC_Entity entity : someEntitiesInCell)
+        {
+            auto itr = std::find(outSomeEntities.cbegin(), outSomeEntities.cend(), entity);
+            if (itr == outSomeEntities.cend())
+            {
+                outSomeEntities.push_back(entity);
+            }
+        }
+    });
+}
+
 sf::Vector2i KC_SpatialGrid::GetGridCoordinate(std::int32_t anIndex) const
 {
     namespace Private = KC_SpatialGrid_Private;
@@ -79,27 +93,10 @@ void KC_SpatialGrid::Clear()
 
 void KC_SpatialGrid::InsertEntity(KC_Entity anEntity, const KC_FloatRect& aBoundingRect)
 {
-    // See https://miro.com/app/board/uXjVL3mClFw=/?moveToWidget=3458764612608170994&cot=14
-    namespace Private = KC_SpatialGrid_Private;
-
-    const std::array<sf::Vector2i, 3> cornerGridCoorindate =
-    { 
-        GetGridCoordinate(aBoundingRect.GetTopLeft()),
-        GetGridCoordinate(aBoundingRect.GetTopRight()),
-        GetGridCoordinate(aBoundingRect.GetBottomLeft())
-    };
-
-    const sf::Vector2i distance =
+    ForEachCell(aBoundingRect, [anEntity](std::vector<KC_Entity>& someEntitiesInCell)
     {
-        cornerGridCoorindate[1].x - cornerGridCoorindate[0].x + 1,
-        cornerGridCoorindate[2].y - cornerGridCoorindate[0].y + 1
-    };
-
-    for (std::int32_t index = 0, count = distance.x * distance.y; index < count; ++index)
-    {
-        const sf::Vector2i offset = { index % distance.x, index / distance.x };
-        myGridCells[GetIndex(cornerGridCoorindate[0] + offset)].push_back(anEntity);
-    }
+        someEntitiesInCell.push_back(anEntity);
+    });
 }
 
 std::int32_t KC_SpatialGrid::MinEntitiesCountInGridCells() const
