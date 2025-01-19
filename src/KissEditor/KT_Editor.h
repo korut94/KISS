@@ -10,6 +10,7 @@ class KT_Editor final : public KC_Game
 public:
     void Init(KC_World& aWorld);
     void Update(KC_GameSystemProvider& aGameSystemProvider);
+    void FixedUpdate(KC_GameSystemProvider& aGameSystemProvider);
     void ImGui();
 
 private:
@@ -29,6 +30,12 @@ template <typename TGame>
 void KT_Editor<TGame>::Update(KC_GameSystemProvider& aGameSystemProvider)
 {
     myGame.Update(aGameSystemProvider);
+}
+
+template <typename TGame>
+void KT_Editor<TGame>::FixedUpdate(KC_GameSystemProvider& aGameSystemProvider)
+{
+    myGame.FixedUpdate(aGameSystemProvider);
 }
 
 template <typename TGame>

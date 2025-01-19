@@ -19,8 +19,12 @@ public:
     template <typename TSystem, typename... Args>
     void RunSystem(Args&&... args) const;
 
+    static float GetFixedUpdateTime() { return ourFixedUpdateTime.AsSeconds(); }
+
 private:
     KC_Time myElapsedTime;
+
+    static KC_Time ourFixedUpdateTime;
 };
 
 template <typename TSystem, typename... Args>

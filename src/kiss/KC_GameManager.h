@@ -71,6 +71,13 @@ void KC_GameManager<TGame>::Run()
 
         {
             KC_PROFILE_GAMEUPDATE
+            KC_Time remainingFixedUpdateTime = gameSystemProvider.myElapsedTime;
+            while (remainingFixedUpdateTime >= gameSystemProvider.ourFixedUpdateTime)
+            {
+                game.FixedUpdate(gameSystemProvider);
+                remainingFixedUpdateTime -= gameSystemProvider.ourFixedUpdateTime;
+            }
+
             game.Update(gameSystemProvider);
         }
 
