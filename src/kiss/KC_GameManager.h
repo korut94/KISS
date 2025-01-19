@@ -46,12 +46,14 @@ void KC_GameManager<TGame>::Run()
 
     KC_Time::SetFrameZero();
     KC_Time previousFrameTime = KC_Time::Now();
+    KC_Time cumulativeUpdateTime;
 
     while (proceed)
     {
         KC_PROFILE_GAME
         const KC_Time currentFrameTime = KC_Time::Now();
         gameSystemProvider.myElapsedTime = currentFrameTime - previousFrameTime;
+        cumulativeUpdateTime += gameSystemProvider.myElapsedTime;
 
         proceed = ProcessEvent(window); // we will close the application at the next cycle
         // Update frame
@@ -71,11 +73,10 @@ void KC_GameManager<TGame>::Run()
 
         {
             KC_PROFILE_GAMEUPDATE
-            KC_Time remainingFixedUpdateTime = gameSystemProvider.myElapsedTime;
-            while (remainingFixedUpdateTime >= gameSystemProvider.ourFixedUpdateTime)
+            while (cumulativeUpdateTime >= gameSystemProvider.ourFixedUpdateTime)
             {
                 game.FixedUpdate(gameSystemProvider);
-                remainingFixedUpdateTime -= gameSystemProvider.ourFixedUpdateTime;
+                cumulativeUpdateTime -= gameSystemProvider.ourFixedUpdateTime;
             }
 
             game.Update(gameSystemProvider);
