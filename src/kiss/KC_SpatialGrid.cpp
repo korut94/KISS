@@ -144,7 +144,7 @@ void KC_ImGui(KC_SpatialGrid& aSpatialGrid)
     ImGui::SeparatorText("Spatial Grid");
     std::vector<sf::Vector2i> gridCoordinates;
     aSpatialGrid.GetGridCoordinates(gridCoordinates);
-    ImGui::Text("Cells: %d [%dx%d]", gridCoordinates.size(), gridCellSize, gridCellSize);
+    ImGui::Text("Cells: %d [%.1fx%.1f]", gridCoordinates.size(), gridCellSize, gridCellSize);
     ImGui::Text("Min Entities: %d", aSpatialGrid.MinEntitiesCountInGridCells());
     ImGui::Text("Max Entities: %d", aSpatialGrid.MaxEntitiesCountInGridCells());
     ImGui::Text("Avg Entities: %d", aSpatialGrid.AverageEntityCountInGridCells());
