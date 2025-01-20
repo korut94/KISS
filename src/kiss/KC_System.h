@@ -18,6 +18,11 @@
         using BaseClass::BaseClass;\
         KC_SYSTEM_PROFILETAGS(aSystem)
 
+#define KC_DERIVED_SYSTEM(aSuperSystem, aSystem)\
+    protected:\
+        using Super::aSuperSystem;\
+        using BaseClass = aSystem; // Override default constructor
+
 template <typename TComponentManager, typename T, typename... Args>
 class KC_System
 {
@@ -32,8 +37,13 @@ public:
     template <typename G>
     G& GetComponent(KC_Entity anEntity);
 
+    template <typename G, typename... OtherArgs>
+    G& AddComponent(KC_Entity anEntity, OtherArgs&&... someArgs);
+    template <typename G>
+    void RemoveAllComponents();
+
 protected:
-    using BaseClass = KC_System; // Override it when making new base System classes
+    using BaseClass = KC_System;
 
     const KC_EntitySet& myEntitySet;
 
@@ -60,4 +70,18 @@ template <typename G>
 G& KC_System<TComponentManager, T, Args...>::GetComponent(KC_Entity anEntity)
 {
     return myComponentManager.template GetComponent<G>(anEntity);
+}
+
+template <typename TComponentManager, typename T, typename... Args>
+template <typename G, typename... OtherArgs>
+G& KC_System<TComponentManager, T, Args...>::AddComponent(KC_Entity anEntity, OtherArgs&&... someArgs)
+{
+    return myComponentManager.template AddComponent<G>(anEntity, std::forward<OtherArgs>(someArgs)...);
+}
+
+template <typename TComponentManager, typename T, typename... Args>
+template <typename G>
+void KC_System<TComponentManager, T, Args...>::RemoveAllComponents()
+{
+    myComponentManager.template RemoveAllComponents<G>();
 }

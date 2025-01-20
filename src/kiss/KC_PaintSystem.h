@@ -10,14 +10,13 @@
 template <typename T, typename... Args>
 class KC_PaintSystem : public KC_GameSystem<KC_Canvas, T, Args...>
 {
+    using Super = KC_GameSystem<KC_Canvas, T, Args...>;
+    KC_DERIVED_SYSTEM(KC_System, KC_PaintSystem)
+
 protected:
     KC_Canvas& GetCanvas(KC_Entity anEntity);
     
     static void DrawRectangle(KC_Canvas& aCanvas, sf::Vector2f aCenter, sf::Vector2f aSize, const KC_CanvasRectanglePalette& aPalette);
-
-protected:
-    using KC_GameSystem<KC_Canvas, T, Args...>::KC_System;
-    using BaseClass = KC_PaintSystem; // Override default constructor
 
 private:
     static void FillBufferForRectangle(sf::Vector2f aCenter, sf::Vector2f aSize, sf::Color aColor, std::array<sf::Vertex, 6>& outSomeVertexes);
