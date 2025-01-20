@@ -38,6 +38,7 @@ target_sources(Kiss
         KC_Canvas.h
         KC_CircleRenderer.h
         KC_ClearCanvasSystem.h
+        KC_CollisionEvent.h
         KC_ComponentArray.h
         KC_ComponentManager.h
         KC_ComponentsRegistry.h
@@ -48,6 +49,7 @@ target_sources(Kiss
         KC_EntityManager.h
         KC_EntitySet.h
         KC_InitializeSpatialGridSystem.h
+        KC_Intersection.h
         KC_Game.h
         KC_GameManager.h
         KC_GameSystemProvider.h
@@ -65,6 +67,7 @@ target_sources(Kiss
         KC_RectColliderPalette.h
         KC_RenderSystem.h
         KC_RenderSystemProvider.h
+        KC_ResolveCollisionSystem.h
         KC_ScopedProfileBlock.h
         KC_ShapeRenderer.h
         KC_SpatialGrid.h
@@ -84,6 +87,7 @@ target_sources(Kiss
         KC_DrawCanvasSystem.cpp
         KC_DrawCircleSystem.cpp
         KC_InitializeSpatialGridSystem.cpp
+        KC_Intersection.cpp
         KC_GameSystemProvider.cpp
         KC_Math.cpp
         KC_PaintRectColliderSystem.cpp
@@ -92,6 +96,7 @@ target_sources(Kiss
         KC_ProfileBlockTimes.cpp
         KC_ProfileManager.cpp
         KC_RenderSystemProvider.cpp
+        KC_ResolveCollisionSystem.cpp
         KC_ScopedProfileBlock.cpp
         KC_SpatialGrid.cpp
         KC_ThreadManager.cpp

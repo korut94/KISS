@@ -1,9 +1,12 @@
 #pragma once
 
+#include "KC_CollisionEvent.h"
 #include "KC_ComponentManager.h"
 #include "KC_EntitySet.h"
 #include "KC_Profiling.h"
 #include "KC_SystemProvider.h"
+
+#include <vector>
 
 class KC_SpatialGrid;
 class KC_World;
@@ -32,6 +35,9 @@ private:
     KC_Time myElapsedTime;
 
     static KC_Time ourFixedUpdateTime;
+
+public:
+    std::vector<KC_CollisionEvent> myCollisionEvents;
 };
 
 template <typename TSystem, typename... Args>

@@ -51,6 +51,7 @@ void KC_SpatialGrid::GetEntitiesInsideBound(const KC_FloatRect& aBoundingRect, s
     {
         for (KC_Entity entity : someEntitiesInCell)
         {
+            // No duplicates
             auto itr = std::find(outSomeEntities.cbegin(), outSomeEntities.cend(), entity);
             if (itr == outSomeEntities.cend())
             {
