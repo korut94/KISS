@@ -13,11 +13,13 @@ class KC_ComponentArrayImpl final : public KC_ComponentArray
 public:
     KC_ComponentArrayImpl();
 
+    const KC_EntitySet& GetEntitySet() const { return myEntitySet; }
+
     const T& GetComponent(std::size_t anIndex) const;
     T& GetComponent(std::size_t anIndex);
     const T& GetComponent(KC_Entity anEntity) const;
     T& GetComponent(KC_Entity anEntity);
-    const KC_EntitySet& GetEntitySet() const { return myEntitySet; }
+    
     template <typename... Args>
     T& InsertComponent(KC_Entity anEntity, Args&&... args);
 
