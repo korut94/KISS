@@ -69,7 +69,7 @@ void MC_Game::Init(KC_World& aWorld)
     spatialGridPalette.myGridLineColor = sf::Color::White;
     spatialGridPalette.myGridLineThickness = 0.1f;
 
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < 1000; ++i)
     {
         KC_Entity entity = entityManager.CreateEntity();
         componentManager.AddComponent<KC_Canvas>(entity);
@@ -119,27 +119,14 @@ void MC_Game::Init(KC_World& aWorld)
 
 void MC_Game::Update(KC_GameSystemProvider& aGameSystemProvider)
 {
-    aGameSystemProvider.RunSystem<MC_BounceOnCollisionSystem>(aGameSystemProvider.myCollisionEvents);
+    aGameSystemProvider.RunSystem<MC_MoveSystem>();
+    aGameSystemProvider.RunSystem<KC_InitializeSpatialGridSystem>();
+    aGameSystemProvider.RunSystem<KC_ResolveCollisionSystem>();
+    aGameSystemProvider.RunSystem<MC_BounceOnCollisionSystem>();
 
     aGameSystemProvider.RunSystem<KC_ClearCanvasSystem>(); // Maybe move it in engine and create a function game.Draw()?
-    aGameSystemProvider.RunSystem<KC_PaintSpatialGridSystem>(aGameSystemProvider.GetSpatialGrids());
+    aGameSystemProvider.RunSystem<KC_PaintSpatialGridSystem>();
     aGameSystemProvider.RunSystem<KC_PaintRectColliderSystem>();
-}
-
-void MC_Game::FixedUpdate(KC_GameSystemProvider& aGameSystemProvider)
-{
-    const float fixedUpdateTime = KC_GameSystemProvider::GetFixedUpdateTime();
-
-    std::vector<KC_SpatialGrid>& spatialGrids = aGameSystemProvider.GetSpatialGrids();
-    KC_ASSERT(spatialGrids.size() > 0);
-
-    aGameSystemProvider.RunSystem<MC_MoveSystem>(fixedUpdateTime);
-    aGameSystemProvider.RunSystem<KC_InitializeSpatialGridSystem>(spatialGrids);
-    aGameSystemProvider.RunSystem<KC_ResolveCollisionSystem>(spatialGrids[0], aGameSystemProvider.myCollisionEvents);
-
-#if IS_IMGUI
-    MC_Game_Private::locCollisionEvents = &aGameSystemProvider.myCollisionEvents;
-#endif // IS_IMGUI
 }
 
 #if IS_IMGUI
