@@ -98,12 +98,13 @@ void KC_SpatialGrid::UpdateEntity(KC_Entity anEntity, const KC_FloatRect& aBound
     KC_ASSERT(myEntitySet.Contains(anEntity), "Entity not in the spatial grid");
 
     const KC_EntitySet::EntityIndex index = myEntitySet.GetIndex(anEntity);
-    KC_FloatRect& entityBound = myEntityBounds[index];
-    const sf::Vector2i newTopLeft = GetGridCoordinate(aBoundingRect.GetTopLeft());
-    const sf::Vector2i newBottomRight = GetGridCoordinate(aBoundingRect.GetBottomRight());
 
+    KC_FloatRect& entityBound = myEntityBounds[index];
     const sf::Vector2i currentTopLeft = GetGridCoordinate(entityBound.GetTopLeft());
     const sf::Vector2i currentBottomRight = GetGridCoordinate(entityBound.GetBottomRight());
+
+    const sf::Vector2i newTopLeft = GetGridCoordinate(aBoundingRect.GetTopLeft());
+    const sf::Vector2i newBottomRight = GetGridCoordinate(aBoundingRect.GetBottomRight());
 
     if (newTopLeft == currentTopLeft && newBottomRight == currentBottomRight)
         return;
