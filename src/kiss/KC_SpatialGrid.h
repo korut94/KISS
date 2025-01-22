@@ -14,7 +14,7 @@ class KC_SpatialGrid final
 public:
     explicit KC_SpatialGrid(float aGridCellSize);
 
-    int32_t AverageEntityCountInGridCells() const;
+    float Density() const;
     void GetEntitiesInsideBound(const KC_FloatRect& aBoundingRect, std::vector<KC_Entity>& outSomeEntities) const;
     float GetGridCellSize() const { return 1.f / myGridCellScale; }
     sf::Vector2i GetGridCoordinate(int32_t anHash) const;
