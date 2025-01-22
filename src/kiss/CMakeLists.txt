@@ -48,7 +48,6 @@ target_sources(Kiss
         KC_Entity.h
         KC_EntityManager.h
         KC_EntitySet.h
-        KC_InitializeSpatialGridSystem.h
         KC_Intersection.h
         KC_Game.h
         KC_GameManager.h
@@ -86,7 +85,6 @@ target_sources(Kiss
         KC_ClearCanvasSystem.cpp
         KC_DrawCanvasSystem.cpp
         KC_DrawCircleSystem.cpp
-        KC_InitializeSpatialGridSystem.cpp
         KC_Intersection.cpp
         KC_GameSystemProvider.cpp
         KC_Math.cpp

@@ -1,6 +1,7 @@
 #include "KC_SpatialGrid.h"
 
 #include "KC_Assert.h"
+#include "KC_Profiling.h"
 
 #if IS_IMGUI
 #include "imgui.h"
@@ -13,14 +14,14 @@ namespace KC_SpatialGrid_Private
     static constexpr const std::uint32_t locXShift = 16;
     static constexpr const std::uint32_t locYMask = (1 << locXShift) - 1;
 
-    std::int32_t X(std::int32_t anIndex)
+    std::int32_t X(std::int32_t anHash)
     {
-        return anIndex >> locXShift;
+        return anHash >> locXShift;
     }
 
-    std::int32_t Y(std::int32_t anIndex)
+    std::int32_t Y(std::int32_t anHash)
     {
-        return static_cast<std::int16_t>(anIndex & locYMask);
+        return static_cast<std::int16_t>(anHash & locYMask);
     }
 }
 
@@ -61,10 +62,10 @@ void KC_SpatialGrid::GetEntitiesInsideBound(const KC_FloatRect& aBoundingRect, s
     });
 }
 
-sf::Vector2i KC_SpatialGrid::GetGridCoordinate(std::int32_t anIndex) const
+sf::Vector2i KC_SpatialGrid::GetGridCoordinate(std::int32_t anHash) const
 {
     namespace Private = KC_SpatialGrid_Private;
-    return sf::Vector2i(Private::X(anIndex), Private::Y(anIndex));
+    return sf::Vector2i(Private::X(anHash), Private::Y(anHash));
 }
 
 void KC_SpatialGrid::GetGridCoordinates(std::vector<sf::Vector2i>& outSomeGridCoordinates) const
@@ -77,16 +78,6 @@ void KC_SpatialGrid::GetGridCoordinates(std::vector<sf::Vector2i>& outSomeGridCo
     }
 }
 
-void KC_SpatialGrid::GetIndexs(std::vector<std::int32_t>& outSomeIndexs) const
-{
-    outSomeIndexs.reserve(myGridCells.size());
-
-    for (auto itr = myGridCells.cbegin(), end = myGridCells.cend(); itr != end; ++itr)
-    {
-        outSomeIndexs.push_back(itr->first);
-    }
-}
-
 void KC_SpatialGrid::Clear()
 {
     myGridCells.clear();
@@ -94,10 +85,42 @@ void KC_SpatialGrid::Clear()
 
 void KC_SpatialGrid::InsertEntity(KC_Entity anEntity, const KC_FloatRect& aBoundingRect)
 {
-    ForEachCell(aBoundingRect, [anEntity](std::vector<KC_Entity>& someEntitiesInCell)
+    KC_ASSERT(!myEntitySet.Contains(anEntity), "Entity already in the spatial grid");
+
+    myEntitySet.Insert(anEntity);
+    myEntityBounds.emplace_back(aBoundingRect);
+
+    InsertEntityInGrid(anEntity);
+}
+
+void KC_SpatialGrid::UpdateEntity(KC_Entity anEntity, const KC_FloatRect& aBoundingRect)
+{
+    KC_ASSERT(myEntitySet.Contains(anEntity), "Entity not in the spatial grid");
+
+    const KC_EntitySet::EntityIndex index = myEntitySet.GetIndex(anEntity);
+    KC_FloatRect& entityBound = myEntityBounds[index];
     {
-        someEntitiesInCell.push_back(anEntity);
-    });
+        KC_PROFILE("SpatialGrid_Filter");
+        const sf::Vector2i newTopLeft = GetGridCoordinate(aBoundingRect.GetTopLeft());
+        const sf::Vector2i newBottomRight = GetGridCoordinate(aBoundingRect.GetBottomRight());
+
+        const sf::Vector2i currentTopLeft = GetGridCoordinate(entityBound.GetTopLeft());
+        const sf::Vector2i currentBottomRight = GetGridCoordinate(entityBound.GetBottomRight());
+
+        if (newTopLeft == currentTopLeft && newBottomRight == currentBottomRight)
+            return;
+    }
+    // Remove the entity with its previous bound
+    {
+        KC_PROFILE("SpatialGrid_Remove");
+        RemoveEntityFromGrid(anEntity);
+    }
+
+    entityBound = aBoundingRect;
+    {
+        KC_PROFILE("SpatialGrid_Insert");
+        InsertEntityInGrid(anEntity);
+    }
 }
 
 std::int32_t KC_SpatialGrid::MinEntitiesCountInGridCells() const
@@ -128,10 +151,39 @@ sf::Vector2i KC_SpatialGrid::GetGridCoordinate(sf::Vector2f aPosition) const
     return static_cast<sf::Vector2i>(aPosition * myGridCellScale);
 }
 
-std::int32_t KC_SpatialGrid::GetIndex(sf::Vector2i aGridCoordinate) const
+std::int32_t KC_SpatialGrid::GetHash(sf::Vector2i aGridCoordinate) const
 {
     namespace Private = KC_SpatialGrid_Private;
     return (aGridCoordinate.x << Private::locXShift) | (aGridCoordinate.y & Private::locYMask);
+}
+
+void KC_SpatialGrid::InsertEntityInGrid(KC_Entity anEntity)
+{
+    const KC_EntitySet::EntityIndex index = myEntitySet.GetIndex(anEntity);
+    ForEachCell(myEntityBounds[index], [anEntity](std::vector<KC_Entity>& someEntitiesInCell, std::int32_t /*anHash*/)
+    {
+        someEntitiesInCell.push_back(anEntity);
+    });
+}
+
+void KC_SpatialGrid::RemoveEntityFromGrid(KC_Entity anEntity)
+{
+    const KC_EntitySet::EntityIndex index = myEntitySet.GetIndex(anEntity);
+    ForEachCell(myEntityBounds[index], [this, anEntity](std::vector<KC_Entity>& someEntitiesInCell, std::int32_t anHash)
+    {
+        auto itr = std::find(someEntitiesInCell.begin(), someEntitiesInCell.end(), anEntity);
+        KC_ASSERT(itr != someEntitiesInCell.end());
+
+        // Remove cyclic
+        *itr = someEntitiesInCell.back();
+        someEntitiesInCell.pop_back();
+
+        if (someEntitiesInCell.size() == 0)
+        {
+            // Safe operation since ForEachCell looks-up at generated hash in each iteration
+            myGridCells.erase(anHash);
+        }
+    });
 }
 
 #if IS_IMGUI
