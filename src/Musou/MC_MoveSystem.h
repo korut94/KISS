@@ -10,5 +10,5 @@ class MC_MoveSystem final : public KC_GameSystem<KC_Transform, KC_Velocity>
     KC_SYSTEM(MC_MoveSystem)
 
 public:
-    void Run(float anElapsedTime);
+    void Run();
 };

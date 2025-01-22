@@ -6,12 +6,14 @@
 #include "KC_SpatialGrid.h"
 #include "KC_SpatialGridPalette.h"
 
-void KC_PaintSpatialGridSystem::Run(const std::vector<KC_SpatialGrid>& someSpatialGrids)
+void KC_PaintSpatialGridSystem::Run()
 {
+    const std::vector<KC_SpatialGrid>& spatialGrids = GetSpatialGrids();
+
     for (std::size_t i = 0, count = myEntitySet.Count(); i < count; ++i)
     {
         const KC_Entity entity = myEntitySet.At(i);
-        const KC_SpatialGrid& spatialGrid = someSpatialGrids[i];
+        const KC_SpatialGrid& spatialGrid = spatialGrids[i];
 
         KC_Canvas& canvas = GetCanvas(entity);
         const KC_SpatialGridPalette& palette = GetComponent<KC_SpatialGridPalette>(entity);

@@ -10,8 +10,11 @@
 template <typename T, typename... Args>
 class KC_PaintSystem : public KC_GameSystem<KC_Canvas, T, Args...>
 {
+    KC_DERIVED_SYSTEM(KC_PaintSystem)
     using Super = KC_GameSystem<KC_Canvas, T, Args...>;
-    KC_DERIVED_SYSTEM(KC_System, KC_PaintSystem)
+
+public:
+    using Super::KC_GameSystem;
 
 protected:
     KC_Canvas& GetCanvas(KC_Entity anEntity);

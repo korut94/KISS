@@ -8,9 +8,13 @@
 
 #include <algorithm>
 
-void KC_ResolveCollisionSystem::Run(const KC_SpatialGrid& aSpatialGrid, std::vector<KC_CollisionEvent>& outSomeCollisionEvents) const
+void KC_ResolveCollisionSystem::Run()
 {
-    outSomeCollisionEvents.clear();
+    const std::vector<KC_SpatialGrid>& spatialGrids = GetSpatialGrids();
+    KC_ASSERT(spatialGrids.size() > 0);
+
+    const KC_SpatialGrid& spatialGrid = spatialGrids[0];
+    std::vector<KC_CollisionEvent>& collisionEvents = GetCollisionEvents();
 
     for (KC_Entity entity : myEntitySet)
     {
@@ -20,7 +24,7 @@ void KC_ResolveCollisionSystem::Run(const KC_SpatialGrid& aSpatialGrid, std::vec
         const KC_FloatRect bound = transform * collider.myBound;
 
         std::vector<KC_Entity> neighborEntities;
-        aSpatialGrid.GetEntitiesInsideBound(bound, neighborEntities);
+        spatialGrid.GetEntitiesInsideBound(bound, neighborEntities);
 
         for (KC_Entity otherEntity : neighborEntities)
         {
@@ -28,12 +32,12 @@ void KC_ResolveCollisionSystem::Run(const KC_SpatialGrid& aSpatialGrid, std::vec
                 continue;
 
             // Avoid to register the same collision twice but with the entities swapped
-            auto itr = std::find_if(outSomeCollisionEvents.cbegin(), outSomeCollisionEvents.cend(), [entity, otherEntity](const KC_CollisionEvent& anEvent)
+            auto itr = std::find_if(collisionEvents.cbegin(), collisionEvents.cend(), [entity, otherEntity](const KC_CollisionEvent& anEvent)
             {
                 return anEvent.myEntity == otherEntity && anEvent.myOtherEntity == entity;
             });
 
-            if (itr != outSomeCollisionEvents.cend())
+            if (itr != collisionEvents.cend())
                 continue;
 
             const KC_Transform& otherTransform = GetComponent<KC_Transform>(otherEntity);
@@ -43,7 +47,7 @@ void KC_ResolveCollisionSystem::Run(const KC_SpatialGrid& aSpatialGrid, std::vec
 
             if (KC_Intersection::RectVsRect(bound, otherBound))
             {
-                outSomeCollisionEvents.push_back({ entity, otherEntity });
+                collisionEvents.push_back({ entity, otherEntity });
             }
         }
     }

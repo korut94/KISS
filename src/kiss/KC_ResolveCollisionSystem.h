@@ -14,5 +14,5 @@ class KC_ResolveCollisionSystem final : public KC_GameSystem<KC_Transform, KC_Re
     KC_SYSTEM(KC_ResolveCollisionSystem)
 
 public:
-    void Run(const KC_SpatialGrid& aSpatialGrid, std::vector<KC_CollisionEvent>& outSomeCollisionEvents) const;
+    void Run();
 };

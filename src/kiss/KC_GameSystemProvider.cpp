@@ -14,18 +14,3 @@ KC_GameSystemProvider::KC_GameSystemProvider(KC_World& aWorld)
     , myWorld(aWorld)
 {
 }
-
-float KC_GameSystemProvider::GetElapsedTime() const
-{
-    return myElapsedTime.AsSeconds();
-}
-
-const std::vector<KC_SpatialGrid>& KC_GameSystemProvider::GetSpatialGrids() const
-{
-    return myWorld.GetSpatialGrids();
-}
-
-std::vector<KC_SpatialGrid>& KC_GameSystemProvider::GetSpatialGrids()
-{
-    return myWorld.GetSpatialGrids();
-}

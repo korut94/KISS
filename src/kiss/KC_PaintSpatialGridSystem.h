@@ -12,5 +12,5 @@ class KC_PaintSpatialGridSystem final : public KC_PaintSystem<KC_SpatialGridPale
     KC_SYSTEM(KC_PaintSpatialGridSystem)
 
 public:
-    void Run(const std::vector<KC_SpatialGrid>& someSpatialGrids);
+    void Run();
 };

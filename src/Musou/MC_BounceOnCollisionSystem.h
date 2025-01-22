@@ -13,5 +13,5 @@ class MC_BounceOnCollisionSystem final : public KC_GameSystem<KC_Velocity>
     KC_SYSTEM(MC_BounceOnCollisionSystem)
 
 public:
-    void Run(const std::vector<KC_CollisionEvent>& someCollisionEvents);
+    void Run();
 };

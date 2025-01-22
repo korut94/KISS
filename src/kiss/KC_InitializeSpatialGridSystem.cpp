@@ -6,9 +6,11 @@
 
 #include <SFML/Graphics/Transform.hpp>
 
-void KC_InitializeSpatialGridSystem::Run(std::vector<KC_SpatialGrid>& someSpatialGrids)
+void KC_InitializeSpatialGridSystem::Run()
 {
-    for (KC_SpatialGrid& spatialGrid : someSpatialGrids)
+    std::vector<KC_SpatialGrid>& spatialGrids = GetSpatialGrids();
+
+    for (KC_SpatialGrid& spatialGrid : spatialGrids)
     {
         spatialGrid.Clear();
 

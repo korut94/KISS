@@ -13,5 +13,5 @@ class KC_InitializeSpatialGridSystem final : public KC_GameSystem<KC_Transform, 
     KC_SYSTEM(KC_InitializeSpatialGridSystem)
 
 public:
-    void Run(std::vector<KC_SpatialGrid>& someSpatialGrids);
+    void Run();
 };
