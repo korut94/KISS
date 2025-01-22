@@ -99,28 +99,20 @@ void KC_SpatialGrid::UpdateEntity(KC_Entity anEntity, const KC_FloatRect& aBound
 
     const KC_EntitySet::EntityIndex index = myEntitySet.GetIndex(anEntity);
     KC_FloatRect& entityBound = myEntityBounds[index];
-    {
-        KC_PROFILE("SpatialGrid_Filter");
-        const sf::Vector2i newTopLeft = GetGridCoordinate(aBoundingRect.GetTopLeft());
-        const sf::Vector2i newBottomRight = GetGridCoordinate(aBoundingRect.GetBottomRight());
+    const sf::Vector2i newTopLeft = GetGridCoordinate(aBoundingRect.GetTopLeft());
+    const sf::Vector2i newBottomRight = GetGridCoordinate(aBoundingRect.GetBottomRight());
 
-        const sf::Vector2i currentTopLeft = GetGridCoordinate(entityBound.GetTopLeft());
-        const sf::Vector2i currentBottomRight = GetGridCoordinate(entityBound.GetBottomRight());
+    const sf::Vector2i currentTopLeft = GetGridCoordinate(entityBound.GetTopLeft());
+    const sf::Vector2i currentBottomRight = GetGridCoordinate(entityBound.GetBottomRight());
 
-        if (newTopLeft == currentTopLeft && newBottomRight == currentBottomRight)
-            return;
-    }
+    if (newTopLeft == currentTopLeft && newBottomRight == currentBottomRight)
+        return;
+
     // Remove the entity with its previous bound
-    {
-        KC_PROFILE("SpatialGrid_Remove");
-        RemoveEntityFromGrid(anEntity);
-    }
+    RemoveEntityFromGrid(anEntity);
 
     entityBound = aBoundingRect;
-    {
-        KC_PROFILE("SpatialGrid_Insert");
-        InsertEntityInGrid(anEntity);
-    }
+    InsertEntityInGrid(anEntity);
 }
 
 std::int32_t KC_SpatialGrid::MinEntitiesCountInGridCells() const
