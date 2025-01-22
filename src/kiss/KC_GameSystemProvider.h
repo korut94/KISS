@@ -28,8 +28,8 @@ public:
     const std::vector<KC_CollisionEvent>& GetCollisionEvents() const { return myCollisionEvents; };
     std::vector<KC_CollisionEvent>& GetCollisionEvents() { return myCollisionEvents; };
 
-    const KC_SpatialGrid& GetSpatialGrid(std::size_t anIndex) const { return myWorld.GetSpatialGrid(anIndex); }
-    KC_SpatialGrid& GetSpatialGrid(std::size_t anIndex) { return myWorld.GetSpatialGrid(anIndex); }
+    const KC_SpatialGrid& GetSpatialGrid(size_t anIndex) const { return myWorld.GetSpatialGrid(anIndex); }
+    KC_SpatialGrid& GetSpatialGrid(size_t anIndex) { return myWorld.GetSpatialGrid(anIndex); }
     const std::vector<KC_SpatialGrid>& GetSpatialGrids() const { return myWorld.GetSpatialGrids(); }
     std::vector<KC_SpatialGrid>& GetSpatialGrids() { return myWorld.GetSpatialGrids(); }
 

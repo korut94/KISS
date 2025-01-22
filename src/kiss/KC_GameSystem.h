@@ -19,8 +19,8 @@ protected:
     const std::vector<KC_CollisionEvent>& GetCollisionEvents() const { return myGameSystemProvider.GetCollisionEvents(); };
     std::vector<KC_CollisionEvent>& GetCollisionEvents() { return myGameSystemProvider.GetCollisionEvents(); };
 
-    const KC_SpatialGrid& GetSpatialGrid(std::size_t anIndex) const { return myGameSystemProvider.GetSpatialGrid(anIndex); }
-    KC_SpatialGrid& GetSpatialGrid(std::size_t anIndex) { return myGameSystemProvider.GetSpatialGrid(anIndex); }
+    const KC_SpatialGrid& GetSpatialGrid(size_t anIndex) const { return myGameSystemProvider.GetSpatialGrid(anIndex); }
+    KC_SpatialGrid& GetSpatialGrid(size_t anIndex) { return myGameSystemProvider.GetSpatialGrid(anIndex); }
     const std::vector<KC_SpatialGrid>& GetSpatialGrids() const { return myGameSystemProvider.GetSpatialGrids(); };
     std::vector<KC_SpatialGrid>& GetSpatialGrids() { return myGameSystemProvider.GetSpatialGrids(); };
 

@@ -15,8 +15,8 @@ public:
 
     const KC_EntitySet& GetEntitySet() const { return myEntitySet; }
 
-    const T& GetComponent(std::size_t anIndex) const;
-    T& GetComponent(std::size_t anIndex);
+    const T& GetComponent(size_t anIndex) const;
+    T& GetComponent(size_t anIndex);
     const T& GetComponent(KC_Entity anEntity) const;
     T& GetComponent(KC_Entity anEntity);
     
@@ -39,14 +39,14 @@ KC_ComponentArrayImpl<T>::KC_ComponentArrayImpl()
 }
 
 template <typename T>
-const T& KC_ComponentArrayImpl<T>::GetComponent(std::size_t anIndex) const
+const T& KC_ComponentArrayImpl<T>::GetComponent(size_t anIndex) const
 {
     KC_ASSERT(anIndex < myComponentInstances.size(), "Component index out of bound");
     return myComponentInstances[anIndex];
 }
 
 template <typename T>
-T& KC_ComponentArrayImpl<T>::GetComponent(std::size_t anIndex)
+T& KC_ComponentArrayImpl<T>::GetComponent(size_t anIndex)
 {
     KC_ASSERT(anIndex < myComponentInstances.size(), "Component index out of bound");
     return myComponentInstances[anIndex];

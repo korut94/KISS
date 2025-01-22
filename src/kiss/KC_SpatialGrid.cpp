@@ -11,17 +11,17 @@
 
 namespace KC_SpatialGrid_Private
 {
-    static constexpr const std::uint32_t locXShift = 16;
-    static constexpr const std::uint32_t locYMask = (1 << locXShift) - 1;
+    static constexpr const uint32_t locXShift = 16;
+    static constexpr const uint32_t locYMask = (1 << locXShift) - 1;
 
-    std::int32_t X(std::int32_t anHash)
+    int32_t X(int32_t anHash)
     {
         return anHash >> locXShift;
     }
 
-    std::int32_t Y(std::int32_t anHash)
+    int32_t Y(int32_t anHash)
     {
-        return static_cast<std::int16_t>(anHash & locYMask);
+        return static_cast<int16_t>(anHash & locYMask);
     }
 }
 
@@ -30,14 +30,14 @@ KC_SpatialGrid::KC_SpatialGrid(float aGridCellSize)
 {
 }
 
-std::int32_t KC_SpatialGrid::AverageEntityCountInGridCells() const
+int32_t KC_SpatialGrid::AverageEntityCountInGridCells() const
 {
-    using Pair = std::pair<std::int32_t, std::vector<KC_Entity>>;
+    using Pair = std::pair<int32_t, std::vector<KC_Entity>>;
 
     if (myGridCells.empty())
         return 0;
 
-    std::int32_t totalEntitiesCount = 0;
+    int32_t totalEntitiesCount = 0;
     for (const Pair& pair : myGridCells)
     {
         totalEntitiesCount += pair.second.size();
@@ -62,7 +62,7 @@ void KC_SpatialGrid::GetEntitiesInsideBound(const KC_FloatRect& aBoundingRect, s
     });
 }
 
-sf::Vector2i KC_SpatialGrid::GetGridCoordinate(std::int32_t anHash) const
+sf::Vector2i KC_SpatialGrid::GetGridCoordinate(int32_t anHash) const
 {
     namespace Private = KC_SpatialGrid_Private;
     return sf::Vector2i(Private::X(anHash), Private::Y(anHash));
@@ -116,9 +116,9 @@ void KC_SpatialGrid::UpdateEntity(KC_Entity anEntity, const KC_FloatRect& aBound
     InsertEntityInGrid(anEntity);
 }
 
-std::int32_t KC_SpatialGrid::MinEntitiesCountInGridCells() const
+int32_t KC_SpatialGrid::MinEntitiesCountInGridCells() const
 {
-    using Pair = std::pair<std::int32_t, std::vector<KC_Entity>>;
+    using Pair = std::pair<int32_t, std::vector<KC_Entity>>;
     auto itr = std::min_element(myGridCells.cbegin(), myGridCells.cend(), [](const Pair& a, const Pair& b)
     {
         return a.second.size() < b.second.size();
@@ -127,9 +127,9 @@ std::int32_t KC_SpatialGrid::MinEntitiesCountInGridCells() const
     return itr != myGridCells.cend() ? itr->second.size() : 0;
 }
 
-std::int32_t KC_SpatialGrid::MaxEntitiesCountInGridCells() const
+int32_t KC_SpatialGrid::MaxEntitiesCountInGridCells() const
 {
-    using Pair = std::pair<std::int32_t, std::vector<KC_Entity>>;
+    using Pair = std::pair<int32_t, std::vector<KC_Entity>>;
     auto itr = std::max_element(myGridCells.cbegin(), myGridCells.cend(), [](const Pair& a, const Pair& b)
     {
         return a.second.size() < b.second.size();
@@ -144,7 +144,7 @@ sf::Vector2i KC_SpatialGrid::GetGridCoordinate(sf::Vector2f aPosition) const
     return static_cast<sf::Vector2i>(aPosition * myGridCellScale);
 }
 
-std::int32_t KC_SpatialGrid::GetHash(sf::Vector2i aGridCoordinate) const
+int32_t KC_SpatialGrid::GetHash(sf::Vector2i aGridCoordinate) const
 {
     namespace Private = KC_SpatialGrid_Private;
     return (aGridCoordinate.x << Private::locXShift) | (aGridCoordinate.y & Private::locYMask);
@@ -153,7 +153,7 @@ std::int32_t KC_SpatialGrid::GetHash(sf::Vector2i aGridCoordinate) const
 void KC_SpatialGrid::InsertEntityInGrid(KC_Entity anEntity)
 {
     const KC_EntitySet::EntityIndex index = myEntitySet.GetIndex(anEntity);
-    ForEachCell(myEntityBounds[index], [anEntity](std::vector<KC_Entity>& someEntitiesInCell, std::int32_t /*anHash*/)
+    ForEachCell(myEntityBounds[index], [anEntity](std::vector<KC_Entity>& someEntitiesInCell, int32_t /*anHash*/)
     {
         someEntitiesInCell.push_back(anEntity);
     });
@@ -162,7 +162,7 @@ void KC_SpatialGrid::InsertEntityInGrid(KC_Entity anEntity)
 void KC_SpatialGrid::RemoveEntityFromGrid(KC_Entity anEntity)
 {
     const KC_EntitySet::EntityIndex index = myEntitySet.GetIndex(anEntity);
-    ForEachCell(myEntityBounds[index], [this, anEntity](std::vector<KC_Entity>& someEntitiesInCell, std::int32_t anHash)
+    ForEachCell(myEntityBounds[index], [this, anEntity](std::vector<KC_Entity>& someEntitiesInCell, int32_t anHash)
     {
         auto itr = std::find(someEntitiesInCell.begin(), someEntitiesInCell.end(), anEntity);
         KC_ASSERT(itr != someEntitiesInCell.end());

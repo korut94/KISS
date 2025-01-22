@@ -36,7 +36,7 @@ private:
 template <typename T>
 KC_Rect<T> operator*(const KC_Transform& aTransform);
 
-using KC_IntRect = KC_Rect<std::int32_t>;
+using KC_IntRect = KC_Rect<int32_t>;
 using KC_FloatRect = KC_Rect<float>;
 
 template <typename T>

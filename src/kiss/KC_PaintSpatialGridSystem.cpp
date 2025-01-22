@@ -10,7 +10,7 @@ void KC_PaintSpatialGridSystem::Run()
 {
     const std::vector<KC_SpatialGrid>& spatialGrids = GetSpatialGrids();
 
-    for (std::size_t i = 0, count = myEntitySet.Count(); i < count; ++i)
+    for (size_t i = 0, count = myEntitySet.Count(); i < count; ++i)
     {
         const KC_Entity entity = myEntitySet.At(i);
         const KC_SpatialGrid& spatialGrid = spatialGrids[i];

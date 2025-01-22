@@ -14,7 +14,7 @@ namespace KC_Math
         return aRadian * 180.0f / M_PI;
     }
 
-    std::int32_t Sign(std::int32_t aValue)
+    int32_t Sign(int32_t aValue)
     {
         return (aValue > 0) - (aValue < 0);
 }

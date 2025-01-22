@@ -2,4 +2,4 @@
 
 #include <cstdint>
 
-using KC_Entity = std::uint32_t;
+using KC_Entity = uint32_t;

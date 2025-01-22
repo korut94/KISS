@@ -2,7 +2,7 @@
 
 #include "KC_Assert.h"
 
-KC_EntitySet::Iterator::Iterator(const KC_EntitySet& anEntitySet, std::size_t anIndex)
+KC_EntitySet::Iterator::Iterator(const KC_EntitySet& anEntitySet, size_t anIndex)
     : myEntitySet(anEntitySet)
     , myIndex(anIndex)
     , myCount(0)
@@ -79,8 +79,8 @@ KC_EntitySet::Iterator KC_EntitySet::End() const
 
 KC_Entity KC_EntitySet::At(EntityIndex anIndex) const
 {
-    std::size_t intervalIndex = 0;
-    const std::size_t intervalCount = myIntervals.size();
+    size_t intervalIndex = 0;
+    const size_t intervalCount = myIntervals.size();
 
     while (intervalIndex < intervalCount && myIntervals[intervalIndex].myTotalCount < anIndex)
     {
@@ -141,8 +141,8 @@ KC_EntitySet KC_EntitySet::Intersect(const KC_EntitySet& anOther) const
     const std::vector<Interval>& sourceIntervals = hasLessIntervals ? myIntervals : anOther.myIntervals;
     const std::vector<Interval>& targetIntervals = hasLessIntervals ? anOther.myIntervals : myIntervals;
 
-    const std::size_t targetSize = targetIntervals.size();
-    std::size_t targetIndex = 0;
+    const size_t targetSize = targetIntervals.size();
+    size_t targetIndex = 0;
 
     bool isConsumed = false;
 
@@ -206,7 +206,7 @@ void KC_EntitySet::Insert(KC_Entity anEntity)
         return;
     }
 
-    const std::size_t count = myIntervals.size();
+    const size_t count = myIntervals.size();
 
     auto itr = myIntervals.begin();
     const auto end = myIntervals.end();
@@ -258,7 +258,7 @@ bool KC_EntitySet::operator==(const KC_EntitySet& anOther) const
     if (myIntervals.size() != anOther.myIntervals.size())
         return false;
 
-    for (std::size_t i = 0, count = myIntervals.size(); i < count; ++i)
+    for (size_t i = 0, count = myIntervals.size(); i < count; ++i)
     {
         if (myIntervals[i].myFirstEntity != anOther.myIntervals[i].myFirstEntity || myIntervals[i].myTotalCount != anOther.myIntervals[i].myTotalCount)
             return false;

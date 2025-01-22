@@ -14,13 +14,13 @@ class KC_SpatialGrid final
 public:
     explicit KC_SpatialGrid(float aGridCellSize);
 
-    std::int32_t AverageEntityCountInGridCells() const;
+    int32_t AverageEntityCountInGridCells() const;
     void GetEntitiesInsideBound(const KC_FloatRect& aBoundingRect, std::vector<KC_Entity>& outSomeEntities) const;
     float GetGridCellSize() const { return 1.f / myGridCellScale; }
-    sf::Vector2i GetGridCoordinate(std::int32_t anHash) const;
+    sf::Vector2i GetGridCoordinate(int32_t anHash) const;
     void GetGridCoordinates(std::vector<sf::Vector2i>& outSomeGridCoordinates) const;
-    std::int32_t MinEntitiesCountInGridCells() const;
-    std::int32_t MaxEntitiesCountInGridCells() const;
+    int32_t MinEntitiesCountInGridCells() const;
+    int32_t MaxEntitiesCountInGridCells() const;
 
     void Clear();
     void InsertEntity(KC_Entity anEntity, const KC_FloatRect& aBoundingRect);
@@ -33,13 +33,13 @@ public:
 
 private:
     sf::Vector2i GetGridCoordinate(sf::Vector2f aPosition) const;
-    std::int32_t GetHash(sf::Vector2i aGridCoordinate) const;
+    int32_t GetHash(sf::Vector2i aGridCoordinate) const;
 
     void InsertEntityInGrid(KC_Entity anEntity);
     void RemoveEntityFromGrid(KC_Entity anEntity);
 
     const float myGridCellScale;
-    std::unordered_map<std::int32_t, std::vector<KC_Entity>> myGridCells;
+    std::unordered_map<int32_t, std::vector<KC_Entity>> myGridCells;
 
     KC_EntitySet myEntitySet;
     std::vector<KC_FloatRect> myEntityBounds;
@@ -57,7 +57,7 @@ void KC_SpatialGrid::ForEachCell(const KC_FloatRect& aBoundingRect, TFunc&& aFun
     const sf::Vector2i bottomRight = GetGridCoordinate(aBoundingRect.GetBottomRight());
     const sf::Vector2i distance = (bottomRight - topLeft) + sf::Vector2i(1, 1);
 
-    for (std::int32_t index = 0, count = distance.x * distance.y; index < count; ++index)
+    for (int32_t index = 0, count = distance.x * distance.y; index < count; ++index)
     {
         const sf::Vector2i offset = { index % distance.x, index / distance.x };
 
@@ -77,10 +77,10 @@ void KC_SpatialGrid::ForEachCell(const KC_FloatRect& aBoundingRect, TFunc&& aFun
     const sf::Vector2i bottomRight = GetGridCoordinate(aBoundingRect.GetBottomRight());
     const sf::Vector2i distance = (bottomRight - topLeft) + sf::Vector2i(1, 1);
 
-    for (std::int32_t index = 0, count = distance.x * distance.y; index < count; ++index)
+    for (int32_t index = 0, count = distance.x * distance.y; index < count; ++index)
     {
         const sf::Vector2i offset = { index % distance.x, index / distance.x };
-        const std::int32_t hash = GetHash(topLeft + offset);
+        const int32_t hash = GetHash(topLeft + offset);
 
         aFunction(myGridCells[hash], hash);
     }

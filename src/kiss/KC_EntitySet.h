@@ -14,7 +14,7 @@ public:
     class Iterator
     {
     public:
-        Iterator(const KC_EntitySet& anEntitySet, std::size_t anIndex);
+        Iterator(const KC_EntitySet& anEntitySet, size_t anIndex);
 
         bool operator==(const Iterator& anOther) const;
         bool operator!=(const Iterator& anOther) const;
@@ -24,7 +24,7 @@ public:
 
     private:
         const KC_EntitySet& myEntitySet;
-        std::size_t myIndex;
+        size_t myIndex;
         EntityIndex myCount;
     };
 
@@ -59,7 +59,7 @@ public:
 #if IS_DEBUG_BUILD
     void GetAllEntities(std::vector<KC_Entity>& outSomeEntities) const;
     void GetAllIntervals(std::vector<std::pair<KC_Entity, EntityIndex>>& outSomeIntervals) const;
-    std::size_t GetIntervalsCount() const { return myIntervals.size(); }
+    size_t GetIntervalsCount() const { return myIntervals.size(); }
 #endif // IS_DEBUG_BUILD
 
 private:

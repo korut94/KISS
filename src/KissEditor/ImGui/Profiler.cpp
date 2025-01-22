@@ -11,8 +11,8 @@
 
 namespace Profiler_Private
 {
-    static constexpr const std::uint64_t locMaxNanoseconds = 10000;
-    static constexpr const std::uint64_t locMaxMicroseconds = 1000;
+    static constexpr const uint64_t locMaxNanoseconds = 10000;
+    static constexpr const uint64_t locMaxMicroseconds = 1000;
     static constexpr const char* locNanosecondsUnit = "ns";
     static constexpr const char* locMicrosecondsUnit = "us";
     static constexpr const char* locMillisecondsUnit = "ms";
@@ -61,8 +61,8 @@ void Profiler(bool* outIsOpen)
 
     Private::SortProfileBlocks(profileBlocks, sortedProfileBlocks);
 
-    std::size_t index = 0;
-    const std::size_t sortedProfileBlocksCount = sortedProfileBlocks.size();
+    size_t index = 0;
+    const size_t sortedProfileBlocksCount = sortedProfileBlocks.size();
 
     ImGui::Begin("Profiler", outIsOpen);
     while (index < sortedProfileBlocksCount)

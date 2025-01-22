@@ -12,7 +12,7 @@
 template <typename TComponents>
 class KC_ComponentManager final
 {
-    static constexpr const std::size_t ComponentsCount = std::tuple_size<TComponents>::value;
+    static constexpr const size_t ComponentsCount = std::tuple_size<TComponents>::value;
 
 public:
     KC_ComponentManager();
@@ -38,13 +38,13 @@ private:
     template <typename... Args>
     void AssignComponentsImpl(KC_ComponentManager<std::tuple<Args...>>& anOther) const;
 
-    template <std::size_t... Index>
+    template <size_t... Index>
     inline void RegisterComponents(std::index_sequence<Index...>);
-    template <std::size_t Index>
+    template <size_t Index>
     void RegisterComponent();
-    template <std::size_t... Index>
+    template <size_t... Index>
     inline void DeleteComponents(std::index_sequence<Index...>);
-    template <std::size_t Index>
+    template <size_t Index>
     void DeleteComponent();
 
     std::array<KC_ComponentArray*, ComponentsCount> myComponentArrays;
@@ -95,7 +95,7 @@ template <typename TComponents>
 template <typename T>
 const KC_ComponentArrayImpl<T>& KC_ComponentManager<TComponents>::GetComponentArray() const
 {
-    static constexpr const std::size_t index = KC_TemplateHelper::GetTupleTypeIndex<T, TComponents>::value;
+    static constexpr const size_t index = KC_TemplateHelper::GetTupleTypeIndex<T, TComponents>::value;
     KC_STATIC_ASSERT(index < ComponentsCount, "Component not found: did you forget to register it?");
 
     return static_cast<const KC_ComponentArrayImpl<T>&>(*myComponentArrays[index]);
@@ -105,7 +105,7 @@ template <typename TComponents>
 template <typename T>
 KC_ComponentArrayImpl<T>& KC_ComponentManager<TComponents>::GetComponentArray()
 {
-    static constexpr const std::size_t index = KC_TemplateHelper::GetTupleTypeIndex<T, TComponents>::value;
+    static constexpr const size_t index = KC_TemplateHelper::GetTupleTypeIndex<T, TComponents>::value;
     KC_STATIC_ASSERT(index < ComponentsCount, "Component not found: did you forget to register it?");
 
     return static_cast<KC_ComponentArrayImpl<T>&>(*myComponentArrays[index]);
@@ -127,14 +127,14 @@ void KC_ComponentManager<TComponents>::AssignComponentsImpl(KC_ComponentManager<
 }
 
 template <typename TComponents>
-template <std::size_t... Index>
+template <size_t... Index>
 inline void KC_ComponentManager<TComponents>::RegisterComponents(std::index_sequence<Index...>)
 {
     ((RegisterComponent<Index>()), ...);
 }
 
 template <typename TComponents>
-template <std::size_t Index>
+template <size_t Index>
 void KC_ComponentManager<TComponents>::RegisterComponent()
 {
     using ComponentType = typename std::tuple_element<Index, TComponents>::type;
@@ -144,14 +144,14 @@ void KC_ComponentManager<TComponents>::RegisterComponent()
 }
 
 template <typename TComponents>
-template <std::size_t... Index>
+template <size_t... Index>
 inline void KC_ComponentManager<TComponents>::DeleteComponents(std::index_sequence<Index...>)
 {
     ((DeleteComponent<Index>()), ...);
 }
 
 template <typename TComponents>
-template <std::size_t Index>
+template <size_t Index>
 void KC_ComponentManager<TComponents>::DeleteComponent()
 {
     using ComponentType = typename std::tuple_element<Index, TComponents>::type;

@@ -43,7 +43,7 @@ TEST_F(Test_KC_EntitySet, GetIndex)
     std::vector<KC_Entity> entities;
     myEntitySetA.GetAllEntities(entities);
 
-    for (std::size_t i = 0, count = entities.size(); i < count; ++i)
+    for (size_t i = 0, count = entities.size(); i < count; ++i)
     {
         EXPECT_EQ(myEntitySetA.GetIndex(entities[i]), i);
     }

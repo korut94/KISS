@@ -12,15 +12,15 @@ public:
     KC_Time(const std::chrono::duration<TRep, TPeriod>& aDuration);
 
     float AsSeconds() const;
-    std::int32_t AsMilliseconds() const;
-    std::int64_t AsMicroseconds() const;
-    std::int64_t AsNanoseconds() const;
+    int32_t AsMilliseconds() const;
+    int64_t AsMicroseconds() const;
+    int64_t AsNanoseconds() const;
 
     static KC_Time Now();
     static KC_Time Seconds(float anAmount);
-    static KC_Time Milliseconds(std::int32_t anAmount);
-    static KC_Time Microseconds(std::int64_t anAmount);
-    static KC_Time Nanoseconds(std::int64_t anAmount);
+    static KC_Time Milliseconds(int32_t anAmount);
+    static KC_Time Microseconds(int64_t anAmount);
+    static KC_Time Nanoseconds(int64_t anAmount);
 
     static void SetFrameZero();
 

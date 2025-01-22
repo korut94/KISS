@@ -14,7 +14,7 @@ namespace sf { class RenderWindow; }
 
 class KC_RenderSystemProvider final : public KC_SystemProvider<KC_RenderComponentManager>
 {
-    enum class RenderThreadState : std::uint8_t { Ready, Run, Stop, UpdateFrame, Wait };
+    enum class RenderThreadState : uint8_t { Ready, Run, Stop, UpdateFrame, Wait };
 
 public:
     KC_RenderSystemProvider(sf::RenderWindow& aRenderWindow);
