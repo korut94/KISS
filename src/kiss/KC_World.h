@@ -17,8 +17,11 @@ public:
     const KC_EntityManager& GetEntityManager() const { return myEntityManager; }
     KC_EntityManager& GetEntityManager() { return myEntityManager; }
 
+    const KC_SpatialGrid& GetSpatialGrid(std::size_t anIndex) const { return mySpatialGrids[anIndex]; }
+    KC_SpatialGrid& GetSpatialGrid(std::size_t anIndex) { return mySpatialGrids[anIndex]; }
     const std::vector<KC_SpatialGrid>& GetSpatialGrids() const { return mySpatialGrids; }
     std::vector<KC_SpatialGrid>& GetSpatialGrids() { return mySpatialGrids; }
+
     KC_SpatialGrid& AddSpatialGrid(float aGridCellSize);
 
 private:
