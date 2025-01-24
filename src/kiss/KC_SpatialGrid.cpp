@@ -32,7 +32,7 @@ KC_SpatialGrid::KC_SpatialGrid(float aGridCellSize)
 
 float KC_SpatialGrid::Density() const
 {
-   return myGridCells.size() > 0 ? static_cast<float>(myEntitySet.Count()) / static_cast<float>(myGridCells.size()) : 0;
+   return myGridCells.size() > 0 ? static_cast<float>(myGridCells.size()) / static_cast<float>(myEntitySet.Count()) : 0;
 }
 
 void KC_SpatialGrid::GetEntitiesInsideBound(const KC_FloatRect& aBoundingRect, std::vector<KC_Entity>& outSomeEntities) const
