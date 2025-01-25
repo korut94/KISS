@@ -6,10 +6,12 @@
 #include <tuple>
 
 #if IS_DEBUG_BUILD
+#define KC_SYSTEM_PROFILE(aSystem, aStepName) KC_PROFILE_STEP(#aSystem, aStepName)
 #define KC_SYSTEM_PROFILETAGS(aSystem)\
     static constexpr const char* GetEntitiesFetchTag() { return KC_PROFILE_STEP_TAG(#aSystem, "EntitiesFetch"); }\
     static constexpr const char* GetRunTag() { return KC_PROFILE_STEP_TAG(#aSystem, "Run"); }
 #else
+#define KC_SYSTEM_PROFILE(aSystem, aStepName)
 #define KC_SYSTEM_PROFILETAGS(aSystem)
 #endif // IS_DEBUG_BUILD
 
