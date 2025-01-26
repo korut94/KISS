@@ -30,23 +30,22 @@ KC_SpatialGrid::KC_SpatialGrid(float aGridCellSize)
 {
 }
 
-float KC_SpatialGrid::Density() const
+void KC_SpatialGrid::GetNearbyEntities(KC_Entity anEntity, std::vector<KC_Entity>& outSomeCloseEntities) const
 {
-   return myGridCells.size() > 0 ? static_cast<float>(myGridCells.size()) / static_cast<float>(myEntitySet.Count()) : 0;
-}
-
-void KC_SpatialGrid::GetEntitiesInsideBound(const KC_FloatRect& aBoundingRect, std::vector<KC_Entity>& outSomeEntities) const
-{
-    ForEachCell(aBoundingRect, [&outSomeEntities](const std::vector<KC_Entity>& someEntitiesInCell)
+    const KC_EntitySet::EntityIndex index = myEntitySet.GetIndex(anEntity);
+    ForEachCellUnsafe(myEntityBounds[index], [anEntity, &outSomeCloseEntities](const std::vector<KC_Entity>& someEntitiesInCell)
     {
         for (KC_Entity entity : someEntitiesInCell)
         {
+            if (entity == anEntity)
+                continue;
+
             // No duplicates
-            auto itr = std::find(outSomeEntities.cbegin(), outSomeEntities.cend(), entity);
-            if (itr == outSomeEntities.cend())
-            {
-                outSomeEntities.push_back(entity);
-            }
+            const auto itr = std::find(outSomeCloseEntities.cbegin(), outSomeCloseEntities.cend(), entity);
+            if (itr != outSomeCloseEntities.cend())
+                continue;
+
+            outSomeCloseEntities.push_back(entity);
         }
     });
 }
@@ -67,27 +66,34 @@ void KC_SpatialGrid::GetGridCoordinates(std::vector<sf::Vector2i>& outSomeGridCo
     }
 }
 
-int32_t KC_SpatialGrid::MinEntitiesCountInGridCells() const
+#if IS_DEBUG_BUILD
+float KC_SpatialGrid::Density() const
 {
-    using Pair = std::pair<int32_t, std::vector<KC_Entity>>;
-    auto itr = std::min_element(myGridCells.cbegin(), myGridCells.cend(), [](const Pair& a, const Pair& b)
-    {
-        return a.second.size() < b.second.size();
-    });
-
-    return itr != myGridCells.cend() ? itr->second.size() : 0;
+   return myGridCells.size() > 0 ? static_cast<float>(myGridCells.size()) / static_cast<float>(myEntitySet.Count()) : 0;
 }
 
 int32_t KC_SpatialGrid::MaxEntitiesCountInGridCells() const
 {
     using Pair = std::pair<int32_t, std::vector<KC_Entity>>;
-    auto itr = std::max_element(myGridCells.cbegin(), myGridCells.cend(), [](const Pair& a, const Pair& b)
+    auto itr = std::max_element(myGridCells.cbegin(), myGridCells.cend(), [](const Pair& aMax, const Pair& aCurrent)
     {
-        return a.second.size() < b.second.size();
+        return aCurrent.second.size() > aMax.second.size();
     });
 
     return itr != myGridCells.cend() ? itr->second.size() : 0;
 }
+
+int32_t KC_SpatialGrid::MinEntitiesCountInGridCells() const
+{
+    using Pair = std::pair<int32_t, std::vector<KC_Entity>>;
+    auto itr = std::min_element(myGridCells.cbegin(), myGridCells.cend(), [](const Pair& aCurrent, const Pair& aMin)
+    {
+        return aCurrent.second.size() < aMin.second.size();
+    });
+
+    return itr != myGridCells.cend() ? itr->second.size() : 0;
+}
+#endif // IS_DEBUG_BUILD
 
 void KC_SpatialGrid::Clear()
 {
@@ -169,15 +175,16 @@ void KC_SpatialGrid::RemoveEntityFromGrid(KC_Entity anEntity)
 }
 
 #if IS_IMGUI
-void KC_ImGui(KC_SpatialGrid& aSpatialGrid)
+void KC_ImGui(const KC_SpatialGrid& aSpatialGrid)
 {
     const float gridCellSize = aSpatialGrid.GetGridCellSize();
 
-    ImGui::SeparatorText("Spatial Grid");
     std::vector<sf::Vector2i> gridCoordinates;
     aSpatialGrid.GetGridCoordinates(gridCoordinates);
     ImGui::Text("Cells: %d [%.1fx%.1f]", gridCoordinates.size(), gridCellSize, gridCellSize);
+#if IS_DEBUG_BUILD
     ImGui::Text("Density: %.2f", aSpatialGrid.Density());
     ImGui::Text("Min-Max: [%d, %d]", aSpatialGrid.MinEntitiesCountInGridCells(), aSpatialGrid.MaxEntitiesCountInGridCells());
+#endif // IS_DEBUG_BUILD
 }
 #endif // IS_IMGUI

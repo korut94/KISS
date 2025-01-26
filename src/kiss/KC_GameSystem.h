@@ -14,10 +14,12 @@ public:
     KC_GameSystem(const KC_EntitySet& anEntitySet, KC_GameSystemProvider& aGameSystemProvider);
 
 protected:
+    const std::vector<KC_CollisionEvent>& GetCollisionEvents(KC_Entity anEntity) const { return myGameSystemProvider.myCollisionEventSet.GetCollisionEvents(anEntity); }
     float GetElapsedTime() const { return myGameSystemProvider.GetElapsedTime(); };
+    bool HasCollision(KC_Entity anEntity) const { return myGameSystemProvider.myCollisionEventSet.HasCollision(anEntity); }
 
-    const std::vector<KC_CollisionEvent>& GetCollisionEvents() const { return myGameSystemProvider.GetCollisionEvents(); };
-    std::vector<KC_CollisionEvent>& GetCollisionEvents() { return myGameSystemProvider.GetCollisionEvents(); };
+    const KC_CollisionEventSet& GetCollisionEventSet() const { return myGameSystemProvider.myCollisionEventSet; };
+    KC_CollisionEventSet& GetCollisionEventSet() { return myGameSystemProvider.myCollisionEventSet; };
 
     const KC_SpatialGrid& GetSpatialGrid(size_t anIndex) const { return myGameSystemProvider.GetSpatialGrid(anIndex); }
     KC_SpatialGrid& GetSpatialGrid(size_t anIndex) { return myGameSystemProvider.GetSpatialGrid(anIndex); }

@@ -4,6 +4,11 @@
 
 namespace KC_Math
 {
+    bool AreValuesClose(float a, float b, float delta /*= std::numeric_limits<float>::min()*/)
+    {
+        return std::abs(a - b) < delta;
+    }
+
     float DegToRad(float aDegree)
     {
         return aDegree * M_PI / 180.0f;

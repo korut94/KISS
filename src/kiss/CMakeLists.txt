@@ -39,10 +39,12 @@ target_sources(Kiss
         KC_CircleRenderer.h
         KC_ClearCanvasSystem.h
         KC_CollisionEvent.h
+        KC_CollisionEventSet.h
         KC_ComponentArray.h
         KC_ComponentManager.h
         KC_ComponentsRegistry.h
         KC_Defines.h
+        KC_DetectCollisionSystem.h
         KC_DrawCanvasSystem.h
         KC_DrawCircleSystem.h
         KC_Entity.h
@@ -66,7 +68,6 @@ target_sources(Kiss
         KC_RectColliderPalette.h
         KC_RenderSystem.h
         KC_RenderSystemProvider.h
-        KC_ResolveCollisionSystem.h
         KC_ScopedProfileBlock.h
         KC_ShapeRenderer.h
         KC_SpatialGrid.h
@@ -83,6 +84,8 @@ target_sources(Kiss
         KC_EntityManager.cpp
         KC_EntitySet.cpp
         KC_ClearCanvasSystem.cpp
+        KC_CollisionEventSet.cpp
+        KC_DetectCollisionSystem.cpp
         KC_DrawCanvasSystem.cpp
         KC_DrawCircleSystem.cpp
         KC_Intersection.cpp
@@ -94,7 +97,6 @@ target_sources(Kiss
         KC_ProfileBlockTimes.cpp
         KC_ProfileManager.cpp
         KC_RenderSystemProvider.cpp
-        KC_ResolveCollisionSystem.cpp
         KC_ScopedProfileBlock.cpp
         KC_SpatialGrid.cpp
         KC_ThreadManager.cpp

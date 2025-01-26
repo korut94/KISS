@@ -7,14 +7,13 @@
 #include "KC_Canvas.h"
 #include "KC_ClearCanvasSystem.h"
 #include "KC_Defines.h"
+#include "KC_DetectCollisionSystem.h"
 #include "KC_GameSystemProvider.h"
-#include "KC_InitializeSpatialGridSystem.h"
 #include "KC_Math.h"
 #include "KC_PaintRectColliderSystem.h"
 #include "KC_PaintSpatialGridSystem.h"
 #include "KC_RectCollider.h"
 #include "KC_RectColliderPalette.h"
-#include "KC_ResolveCollisionSystem.h"
 #include "KC_SpatialGridPalette.h"
 #include "KC_Transform.h"
 #include "KC_World.h"
@@ -34,8 +33,8 @@ namespace MC_Game_Private
 {
 #if IS_IMGUI
     float* locCameraZoom = nullptr;
-    KC_SpatialGrid* locSpatialGrid = nullptr;
-    std::vector<KC_CollisionEvent>* locCollisionEvents = nullptr;
+    const KC_SpatialGrid* locSpatialGrid = nullptr;
+    const KC_CollisionEventSet* locCollisionEventSet = nullptr;
 #endif // IS_IMGUI
 }
 
@@ -69,17 +68,15 @@ void MC_Game::Init(KC_World& aWorld)
     spatialGridPalette.myGridLineColor = sf::Color::White;
     spatialGridPalette.myGridLineThickness = 0.1f;
 
-    for (int i = 0; i < 1000; ++i)
+    for (int i = 0; i < 100; ++i)
     {
         KC_Entity entity = entityManager.CreateEntity();
         componentManager.AddComponent<KC_Canvas>(entity);
 
         KC_Transform& transform = componentManager.AddComponent<KC_Transform>(entity);
-        const float rX = static_cast<float>(std::rand()) / RAND_MAX;
-        const float rY = static_cast<float>(std::rand()) / RAND_MAX;
-        const float randomX =  100.f * rX - 50.f;
-        const float randomY = 100.f * rY - 50.f;
-        transform.myPosition = { randomX, randomY };
+        const float x = -50.f + (i % 10) * 2;
+        const float y = -50.f + (i / 10) * 2;
+        transform.myPosition = { x, y };
 
         KC_RectCollider& collider = componentManager.AddComponent<KC_RectCollider>(entity);
         collider.myBound.SetPosition(sf::Vector2f(-0.5f, -0.5f));
@@ -90,7 +87,9 @@ void MC_Game::Init(KC_World& aWorld)
         colliderPalette.myOutlineColor = {255, 127, 127};
 
         KC_Velocity& velocity = componentManager.AddComponent<KC_Velocity>(entity);
-        velocity.myVector = sf::Transform().rotate(sf::degrees(std::rand() % 365)) * sf::Vector2f(0.f, 1.f) * 20.f;
+        velocity.myVector = sf::Transform().rotate(sf::degrees(std::rand() % 365)) * sf::Vector2f(0.f, 1.f) * 10.f;
+        
+        spatialGrid.InsertEntity(entity, transform * collider.myBound);
     }
 
     for (int i = 0; i < 4; ++i)
@@ -103,6 +102,8 @@ void MC_Game::Init(KC_World& aWorld)
         KC_Transform& transform = componentManager.AddComponent<KC_Transform>(border);
         transform.myPosition = rotation * sf::Vector2f(100.f, 0.f);
 
+        componentManager.AddComponent<KC_Velocity>(border);
+
         const sf::Vector2f size = { 5.f, 200.f };
         const sf::Vector2f rotatedSize = rotation * size;
         const sf::Vector2f rectSize = { abs(rotatedSize.x), abs(rotatedSize.y) };
@@ -114,19 +115,24 @@ void MC_Game::Init(KC_World& aWorld)
         colliderPalette.myFillColor = sf::Color::Transparent;
         colliderPalette.myOutlineColor = sf::Color::Green;
         colliderPalette.myOutlineThickness = 0.2f;
+
+        spatialGrid.InsertEntity(border, transform * collider.myBound);
     }
 }
 
 void MC_Game::Update(KC_GameSystemProvider& aGameSystemProvider)
 {
+    aGameSystemProvider.RunSystem<KC_DetectCollisionSystem>();
     aGameSystemProvider.RunSystem<MC_MoveSystem>();
-    aGameSystemProvider.RunSystem<KC_InitializeSpatialGridSystem>();
-    aGameSystemProvider.RunSystem<KC_ResolveCollisionSystem>();
     aGameSystemProvider.RunSystem<MC_BounceOnCollisionSystem>();
 
     aGameSystemProvider.RunSystem<KC_ClearCanvasSystem>(); // Maybe move it in engine and create a function game.Draw()?
     aGameSystemProvider.RunSystem<KC_PaintSpatialGridSystem>();
     aGameSystemProvider.RunSystem<KC_PaintRectColliderSystem>();
+
+#if IS_IMGUI
+    MC_Game_Private::locCollisionEventSet = &aGameSystemProvider.GetCollisionEventSet();
+#endif // IS_IMGUI
 }
 
 #if IS_IMGUI
@@ -138,17 +144,15 @@ void MC_Game::ImGui()
     ImGui::SliderFloat("Camera Zoom", Private::locCameraZoom, 0.5f, 3.f);
 
     if (Private::locSpatialGrid)
-    { 
+    {
+        ImGui::SeparatorText("Spatial Grid");
         KC_ImGui(*Private::locSpatialGrid);
     }
 
-    if (Private::locCollisionEvents)
+    if (Private::locCollisionEventSet)
     {
-        ImGui::Text("Collision Events");
-        for (const KC_CollisionEvent& collision : *Private::locCollisionEvents)
-        {
-            ImGui::Text("%d -> %d", collision.myEntity, collision.myOtherEntity);
-        }
+        ImGui::SeparatorText("Collision Events");
+        KC_ImGui(*Private::locCollisionEventSet);
     }
 
     ImGui::End();

@@ -4,6 +4,11 @@
 
 struct KC_CollisionEvent
 {
-    KC_Entity myEntity;
-    KC_Entity myOtherEntity;
+    KC_CollisionEvent(KC_Entity anEntity, float aContactTime)
+        : myHitEntity(anEntity)
+        , myContactTime(aContactTime)
+    {}
+
+    KC_Entity myHitEntity;
+    float myContactTime;
 };

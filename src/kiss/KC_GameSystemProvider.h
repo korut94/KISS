@@ -1,13 +1,11 @@
 #pragma once
 
-#include "KC_CollisionEvent.h"
+#include "KC_CollisionEventSet.h"
 #include "KC_ComponentManager.h"
 #include "KC_EntitySet.h"
 #include "KC_Profiling.h"
 #include "KC_SystemProvider.h"
 #include "KC_World.h"
-
-#include <vector>
 
 class KC_SpatialGrid;
 
@@ -25,8 +23,8 @@ public:
 
     float GetElapsedTime() const { return myElapsedTime.AsSeconds(); }
 
-    const std::vector<KC_CollisionEvent>& GetCollisionEvents() const { return myCollisionEvents; };
-    std::vector<KC_CollisionEvent>& GetCollisionEvents() { return myCollisionEvents; };
+    const KC_CollisionEventSet& GetCollisionEventSet() const { return myCollisionEventSet; };
+    KC_CollisionEventSet& GetCollisionEventSet() { return myCollisionEventSet; };
 
     const KC_SpatialGrid& GetSpatialGrid(size_t anIndex) const { return myWorld.GetSpatialGrid(anIndex); }
     KC_SpatialGrid& GetSpatialGrid(size_t anIndex) { return myWorld.GetSpatialGrid(anIndex); }
@@ -41,7 +39,7 @@ public:
 private:
     KC_World& myWorld;
     KC_Time myElapsedTime;
-    std::vector<KC_CollisionEvent> myCollisionEvents;
+    KC_CollisionEventSet myCollisionEventSet;
 
     static KC_Time ourFixedUpdateTime;
 };
