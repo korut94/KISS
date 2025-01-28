@@ -65,7 +65,7 @@ bool MovingRectVsMovingRect(
                 lastContactTime = std::min((minA[i] - maxB[i]) / axisVelocity[i], lastContactTime);
             }
         }
-        else if (axisVelocity[i])
+        else if (axisVelocity[i] > 0.f)
         {
             if (minB[i] > maxA[i])
                 return 0;
